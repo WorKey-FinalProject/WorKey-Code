@@ -5,19 +5,19 @@ class Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height / 2.5,
+      height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Theme.of(context).primaryColor,
-            Colors.blue,
-          ],
-        ),
+        color: Theme.of(context).accentColor,
         borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(90),
+          bottomLeft: Radius.circular(100),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0, 1),
+            blurRadius: 6,
+          )
+        ],
       ),
       child: Center(
         child: Text('Logo'),

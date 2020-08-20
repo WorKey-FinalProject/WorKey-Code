@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
           children: <Widget>[
             Container(
               // height: MediaQuery.of(context).size.height * 0.2,
-              height: 200,
+              height: 125,
               child: Logo(),
             ),
             SizedBox(
@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
             ),
             Container(
               // height: MediaQuery.of(context).size.height,
-              height: 400,
+              height: 500,
               child: Feed(),
             ),
           ],

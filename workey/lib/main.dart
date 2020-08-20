@@ -7,14 +7,28 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  hexColor(String colorHexCode) {
+    String colornew = '0xff' + colorHexCode;
+    colornew = colornew.replaceAll('#', '');
+    int colorInt = int.parse(colornew);
+    return colorInt;
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.blue,
         accentColor: Colors.amber,
+        bottomAppBarColor: Colors.blue,
+        buttonColor: Colors.amber,
+        // primaryColor: Color(hexColor('#505160')),
+        // accentColor: Color(hexColor('#68829e')),
+        // bottomAppBarColor: Color(hexColor('#20232a')),
+        // buttonColor: Color(hexColor('#a01d26')),
+        // cardColor: Color(hexColor('#bcbabe')),
+        // backgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       //home:

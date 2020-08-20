@@ -49,7 +49,7 @@ class _FeedState extends State<Feed> {
               autoPlayAnimationDuration: Duration(milliseconds: 2000),
               pauseAutoPlayOnTouch: true,
               scrollDirection: Axis.horizontal,
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.6,
               initialPage: 0,
               onPageChanged: (index, _) {
                 setState(() {
