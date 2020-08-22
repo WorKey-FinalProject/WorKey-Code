@@ -4,6 +4,8 @@ import './home_screen.dart';
 import './profile_screen.dart';
 
 class TabsScreen extends StatefulWidget {
+  static const nameRoute = '/tabs-screen';
+
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }

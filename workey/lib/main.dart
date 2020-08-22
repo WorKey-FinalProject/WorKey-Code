@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
+import './screens/signup_screen.dart';
 import './company_account/screens/tabs_screen.dart';
-import './screens/auth_screen.dart';
+import 'screens/auth_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,10 +33,12 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      //home:
-      initialRoute: '/',
+      home: AuthScreen(),
+      //initialRoute: '/',
       routes: {
-        '/': (ctx) => TabsScreen(),
+        TabsScreen.nameRoute: (ctx) => TabsScreen(),
+        AuthScreen.routeName: (ctx) => AuthScreen(),
+        SignUpScreen.routeName: (ctx) => SignUpScreen(),
       },
     );
   }
