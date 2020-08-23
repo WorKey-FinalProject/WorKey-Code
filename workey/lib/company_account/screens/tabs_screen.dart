@@ -1,6 +1,8 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import './groups_screen.dart';
 import './home_screen.dart';
 import './profile_screen.dart';
@@ -40,6 +42,33 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          DropdownButton(
+            icon: Icon(
+              Icons.more_vert,
+              color: Theme.of(context).primaryIconTheme.color,
+            ),
+            items: [
+              DropdownMenuItem(
+                child: Container(
+                  child: Row(
+                    children: [
+                      Icon(Icons.exit_to_app),
+                      SizedBox(width: 8),
+                      Text('Logout'),
+                    ],
+                  ),
+                ),
+                value: 'logout',
+              )
+            ],
+            onChanged: (itemIdentifier) {
+              if (itemIdentifier == 'logout') {
+                FirebaseAuth.instance.signOut();
+              }
+            },
+          )
+        ],
         // Todo - Enter title text
         title: Text(_pages[_selectedPageIndex]['title']),
       ),
