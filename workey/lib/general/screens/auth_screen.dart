@@ -25,7 +25,6 @@ class _AuthScreenState extends State<AuthScreen> {
     BuildContext ctx,
   ) async {
     try {
-      print('fk off');
       AuthResult authResult = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
