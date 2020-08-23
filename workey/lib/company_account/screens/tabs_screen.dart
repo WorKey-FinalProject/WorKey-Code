@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import './groups_screen.dart';
 import './home_screen.dart';
@@ -11,13 +13,22 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final List<Widget> _pages = [
-    HomeScreen(),
-    GroupsScreen(),
-    ProfileScreen(),
+  final List<Map<String, Object>> _pages = [
+    {
+      'page': HomeScreen(),
+      'title': 'Home',
+    },
+    {
+      'page': GroupsScreen(),
+      'title': 'Groups',
+    },
+    {
+      'page': ProfileScreen(),
+      'title': 'Profile',
+    },
   ];
 
-  int _selectedPageIndex = 0;
+  var _selectedPageIndex = 0;
 
   void _selectPage(int index) {
     setState(() {
@@ -30,9 +41,9 @@ class _TabsScreenState extends State<TabsScreen> {
     return Scaffold(
       appBar: AppBar(
         // Todo - Enter title text
-        title: Text('title'),
+        title: Text(_pages[_selectedPageIndex]['title']),
       ),
-      body: _pages[_selectedPageIndex],
+      body: _pages[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         backgroundColor: Theme.of(context).bottomAppBarColor,

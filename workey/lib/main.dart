@@ -33,8 +33,7 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AuthScreen(),
-      //initialRoute: '/',
+      home: TabsScreen(), //AuthScreen(),
       routes: {
         TabsScreen.nameRoute: (ctx) => TabsScreen(),
         AuthScreen.routeName: (ctx) => AuthScreen(),
