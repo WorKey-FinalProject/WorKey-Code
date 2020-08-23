@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './screens/signup_screen.dart';
+import './general/screens/signup_screen.dart';
 import './company_account/screens/tabs_screen.dart';
-import 'screens/auth_screen.dart';
+import './general/screens/auth_screen.dart';
 
 void main() {
   runApp(MyApp());
