@@ -26,9 +26,11 @@ class FeedItem extends StatelessWidget {
               style: TextStyle(fontSize: 40),
             ),
             Divider(),
-            Text(
-              text,
-              style: TextStyle(fontSize: 20),
+            FittedBox(
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 20),
+              ),
             ),
           ],
         ),
