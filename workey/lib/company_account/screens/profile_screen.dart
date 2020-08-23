@@ -22,18 +22,5 @@ class ProfileScreen extends StatelessWidget {
         );
       },
     );
-    // return Container(
-    //   constraints: BoxConstraints.tightFor(height: context.size.height),
-    //   child: Column(children: <Widget>[
-    //     Container(
-    //       constraints: BoxConstraints.expand(),
-    //       color: Colors.blue,
-    //     ),
-    //     Container(
-    //       constraints: BoxConstraints.expand(),
-    //       color: Colors.black,
-    //     ),
-    //   ]),
-    // );
   }
 }
