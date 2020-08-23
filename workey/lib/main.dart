@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import './general/screens/signup_screen.dart';
 import './company_account/screens/tabs_screen.dart';
 import './general/screens/auth_screen.dart';
@@ -33,7 +34,15 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AuthScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.hasData) {
+            return TabsScreen();
+          }
+          return AuthScreen();
+        },
+      ),
       //initialRoute: '/',
       routes: {
         TabsScreen.nameRoute: (ctx) => TabsScreen(),
