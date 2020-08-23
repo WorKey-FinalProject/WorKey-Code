@@ -4,6 +4,8 @@ import './home_screen.dart';
 import './profile_screen.dart';
 
 class TabsScreen extends StatefulWidget {
+  static const nameRoute = '/tabs-screen';
+
   @override
   _TabsScreenState createState() => _TabsScreenState();
 }
@@ -33,9 +35,9 @@ class _TabsScreenState extends State<TabsScreen> {
       body: _pages[_selectedPageIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Theme.of(context).bottomAppBarColor,
         unselectedItemColor: Colors.white,
-        selectedItemColor: Theme.of(context).accentColor,
+        selectedItemColor: Theme.of(context).buttonColor,
         currentIndex: _selectedPageIndex,
         items: [
           BottomNavigationBarItem(

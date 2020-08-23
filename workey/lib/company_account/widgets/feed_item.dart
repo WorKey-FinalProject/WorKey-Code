@@ -12,11 +12,13 @@ class FeedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.grey,
+      margin: EdgeInsets.symmetric(vertical: 20),
+      // color: Theme.of(context).cardColor,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      elevation: 5,
+      elevation: 10,
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[

@@ -10,8 +10,7 @@ class Feed extends StatefulWidget {
 
 class _FeedState extends State<Feed> {
   int _current = 0;
-
-  List<FeedItem> feeds = [
+  List<FeedItem> feedsList = [
     FeedItem(
       title: 'one',
       text: 'oneeeeeeeeeeeeee',
@@ -26,6 +25,14 @@ class _FeedState extends State<Feed> {
     ),
   ];
 
+  List<T> map<T>(List list, Function handler) {
+    List<T> result = [];
+    for (var i = 0; i < list.length; i++) {
+      result.add(handler(i, list[i]));
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +42,14 @@ class _FeedState extends State<Feed> {
         children: <Widget>[
           CarouselSlider(
             options: CarouselOptions(
-              height: MediaQuery.of(context).size.height * 0.5,
+              enlargeCenterPage: true,
+              autoPlay: true,
+              reverse: false,
+              autoPlayInterval: Duration(seconds: 5),
+              autoPlayAnimationDuration: Duration(milliseconds: 2000),
+              pauseAutoPlayOnTouch: true,
+              scrollDirection: Axis.horizontal,
+              height: MediaQuery.of(context).size.height * 0.6,
               initialPage: 0,
               onPageChanged: (index, _) {
                 setState(() {
@@ -43,7 +57,7 @@ class _FeedState extends State<Feed> {
                 });
               },
             ),
-            items: feeds.map(
+            items: feedsList.map(
               (feed) {
                 return Builder(
                   builder: (BuildContext context) {
@@ -56,6 +70,23 @@ class _FeedState extends State<Feed> {
                 );
               },
             ).toList(),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: map<Widget>(feedsList, (index, _) {
+              return Container(
+                width: 10,
+                height: 10,
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _current == index ? Colors.redAccent : Colors.green,
+                ),
+              );
+            }),
           ),
         ],
       ),
