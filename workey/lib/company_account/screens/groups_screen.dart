@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -6,7 +7,13 @@ class GroupsScreen extends StatefulWidget {
 }
 
 class _GroupsScreenState extends State<GroupsScreen> {
-  var _pathHandler = false;
+  bool _pathHandler;
+
+  @override
+  void initState() {
+    _pathHandler = false;
+    super.initState();
+  }
 
   _pathIsChanged() {
     setState(() {
@@ -16,24 +23,20 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: !_pathHandler
-          ? null
-          : AppBar(
-              bottom: PreferredSize(
-                child: Text('bottom'),
-                preferredSize: Size.fromHeight(10),
-              ),
-            ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Container(
-            height: constraints.maxHeight,
-            child: Column(
-              children: <Widget>[
-                GestureDetector(
+    print(_pathHandler);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          height: constraints.maxHeight,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: GestureDetector(
                   onTap: () {
                     _pathIsChanged();
+                    print(_pathHandler);
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
@@ -48,32 +51,25 @@ class _GroupsScreenState extends State<GroupsScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  height: constraints.maxHeight / 4,
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      CircleAvatar(
-                        minRadius: 40,
-                        child: Text('1'),
-                      ),
-                      CircleAvatar(
-                        minRadius: 40,
-                        child: Text('2'),
-                      ),
-                      CircleAvatar(
-                        minRadius: 40,
-                        child: Text('3'),
-                      ),
-                    ],
-                  ),
+              ),
+              Container(
+                height: constraints.maxHeight / 5,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(icon: Icon(Icons.people), onPressed: null),
+                    IconButton(icon: Icon(Icons.place), onPressed: null),
+                    IconButton(icon: Icon(MdiIcons.sword), onPressed: null),
+                    // IconButton(icon: Icon(Icons.), onPressed: null),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              ),
+              Divider(),
+            ],
+          ),
+        );
+      },
     );
   }
 }
