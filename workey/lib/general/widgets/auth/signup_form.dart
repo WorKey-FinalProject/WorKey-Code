@@ -93,30 +93,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
         ),
         SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Container(
-              height: 60,
-              child: RaisedButton(
-                color: Theme.of(context).buttonColor,
-                child: Text(
-                  'SIGN IN',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
-                ),
-                onPressed: _trySubmit,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 20,
+          height: 40,
         ),
         Padding(
           padding: const EdgeInsets.all(20.0),
@@ -133,7 +110,7 @@ class _SignUpFormState extends State<SignUpForm> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
-                onPressed: () {},
+                onPressed: _trySubmit,
               ),
             ),
           ),
