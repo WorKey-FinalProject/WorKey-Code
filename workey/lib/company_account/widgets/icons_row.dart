@@ -5,36 +5,56 @@ class IconsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        IconButton(
-            iconSize: 40,
-            icon: Icon(
-              Icons.people,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: null),
-        IconButton(
-            iconSize: 40,
-            icon: Icon(
-              Icons.place,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: null),
-        IconButton(
-            iconSize: 40,
-            icon: Icon(
-              MdiIcons.graph,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: null),
-        IconButton(
-            iconSize: 40,
-            icon: Icon(
-              Icons.settings,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: null),
+        Column(
+          children: <Widget>[
+            IconButton(
+                iconSize: 30,
+                icon: Icon(
+                  Icons.people,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: null),
+            const Text('Employees'),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            IconButton(
+                iconSize: 30,
+                icon: Icon(
+                  Icons.place,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: null),
+            const Text('Location'),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            IconButton(
+                iconSize: 30,
+                icon: Icon(
+                  MdiIcons.graph,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: null),
+            const Text('Sub Groups'),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            IconButton(
+                iconSize: 30,
+                icon: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: null),
+            const Text('Settings'),
+          ],
+        ),
       ],
     );
   }

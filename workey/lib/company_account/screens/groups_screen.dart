@@ -41,19 +41,25 @@ class _GroupsScreenState extends State<GroupsScreen> {
                     padding: EdgeInsets.symmetric(vertical: 10),
                     height: constraints.maxHeight / 4,
                     width: MediaQuery.of(context).size.width * 0.7,
-                    child: Card(
-                      elevation: 6,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white,
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text('LOGO'),
+                        child: Text(
+                          'LOGO',
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
               Container(
+                padding: EdgeInsets.all(20),
                 height: constraints.maxHeight / 5,
-                width: MediaQuery.of(context).size.width * 0.6,
+                width: MediaQuery.of(context).size.width,
                 child: IconsRow(),
               ),
               Divider(),
