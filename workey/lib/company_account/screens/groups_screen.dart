@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import '../widgets/icons_row.dart';
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -23,8 +24,6 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(_pathHandler);
-
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
@@ -54,16 +53,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
               ),
               Container(
                 height: constraints.maxHeight / 5,
-                width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    IconButton(icon: Icon(Icons.people), onPressed: null),
-                    IconButton(icon: Icon(Icons.place), onPressed: null),
-                    IconButton(icon: Icon(MdiIcons.sword), onPressed: null),
-                    // IconButton(icon: Icon(Icons.), onPressed: null),
-                  ],
-                ),
+                width: MediaQuery.of(context).size.width * 0.6,
+                child: IconsRow(),
               ),
               Divider(),
             ],
