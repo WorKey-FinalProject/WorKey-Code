@@ -34,15 +34,16 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.onAuthStateChanged,
-        builder: (ctx, userSnapshot) {
-          if (userSnapshot.hasData) {
-            return TabsScreen();
-          }
-          return AuthScreen();
-        },
-      ),
+      home: TabsScreen(),
+      // home: StreamBuilder(
+      //   stream: FirebaseAuth.instance.onAuthStateChanged,
+      //   builder: (ctx, userSnapshot) {
+      //     if (userSnapshot.hasData) {
+      //       return TabsScreen();
+      //     }
+      //     return AuthScreen();
+      //   },
+      // ),
       //initialRoute: '/',
       routes: {
         TabsScreen.nameRoute: (ctx) => TabsScreen(),
