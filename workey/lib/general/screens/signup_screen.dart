@@ -42,7 +42,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               'lastName': lastName,
             },
           );
-        } else {
+        }
+        if (accountTypeChosen == AccountTypeChosen.personal) {
           await Firestore.instance
               .collection('users')
               .document(authResult.user.uid)
