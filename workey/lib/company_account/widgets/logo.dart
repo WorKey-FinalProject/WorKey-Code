@@ -3,24 +3,82 @@ import 'package:flutter/material.dart';
 class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: Theme.of(context).accentColor,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(100),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(0, 1),
-            blurRadius: 6,
+      width: size.width,
+      height: size.height * 0.2,
+      // decoration: BoxDecoration(
+      //   color: Theme.of(context).primaryColor,
+      //   borderRadius: BorderRadius.only(
+      //     bottomLeft: Radius.circular(100),
+      //   ),
+      //   boxShadow: [
+      //     BoxShadow(
+      //       color: Colors.grey,
+      //       offset: Offset(0, 1),
+      //       blurRadius: 6,
+      //     )
+      //   ],
+      // ),
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+              bottom: 56,
+            ),
+            height: size.height * 0.2 - 27,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(36),
+                bottomRight: Radius.circular(36),
+              ),
+            ),
+            child: Center(
+              child: Text(
+                'Hello!',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              height: 54,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 10),
+                    blurRadius: 50,
+                    color: Theme.of(context).primaryColor.withOpacity(0.23),
+                  ),
+                ],
+              ),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+                  ),
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
+              ),
+            ),
           )
         ],
-      ),
-      child: Center(
-        child: Text('Logo'),
       ),
     );
   }

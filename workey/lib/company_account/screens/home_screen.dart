@@ -12,8 +12,8 @@ class HomeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-              // height: MediaQuery.of(context).size.height * 0.2,
-              height: 125,
+              height: MediaQuery.of(context).size.height * 0.2,
+              //height: 125,
               child: Logo(),
             ),
             SizedBox(

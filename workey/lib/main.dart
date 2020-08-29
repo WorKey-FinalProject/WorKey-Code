@@ -22,11 +22,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primaryColor: Colors.blue,
+        //primaryColor: Colors.green,
         accentColor: Colors.amber,
-        bottomAppBarColor: Colors.blue,
+        bottomAppBarColor: Color(hexColor('#27AE60')),
         buttonColor: Colors.amber,
-        // primaryColor: Color(hexColor('#505160')),
+        primaryColor: Color(hexColor('#27AE60')),
         // accentColor: Color(hexColor('#68829e')),
         // bottomAppBarColor: Color(hexColor('#20232a')),
         // buttonColor: Color(hexColor('#a01d26')),
@@ -34,16 +34,16 @@ class MyApp extends StatelessWidget {
         // backgroundColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: TabsScreen(),
-      // home: StreamBuilder(
-      //   stream: FirebaseAuth.instance.onAuthStateChanged,
-      //   builder: (ctx, userSnapshot) {
-      //     if (userSnapshot.hasData) {
-      //       return TabsScreen();
-      //     }
-      //     return AuthScreen();
-      //   },
-      // ),
+      // home: TabsScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (ctx, userSnapshot) {
+          if (userSnapshot.hasData) {
+            return TabsScreen();
+          }
+          return AuthScreen();
+        },
+      ),
       //initialRoute: '/',
       routes: {
         TabsScreen.nameRoute: (ctx) => TabsScreen(),

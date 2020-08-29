@@ -42,6 +42,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         actions: [
           DropdownButton(
             icon: Icon(
