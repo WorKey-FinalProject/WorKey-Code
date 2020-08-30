@@ -1,7 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:workey/company_account/widgets/employees_list.dart';
 
+import '../widgets/employees_list.dart';
 import '../widgets/icons_row.dart';
+
+enum SelectedIcon {
+  subGroups,
+  employees,
+  location,
+  settings,
+}
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -9,33 +18,32 @@ class GroupsScreen extends StatefulWidget {
 }
 
 class _GroupsScreenState extends State<GroupsScreen> {
-  bool _pathHandler;
-  List iconsPages = [
-    EmployeesList(),
-    Text('hi'),
-  ];
-  var _selectedPageIndex = 1;
+  SelectedIcon selectedIcon = SelectedIcon.employees;
 
-  void _selectPage(int index) {
+  void _selectedIconHandler(SelectedIcon newSelectedIcon) {
     setState(() {
-      _selectedPageIndex = index;
+      this.selectedIcon = newSelectedIcon;
     });
   }
 
-  @override
-  void initState() {
-    _pathHandler = false;
-    super.initState();
-  }
-
-  _pathIsChanged() {
-    setState(() {
-      _pathHandler = true;
-    });
+  Widget _contantHandler() {
+    switch (selectedIcon) {
+      case SelectedIcon.subGroups:
+        break;
+      case SelectedIcon.employees:
+        return EmployeesList();
+        break;
+      case SelectedIcon.location:
+        break;
+      case SelectedIcon.settings:
+        break;
+      default:
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    print(selectedIcon.toString());
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
@@ -46,12 +54,11 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 padding: const EdgeInsets.only(top: 15.0),
                 child: GestureDetector(
                   onTap: () {
-                    _pathIsChanged();
-                    print(_pathHandler);
+                    null;
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    height: constraints.maxHeight / 4,
+                    height: constraints.maxHeight * 0.25,
                     width: double.infinity,
                     child: CircleAvatar(
                       backgroundColor: Colors.green,
@@ -70,14 +77,17 @@ class _GroupsScreenState extends State<GroupsScreen> {
               ),
               Container(
                 padding: EdgeInsets.all(20),
-                height: constraints.maxHeight / 5,
+                height: constraints.maxHeight * 0.2,
                 width: MediaQuery.of(context).size.width,
-                child: IconsRow(_selectPage),
+                child: IconsRow(_selectedIconHandler),
+              ),
+              Divider(
+                thickness: 10,
               ),
               Container(
                 height: constraints.maxHeight * 0.4,
-                child: iconsPages[_selectedPageIndex],
-              )
+                child: _contantHandler(),
+              ),
             ],
           ),
         );
