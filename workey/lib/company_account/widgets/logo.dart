@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
     return Container(
-      // height: constraints.maxHeight,
       child: Stack(
         children: <Widget>[
           Container(
