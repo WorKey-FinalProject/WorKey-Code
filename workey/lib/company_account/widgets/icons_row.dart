@@ -20,6 +20,16 @@ class _IconsRowState extends State<IconsRow> {
       padding: EdgeInsets.symmetric(
         horizontal: 10,
       ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 1.0),
+            blurRadius: 6.0,
+          ),
+        ],
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/widgets/employees_list.dart';
 
 import '../widgets/employees_list.dart';
 import '../widgets/icons_row.dart';
@@ -60,7 +61,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                     height: constraints.maxHeight * 0.25,
                     width: double.infinity,
                     child: CircleAvatar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: Colors.green,
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -73,9 +74,6 @@ class _GroupsScreenState extends State<GroupsScreen> {
                     ),
                   ),
                 ),
-              ),
-              Divider(
-                thickness: 10,
               ),
               Container(
                 padding: EdgeInsets.all(20),

@@ -87,12 +87,11 @@ class _FeedState extends State<Feed> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: map<Widget>(feedsList, (index, _) {
                     return Container(
-                      width: 10,
+                      width: _current == index ? 13 : 10,
                       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color:
-                            _current == index ? Colors.redAccent : Colors.green,
+                        color: _current == index ? Colors.green : Colors.grey,
                       ),
                     );
                   }),
