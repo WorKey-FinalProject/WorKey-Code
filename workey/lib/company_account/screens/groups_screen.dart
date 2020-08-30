@@ -77,7 +77,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
               ),
               Container(
                 padding: EdgeInsets.all(10),
-                height: constraints.maxHeight * 0.25,
+                height: constraints.maxHeight * 0.20,
                 width: MediaQuery.of(context).size.width,
                 child: IconsRow(_selectedIconHandler),
               ),
