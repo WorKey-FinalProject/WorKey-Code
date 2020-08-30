@@ -40,7 +40,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     height: constraints.maxHeight / 4,
-                    width: MediaQuery.of(context).size.width * 0.7,
+                    width: double.infinity,
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
                       child: Align(
@@ -56,13 +56,18 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   ),
                 ),
               ),
+              Divider(
+                thickness: 10,
+              ),
               Container(
                 padding: EdgeInsets.all(20),
                 height: constraints.maxHeight / 5,
                 width: MediaQuery.of(context).size.width,
                 child: IconsRow(),
               ),
-              Divider(),
+              Divider(
+                thickness: 10,
+              ),
             ],
           ),
         );

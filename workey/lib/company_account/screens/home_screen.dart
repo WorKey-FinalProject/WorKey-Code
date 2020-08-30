@@ -6,27 +6,31 @@ import '../widgets/feed.dart';
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height * 0.2,
-              //height: 125,
-              child: Logo(),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Container(
-              // height: MediaQuery.of(context).size.height,
-              height: 500,
-              child: Feed(),
-            ),
-          ],
-        ),
-      ),
+    return //SingleChildScrollView(
+        LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          height: constraints.maxHeight,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                height: constraints.maxHeight * 0.25,
+                //height: 125,
+                child: Logo(),
+              ),
+              SizedBox(
+                height: constraints.maxHeight * 0.05,
+              ),
+              Container(
+                // height: MediaQuery.of(context).size.height,
+                height: constraints.maxHeight * 0.7,
+                child: Feed(),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
