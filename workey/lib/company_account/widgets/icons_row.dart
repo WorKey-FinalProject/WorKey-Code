@@ -16,11 +16,12 @@ class _IconsRowState extends State<IconsRow> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 5,
-        vertical: 5,
-      ),
+      // padding: EdgeInsets.symmetric(
+      //   horizontal: 0,
+      //   vertical: 0,
+      // ),
       child: Card(
+        elevation: 5,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -32,9 +33,11 @@ class _IconsRowState extends State<IconsRow> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.people,
-                      size: 35,
+                    FittedBox(
+                      child: Icon(
+                        Icons.people,
+                        // size: 35,
+                      ),
                     ),
                     FittedBox(child: const Text('Employees')),
                   ],
@@ -49,9 +52,11 @@ class _IconsRowState extends State<IconsRow> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.place,
-                      size: 35,
+                    FittedBox(
+                      child: Icon(
+                        Icons.place,
+                        // size: 35,
+                      ),
                     ),
                     FittedBox(child: const Text('Location')),
                   ],
@@ -66,9 +71,11 @@ class _IconsRowState extends State<IconsRow> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      MdiIcons.graph,
-                      size: 35,
+                    FittedBox(
+                      child: Icon(
+                        MdiIcons.graph,
+                        // size: 35,
+                      ),
                     ),
                     FittedBox(child: const Text('Sub Groups')),
                   ],
@@ -83,9 +90,11 @@ class _IconsRowState extends State<IconsRow> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.settings,
-                      size: 35,
+                    FittedBox(
+                      child: Icon(
+                        Icons.settings,
+                        // size: 35,
+                      ),
                     ),
                     FittedBox(child: const Text('Settings')),
                   ],
