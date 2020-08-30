@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../widgets/employees_list.dart';
 import '../screens/groups_screen.dart';
 
 class IconsRow extends StatefulWidget {
