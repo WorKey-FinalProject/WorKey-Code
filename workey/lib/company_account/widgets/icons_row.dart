@@ -17,78 +17,83 @@ class _IconsRowState extends State<IconsRow> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: 10,
+        horizontal: 5,
+        vertical: 5,
       ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey,
-            offset: Offset(0.0, 1.0),
-            blurRadius: 6.0,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              IconButton(
-                iconSize: 30,
-                icon: Icon(
-                  MdiIcons.graph,
-                  color: Theme.of(context).primaryColor,
-                ),
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.subGroups),
-              ),
-              const Text('Sub Groups'),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              IconButton(
-                iconSize: 30,
-                icon: Icon(
-                  Icons.people,
-                  color: Theme.of(context).primaryColor,
-                ),
+      child: Card(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            Flexible(
+              fit: FlexFit.tight,
+              child: FlatButton(
                 onPressed: () =>
                     widget.selectedIconHandler(SelectedIcon.employees),
-              ),
-              const Text('Employees'),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              IconButton(
-                iconSize: 30,
-                icon: Icon(
-                  Icons.place,
-                  color: Theme.of(context).primaryColor,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.people,
+                      size: 35,
+                    ),
+                    FittedBox(child: const Text('Employees')),
+                  ],
                 ),
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.location),
               ),
-              const Text('Location'),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              IconButton(
-                iconSize: 30,
-                icon: Icon(
-                  Icons.settings,
-                  color: Theme.of(context).primaryColor,
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: FlatButton(
+                onPressed: () =>
+                    widget.selectedIconHandler(SelectedIcon.employees),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.place,
+                      size: 35,
+                    ),
+                    FittedBox(child: const Text('Location')),
+                  ],
                 ),
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.settings),
               ),
-              const Text('Settings'),
-            ],
-          ),
-        ],
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: FlatButton(
+                onPressed: () =>
+                    widget.selectedIconHandler(SelectedIcon.employees),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      MdiIcons.graph,
+                      size: 35,
+                    ),
+                    FittedBox(child: const Text('Sub Groups')),
+                  ],
+                ),
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: FlatButton(
+                onPressed: () =>
+                    widget.selectedIconHandler(SelectedIcon.employees),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.settings,
+                      size: 35,
+                    ),
+                    FittedBox(child: const Text('Settings')),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
