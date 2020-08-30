@@ -28,6 +28,20 @@ class _IconsRowState extends State<IconsRow> {
               IconButton(
                 iconSize: 30,
                 icon: Icon(
+                  MdiIcons.graph,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () =>
+                    widget.selectedIconHandler(SelectedIcon.subGroups),
+              ),
+              const Text('Sub Groups'),
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              IconButton(
+                iconSize: 30,
+                icon: Icon(
                   Icons.people,
                   color: Theme.of(context).primaryColor,
                 ),
@@ -49,20 +63,6 @@ class _IconsRowState extends State<IconsRow> {
                     widget.selectedIconHandler(SelectedIcon.location),
               ),
               const Text('Location'),
-            ],
-          ),
-          Column(
-            children: <Widget>[
-              IconButton(
-                iconSize: 30,
-                icon: Icon(
-                  MdiIcons.graph,
-                  color: Theme.of(context).primaryColor,
-                ),
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.subGroups),
-              ),
-              const Text('Sub Groups'),
             ],
           ),
           Column(
