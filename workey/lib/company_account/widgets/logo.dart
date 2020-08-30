@@ -3,23 +3,9 @@ import 'package:flutter/material.dart';
 class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Container(
-      width: size.width,
-      height: size.height * 0.2,
-      // decoration: BoxDecoration(
-      //   color: Theme.of(context).primaryColor,
-      //   borderRadius: BorderRadius.only(
-      //     bottomLeft: Radius.circular(100),
-      //   ),
-      //   boxShadow: [
-      //     BoxShadow(
-      //       color: Colors.grey,
-      //       offset: Offset(0, 1),
-      //       blurRadius: 6,
-      //     )
-      //   ],
-      // ),
+      // height: constraints.maxHeight,
       child: Stack(
         children: <Widget>[
           Container(
@@ -28,7 +14,6 @@ class Logo extends StatelessWidget {
               right: 20,
               bottom: 56,
             ),
-            height: size.height * 0.2 - 27,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
               borderRadius: BorderRadius.only(
@@ -47,7 +32,7 @@ class Logo extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 0,
+            bottom: -27,
             left: 0,
             right: 0,
             child: Container(
@@ -79,6 +64,7 @@ class Logo extends StatelessWidget {
             ),
           )
         ],
+        overflow: Overflow.visible,
       ),
     );
   }
