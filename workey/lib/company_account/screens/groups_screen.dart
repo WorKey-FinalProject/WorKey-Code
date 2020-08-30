@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:workey/company_account/widgets/employees_list.dart';
 
 import '../widgets/employees_list.dart';
 import '../widgets/icons_row.dart';
@@ -43,25 +42,24 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedIcon.toString());
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
           height: constraints.maxHeight,
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
+              Container(
+                height: constraints.maxHeight * 0.25,
+                padding: const EdgeInsets.only(top: 10),
                 child: GestureDetector(
                   onTap: () {
                     null;
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
-                    height: constraints.maxHeight * 0.25,
                     width: double.infinity,
                     child: CircleAvatar(
-                      backgroundColor: Colors.green,
+                      backgroundColor: Colors.white,
                       child: Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -75,6 +73,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   ),
                 ),
               ),
+              Divider(
+                thickness: constraints.maxHeight * 0.01,
+              ),
               Container(
                 padding: EdgeInsets.all(10),
                 height: constraints.maxHeight * 0.25,
@@ -82,11 +83,13 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 child: IconsRow(_selectedIconHandler),
               ),
               Divider(
-                thickness: 10,
+                thickness: constraints.maxHeight * 0.01,
               ),
-              Container(
-                height: constraints.maxHeight * 0.4,
-                child: _contantHandler(),
+              Flexible(
+                fit: FlexFit.tight,
+                child: Container(
+                  child: _contantHandler(),
+                ),
               ),
             ],
           ),

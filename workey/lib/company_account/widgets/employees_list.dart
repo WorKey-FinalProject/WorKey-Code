@@ -42,7 +42,10 @@ class _State extends State<EmployeesList> {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemBuilder: (ctx, index) {
-        return Card(child: Text(emp[index]));
+        return FlatButton(
+          child: Text(emp[index]),
+          onPressed: null,
+        );
       },
       itemCount: emp.length,
     );
