@@ -88,7 +88,6 @@ class _FeedState extends State<Feed> {
                   children: map<Widget>(feedsList, (index, _) {
                     return Container(
                       width: 10,
-                      // height: 10,
                       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
