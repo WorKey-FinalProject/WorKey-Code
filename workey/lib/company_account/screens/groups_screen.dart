@@ -73,19 +73,17 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   ),
                 ),
               ),
-              Divider(
-                thickness: constraints.maxHeight * 0.01,
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                height: constraints.maxHeight * 0.25,
-                width: MediaQuery.of(context).size.width,
-                child: IconsRow(_selectedIconHandler),
-              ),
-              Divider(
-                thickness: constraints.maxHeight * 0.01,
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: IconsRow(_selectedIconHandler),
+                ),
               ),
               Flexible(
+                flex: 5,
                 fit: FlexFit.tight,
                 child: Container(
                   child: _contantHandler(),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:workey/company_account/screens/tabs_screen.dart';
 
 import './feed_item.dart';
 
@@ -85,16 +84,20 @@ class _FeedState extends State<Feed> {
                 height: constraints.maxHeight * 0.09,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: map<Widget>(feedsList, (index, _) {
-                    return Container(
-                      width: _current == index ? 13 : 10,
-                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: _current == index ? Colors.green : Colors.grey,
-                      ),
-                    );
-                  }),
+                  children: map<Widget>(
+                    feedsList,
+                    (index, _) {
+                      return Container(
+                        width: _current == index ? 13 : 10,
+                        margin:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _current == index ? Colors.green : Colors.grey,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
