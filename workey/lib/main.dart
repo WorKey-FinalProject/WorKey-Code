@@ -24,11 +24,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         //primaryColor: Colors.green,
         accentColor: Colors.amber,
-        bottomAppBarColor: Color(hexColor('#27AE60')),
+        //bottomAppBarColor: Color(hexColor('#27AE60')),
         buttonColor: Colors.amber,
         primaryColor: Color(hexColor('#27AE60')),
         // accentColor: Color(hexColor('#68829e')),
-        // bottomAppBarColor: Color(hexColor('#20232a')),
+        bottomAppBarColor: Colors.white,
         // buttonColor: Color(hexColor('#a01d26')),
         // cardColor: Color(hexColor('#bcbabe')),
         // backgroundColor: Colors.white,
