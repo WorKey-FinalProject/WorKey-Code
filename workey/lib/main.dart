@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/screens/splash_screen.dart';
 
 import './general/screens/signup_screen.dart';
 import './company_account/screens/tabs_screen.dart';
@@ -23,12 +24,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      //*tomer
       providers: [
         ChangeNotifierProvider<Auth>(
           create: (ctx) => Auth(),
         ),
-      ], //*tomer
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -48,13 +48,15 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.onAuthStateChanged,
           builder: (ctx, userSnapshot) {
+            if (userSnapshot.connectionState == ConnectionState.waiting) {
+              return SplashScreen();
+            }
             if (userSnapshot.hasData) {
               return TabsScreen();
             }
             return AuthScreen();
           },
         ),
-        //initialRoute: '/',
         routes: {
           TabsScreen.nameRoute: (ctx) => TabsScreen(),
           AuthScreen.routeName: (ctx) => AuthScreen(),

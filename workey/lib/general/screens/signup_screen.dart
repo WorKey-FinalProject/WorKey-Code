@@ -15,6 +15,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
+    var _isLoading = false;
     // final _auth = FirebaseAuth.instance;
 
     void _submitAuthForm(
@@ -25,6 +26,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       BuildContext ctx,
       AccountTypeChosen accountTypeChosen,
     ) async {
+      setState(() {
+        _isLoading = true;
+      });
       try {
         // AuthResult authResult = await _auth.createUserWithEmailAndPassword(
         //   email: email,
@@ -65,6 +69,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         var message = 'An error occurred, please check your credentials!';
 
         if (err.message != null) {
+          setState(() {
+            _isLoading = true;
+          });
           message = err.message;
         }
 
@@ -75,9 +82,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         );
       } catch (err) {
+        setState(() {
+          _isLoading = true;
+        });
         print(err);
       }
       Navigator.of(context).pop();
+      setState(() {
+        _isLoading = false;
+      });
     }
 
     return Scaffold(

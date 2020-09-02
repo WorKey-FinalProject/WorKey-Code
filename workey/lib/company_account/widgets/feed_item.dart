@@ -35,14 +35,6 @@ class FeedItem extends StatelessWidget {
                 style: TextStyle(fontSize: 20),
               ),
             ),
-            Container(
-              alignment: Alignment.bottomRight,
-              margin: EdgeInsets.only(
-                top: 50,
-                right: 10,
-              ),
-              child: SpeedDialButton(),
-            ),
           ],
         ),
       ),
