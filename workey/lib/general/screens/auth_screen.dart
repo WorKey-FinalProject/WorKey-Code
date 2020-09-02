@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'package:workey/general/widgets/auth/auth_form.dart';
+import '../widgets/auth/auth_form.dart';
 import '../providers/auth.dart';
-//import './signup_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   static const routeName = '/auth';
@@ -15,6 +14,7 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  var _isLoading = false;
   //final _auth = FirebaseAuth.instance;
 
   void _submitAuthForm(
@@ -22,6 +22,9 @@ class _AuthScreenState extends State<AuthScreen> {
     String password,
     BuildContext ctx,
   ) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       // AuthResult authResult = await _auth.signInWithEmailAndPassword(
       //   email: email,
@@ -43,6 +46,9 @@ class _AuthScreenState extends State<AuthScreen> {
       var message = 'An error occurred, please check your credentials!';
 
       if (err.message != null) {
+        setState(() {
+          _isLoading = false;
+        });
         message = err.message;
       }
 
@@ -53,15 +59,23 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       );
     } catch (err) {
+      setState(() {
+        _isLoading = true;
+      });
       print(err);
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: AuthForm(_submitAuthForm),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : AuthForm(_submitAuthForm),
     );
   }
 }
