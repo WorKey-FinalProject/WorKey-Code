@@ -66,16 +66,6 @@ class Auth with ChangeNotifier {
           .set(companyUserModel.toJson());
     }
     if (accountTypeChosen == AccountTypeChosen.personal) {
-      // await Firestore.instance
-      //     .collection('users')
-      //     .document(authResult.user.uid)
-      //     .setData(
-      //   {
-      //     'email': email,
-      //     'firstName': firstName,
-      //     'lastName': lastName,
-      //   },
-      // );
       personalUserModel = PersonalUserModel(
         id: authResult.user.uid,
         email: email,
@@ -98,14 +88,6 @@ class Auth with ChangeNotifier {
     );
     userId = authResult.user.uid;
     findCurrAccountType();
-    // await Firestore.instance
-    //     .collection('users')
-    //     .document(authResult.user.uid)
-    //     .setData(
-    //   {
-    //     'email': email,
-    //   },
-    // );
   }
 
   Future<void> findCurrAccountType() async {
