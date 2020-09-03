@@ -39,18 +39,6 @@ class Auth with ChangeNotifier {
       password: password,
     );
     if (accountTypeChosen == AccountTypeChosen.company) {
-      /*
-      await Firestore.instance
-          .collection('users')
-          .document(authResult.user.uid)
-          .setData(
-        {
-          'email': email,
-          'firstName': firstName,
-          'lastName': lastName,
-        },
-      );
-      */
       companyUserModel = CompanyUserModel(
         id: authResult.user.uid,
         companyEmail: email,
