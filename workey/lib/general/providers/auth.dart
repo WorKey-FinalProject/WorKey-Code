@@ -97,7 +97,7 @@ class Auth with ChangeNotifier {
       password: password,
     );
     userId = authResult.user.uid;
-    findAccountType();
+    findCurrAccountType();
     // await Firestore.instance
     //     .collection('users')
     //     .document(authResult.user.uid)
@@ -108,7 +108,7 @@ class Auth with ChangeNotifier {
     // );
   }
 
-  Future<void> findAccountType() async {
+  Future<void> findCurrAccountType() async {
     await dbRef
         .child('Users')
         .child('Personal Accounts')
@@ -136,28 +136,28 @@ class Auth with ChangeNotifier {
     });
   }
 
-  Future<void> updateUserData(
-      PersonalUserModel personalUserModelToUpdate) async {
+  Future<void> updateCurrUserData(dynamic userNewData) async {
     try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
       String type;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
+        user.updateEmail(userNewData.companyEmail);
       } else {
         type = 'Personal Accounts';
+        user.updateEmail(userNewData.email);
       }
       await dbRef
           .child('Users')
           .child(type)
           .child(userId)
-          .update(personalUserModelToUpdate.toJson());
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      user.updateEmail(personalUserModelToUpdate.email);
+          .update(userNewData.toJson());
     } on Exception catch (error) {
       throw error;
     }
   }
 
-  Future<void> deleteUserData() async {
+  Future<void> deleteCurrUserData() async {
     try {
       String type;
       if (accountType == AccountTypeChosen.company) {
