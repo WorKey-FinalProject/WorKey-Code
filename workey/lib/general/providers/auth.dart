@@ -143,9 +143,12 @@ class Auth with ChangeNotifier {
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
         user.updateEmail(userNewData.companyEmail);
-      } else {
+      } else if (accountType == AccountTypeChosen.personal) {
         type = 'Personal Accounts';
         user.updateEmail(userNewData.email);
+      } else {
+        print("problem with updateCurrUserData");
+        return null;
       }
       await dbRef
           .child('Users')
