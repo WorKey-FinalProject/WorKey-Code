@@ -1,7 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/employees_list.dart';
+import '../widgets/icons_row_pages/settings_view.dart';
+import '../widgets/icons_row_pages/location_view.dart';
+import '../widgets/group_view.dart';
+import '../widgets/icons_row_pages/sub_groups_list.dart';
+import '../widgets/icons_row_pages/employees_list.dart';
 import '../widgets/icons_row.dart';
 
 enum SelectedIcon {
@@ -28,13 +32,16 @@ class _GroupsScreenState extends State<GroupsScreen> {
   Widget _contantHandler() {
     switch (selectedIcon) {
       case SelectedIcon.subGroups:
+        return SubGroupsList();
         break;
       case SelectedIcon.employees:
         return EmployeesList();
         break;
       case SelectedIcon.location:
+        return LocationView();
         break;
       case SelectedIcon.settings:
+        return SettingsView();
         break;
       default:
     }
@@ -48,29 +55,13 @@ class _GroupsScreenState extends State<GroupsScreen> {
           height: constraints.maxHeight,
           child: Column(
             children: <Widget>[
-              Container(
-                height: constraints.maxHeight * 0.25,
-                padding: const EdgeInsets.only(top: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    null;
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    width: double.infinity,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'LOGO',
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+              Flexible(
+                flex: 2,
+                fit: FlexFit.tight,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  width: MediaQuery.of(context).size.width,
+                  child: GroupsView(),
                 ),
               ),
               Flexible(

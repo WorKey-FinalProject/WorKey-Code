@@ -15,29 +15,15 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   var _isLoading = false;
-  //final _auth = FirebaseAuth.instance;
 
   void _submitAuthForm(
     String email,
     String password,
+    Function updateLoadingStatus,
     BuildContext ctx,
   ) async {
-    setState(() {
-      _isLoading = true;
-    });
+    updateLoadingStatus(true);
     try {
-      // AuthResult authResult = await _auth.signInWithEmailAndPassword(
-      //   email: email,
-      //   password: password,
-      // );
-      // await Firestore.instance
-      //     .collection('users')
-      //     .document(authResult.user.uid)
-      //     .setData(
-      //   {
-      //     'email': email,
-      //   },
-      // );
       await Provider.of<Auth>(context, listen: false).signin(
         email,
         password,
@@ -46,9 +32,8 @@ class _AuthScreenState extends State<AuthScreen> {
       var message = 'An error occurred, please check your credentials!';
 
       if (err.message != null) {
-        setState(() {
-          _isLoading = false;
-        });
+        updateLoadingStatus(false);
+
         message = err.message;
       }
 
@@ -59,23 +44,17 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       );
     } catch (err) {
-      setState(() {
-        _isLoading = true;
-      });
+      updateLoadingStatus(false);
       print(err);
     }
-    setState(() {
-      _isLoading = false;
-    });
+    updateLoadingStatus(false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : AuthForm(_submitAuthForm),
+      body: AuthForm(_submitAuthForm),
     );
   }
 }

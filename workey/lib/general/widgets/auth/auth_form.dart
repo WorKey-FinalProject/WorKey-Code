@@ -6,6 +6,7 @@ class AuthForm extends StatefulWidget {
   final void Function(
     String email,
     String password,
+    Function updateLoadingStatus,
     BuildContext ctx,
   ) submitFn;
 
@@ -20,6 +21,14 @@ class _AuthFormState extends State<AuthForm> {
   var _userEmail = '';
   var _userPassword = '';
 
+  var _isLoading = false;
+
+  void updateLoadingStatus(bool isLoading) {
+    setState(() {
+      _isLoading = isLoading;
+    });
+  }
+
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
@@ -29,6 +38,7 @@ class _AuthFormState extends State<AuthForm> {
       widget.submitFn(
         _userEmail.trim(),
         _userPassword.trim(),
+        updateLoadingStatus,
         context,
       );
     }
@@ -107,26 +117,31 @@ class _AuthFormState extends State<AuthForm> {
         SizedBox(
           height: 20,
         ),
-        Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Container(
-              height: 60,
-              child: RaisedButton(
-                color: Theme.of(context).buttonColor,
-                child: Text(
-                  'SIGN IN',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+        _isLoading
+            ? Container(
+                child: Center(child: CircularProgressIndicator()),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Container(
+                    width: double.infinity,
+                    height: 60,
+                    child: RaisedButton(
+                      color: Theme.of(context).buttonColor,
+                      child: Text(
+                        'SIGN IN',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                      onPressed: _trySubmit,
+                    ),
+                  ),
                 ),
-                onPressed: _trySubmit,
               ),
-            ),
-          ),
-        ),
         SizedBox(
           height: 20,
         ),
