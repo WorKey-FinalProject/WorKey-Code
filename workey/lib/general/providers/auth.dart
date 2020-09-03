@@ -1,15 +1,31 @@
-import 'dart:convert';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:workey/general/models/company_user_model.dart';
+import 'package:workey/general/models/personal_user_model.dart';
 import 'package:workey/general/widgets/auth/signup_form.dart';
 
 class Auth with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
-
   final dbRef = FirebaseDatabase.instance.reference();
+
+  String userId;
+  AccountTypeChosen accountType;
+
+  CompanyUserModel companyUserModel = CompanyUserModel(
+      companyEmail: null,
+      companyName: null,
+      owenrFirstName: null,
+      owenrLastName: null,
+      dateOfCreation: null);
+  PersonalUserModel personalUserModel = PersonalUserModel(
+    email: null,
+    dateOfCreation: null,
+    firstName: null,
+    lastName: null,
+  );
+
+  var value;
 
   Future<void> signup(
     String email,
@@ -23,27 +39,31 @@ class Auth with ChangeNotifier {
       password: password,
     );
     if (accountTypeChosen == AccountTypeChosen.company) {
-      // await Firestore.instance
-      //     .collection('users')
-      //     .document(authResult.user.uid)
-      //     .setData(
-      //   {
-      //     'email': email,
-      //     'firstName': firstName,
-      //     'lastName': lastName,
-      //   },
-      // );
-      await dbRef
-          .child('users')
-          .child('company_accounts')
-          .child(authResult.user.uid)
-          .set(
+      /*
+      await Firestore.instance
+          .collection('users')
+          .document(authResult.user.uid)
+          .setData(
         {
           'email': email,
           'firstName': firstName,
           'lastName': lastName,
         },
       );
+      */
+      companyUserModel = CompanyUserModel(
+        id: authResult.user.uid,
+        companyEmail: email,
+        companyName: 'companyName',
+        owenrFirstName: firstName,
+        owenrLastName: lastName,
+        dateOfCreation: DateTime.now().toString(),
+      );
+      await dbRef
+          .child('Users')
+          .child('Company Accounts')
+          .child(authResult.user.uid)
+          .set(companyUserModel.toJson());
     }
     if (accountTypeChosen == AccountTypeChosen.personal) {
       // await Firestore.instance
@@ -56,29 +76,28 @@ class Auth with ChangeNotifier {
       //     'lastName': lastName,
       //   },
       // );
-      await dbRef
-          .child('users')
-          .child('personal_accounts')
-          .child(authResult.user.uid)
-          .set(
-        {
-          'email': email,
-          'firstName': firstName,
-          'lastName': lastName,
-        },
+      personalUserModel = PersonalUserModel(
+        id: authResult.user.uid,
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        dateOfCreation: DateTime.now().toString(),
       );
+      await dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child(authResult.user.uid)
+          .set(personalUserModel.toJson());
     }
   }
 
   Future<void> signin(String email, String password) async {
-    await _auth.signInWithEmailAndPassword(
+    AuthResult authResult = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
-    // AuthResult authResult = await _auth.signInWithEmailAndPassword(
-    //   email: email,
-    //   password: password,
-    // );
+    userId = authResult.user.uid;
+    findAccountType();
     // await Firestore.instance
     //     .collection('users')
     //     .document(authResult.user.uid)
@@ -87,5 +106,70 @@ class Auth with ChangeNotifier {
     //     'email': email,
     //   },
     // );
+  }
+
+  Future<void> findAccountType() async {
+    await dbRef
+        .child('Users')
+        .child('Personal Accounts')
+        .orderByKey()
+        .equalTo(userId)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      if (dataSnapshot.value == null) {
+        dbRef
+            .child('Users')
+            .child('Company Accounts')
+            .orderByKey()
+            .equalTo(userId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          if (dataSnapshot.value == null) {
+            accountType = AccountTypeChosen.nothing;
+          } else {
+            accountType = AccountTypeChosen.company;
+          }
+        });
+      } else {
+        accountType = AccountTypeChosen.personal;
+      }
+    });
+  }
+
+  Future<void> updateUserData(
+      PersonalUserModel personalUserModelToUpdate) async {
+    try {
+      String type;
+      if (accountType == AccountTypeChosen.company) {
+        type = 'Company Accounts';
+      } else {
+        type = 'Personal Accounts';
+      }
+      await dbRef
+          .child('Users')
+          .child(type)
+          .child(userId)
+          .update(personalUserModelToUpdate.toJson());
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      user.updateEmail(personalUserModelToUpdate.email);
+    } on Exception catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> deleteUserData() async {
+    try {
+      String type;
+      if (accountType == AccountTypeChosen.company) {
+        type = 'Company Accounts';
+      } else {
+        type = 'Personal Accounts';
+      }
+      await dbRef.child('Users').child(type).child(userId).remove();
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      user.delete();
+    } on Exception catch (error) {
+      throw ErrorHint;
+    }
   }
 }

@@ -3,24 +3,22 @@ import 'dart:convert';
 
 class CompanyUserModel {
   String id;
-  final String companyEmail;
-  final String companyName;
-  final String location;
-  final String password;
-  final String companyLogo;
-  final String ceoFirstName;
-  final String ceoLastName;
-  final String dateOfCreation;
+  String companyEmail;
+  String companyName;
+  String location;
+  String companyLogo;
+  String owenrFirstName;
+  String owenrLastName;
+  String dateOfCreation;
 
   CompanyUserModel({
     this.id,
     @required this.companyEmail,
     @required this.companyName,
     this.location,
-    @required this.password,
     this.companyLogo,
-    @required this.ceoFirstName,
-    @required this.ceoLastName,
+    @required this.owenrFirstName,
+    @required this.owenrLastName,
     @required this.dateOfCreation,
   });
 
@@ -28,16 +26,26 @@ class CompanyUserModel {
     this.id = id;
   }
 
-  String companyModelToJson() {
-    return json.encode({
+  Map<String, Object> toJson() {
+    return {
       'companyEmail': this.companyEmail,
       'companyName': this.companyName,
       'location': this.location,
-      'password': this.password,
       'companyLogo': this.companyLogo,
-      'ceoFirstName': this.ceoFirstName,
-      'ceoLastName': this.ceoLastName,
+      'owenrFirstName': this.owenrFirstName,
+      'owenrLastName': this.owenrLastName,
       'dateOfCreation': this.dateOfCreation,
-    });
+    };
+  }
+
+  void fromJson(Map snapshot, String uid) {
+    id = uid;
+    companyEmail = snapshot['companyEmail'];
+    companyName = snapshot['companyName'];
+    owenrFirstName = snapshot['owenrFirstName'];
+    owenrLastName = snapshot['owenrLastName'];
+    dateOfCreation = snapshot['dateOfCreation'];
+    location = snapshot['location'] ?? '';
+    companyLogo = snapshot['companyLogo'] ?? '';
   }
 }
