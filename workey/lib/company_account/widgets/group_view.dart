@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 
-class GroupsView extends StatefulWidget {
+class GroupView extends StatefulWidget {
   @override
-  _GroupsViewState createState() => _GroupsViewState();
+  _GroupViewState createState() => _GroupViewState();
 }
 
-class _GroupsViewState extends State<GroupsView> {
+class _GroupViewState extends State<GroupView> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      margin: EdgeInsets.all(5),
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(36),
+          bottomRight: Radius.circular(36),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey,
+            offset: Offset(0.0, 1.0), //(x,y)
+            blurRadius: 6.0,
+          ),
+        ],
+      ),
+      margin: EdgeInsets.only(bottom: 5),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Row(
@@ -21,9 +34,9 @@ class _GroupsViewState extends State<GroupsView> {
               child: Text(
                 'Group Name',
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
             Spacer(),
