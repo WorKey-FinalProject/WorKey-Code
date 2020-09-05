@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
-import 'package:workey/general/models/group_employee.dart';
+import 'package:workey/general/models/group_employee_model.dart';
 
 class WorkGroupModel {
   String id;
@@ -9,7 +9,7 @@ class WorkGroupModel {
   String parentWorkGroupId;
   String dateOfCreation;
   String workGroupLocation;
-  List<Employee> employeeList;
+  List<GroupEmployeeModel> employeeList;
   List<WorkGroupModel> workGroupList;
 
   final dbRef = FirebaseDatabase.instance.reference();
