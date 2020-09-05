@@ -1,36 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
 
 class CompanyGroups with ChangeNotifier {
-  String id;
-  String companyName;
-  List<WorkGroupModel> workGroupsList;
-  String dateOfCration;
+  List<WorkGroupModel> workGroupsList = [];
+  WorkGroupModel workGroupModel;
 
   final dbRef = FirebaseDatabase.instance.reference();
-
-  CompanyGroups({
-    @required this.dateOfCration,
-    @required this.companyName,
-    this.workGroupsList,
-  });
-
-  Map<String, Object> toJson() {
-    return {
-      'dateOfCration': this.dateOfCration,
-      'companyName': this.companyName,
-      'workGroupsList': this.workGroupsList,
-    };
-  }
-
-  void fromJson(Map snapshot, String uid) {
-    id = uid;
-    dateOfCration = snapshot['dateOfCration'];
-    companyName = snapshot['companyName'];
-    workGroupsList = snapshot['workGroupsList'] ?? '';
-  }
+  String userId;
 
   List<WorkGroupModel> get getWorkGroupsList {
     return [...workGroupsList];
@@ -40,11 +19,24 @@ class CompanyGroups with ChangeNotifier {
     return workGroupsList.firstWhere((workGroup) => workGroup.id == id);
   }
 
-  // need to check if works
-  void addWorkGroupToList(String companyId, WorkGroupModel workGroupModel) {
+  Future<void> getUserId() async {
     try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  // worked !!!!!
+  Future<void> addWorkGroupToList(WorkGroupModel workGroupModel) async {
+    var db =
+        dbRef.child("Company Groups").child(userId).child('workGroupsList');
+    try {
+      String newKew = db.push().key;
+      await db.child(newKew).set(workGroupModel.toJson());
+      workGroupModel.id = newKew;
       workGroupsList.add(workGroupModel);
-      addWorkGroupToListInDatabase(companyId, workGroupModel);
       notifyListeners();
     } on Exception {
       throw ErrorHint;
@@ -52,24 +44,10 @@ class CompanyGroups with ChangeNotifier {
   }
 
   // need to check if works
-  void addWorkGroupToListInDatabase(
-      String companyId, WorkGroupModel workGroupModel) async {
+  void deleteWorkGroupFromListById(String workGroupId) {
     try {
-      await dbRef
-          .child("Company")
-          .child(companyId)
-          .child('workGroupsList')
-          .set(workGroupModel.toJson());
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  // need to check if works
-  void deleteWorkGroupFromListById(String companyId, String workGroupId) {
-    try {
-      workGroupsList.removeWhere((workGroup) => workGroup.id == id);
-      deleteWorkGroupByIdInDatabase(companyId, workGroupId);
+      workGroupsList.removeWhere((workGroup) => workGroup.id == workGroupId);
+      deleteWorkGroupByIdInDatabase(workGroupId);
       notifyListeners();
     } on Exception {
       throw ErrorHint;
@@ -77,36 +55,14 @@ class CompanyGroups with ChangeNotifier {
   }
 
   // need to check if works
-  void deleteWorkGroupByIdInDatabase(
-      String companyId, String workGroupId) async {
+  void deleteWorkGroupByIdInDatabase(String workGroupId) async {
     try {
       await dbRef
           .child("Company")
-          .child(companyId)
+          .child(userId)
           .child('workGroupsList')
           .child(workGroupId)
           .remove();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  void updateCompanyName(String id, String companyName) {
-    try {
-      this.companyName = companyName;
-      updateCompanyNameInDatabase(id, companyName);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  void updateCompanyNameInDatabase(String id, String companyName) async {
-    try {
-      await dbRef
-          .child("Company")
-          .child(id)
-          .update({'companyName': companyName});
     } on Exception {
       throw ErrorHint;
     }

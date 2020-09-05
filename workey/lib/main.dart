@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/screens/splash_screen.dart';
 
 import './general/screens/signup_screen.dart';
@@ -28,13 +29,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Auth>(
           create: (ctx) => Auth(),
         ),
+        ChangeNotifierProvider<CompanyGroups>(
+          create: (ctx) => CompanyGroups(),
+        ),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           //primaryColor: Color(hexColor('#27AE60')),
-          //primaryColor: Color(hexColor('#27AE60')),
-          primaryColor: Colors.blue,
+          primaryColor: Color(hexColor('#27AE60')),
+          //primaryColor: Colors.blue,
           accentColor: Colors.amber,
           // accentColor: Color(hexColor('#68829e')),
           buttonColor: Colors.amber,
