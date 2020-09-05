@@ -53,16 +53,13 @@ class _GroupsScreenState extends State<GroupsScreen> {
       builder: (context, constraints) {
         return Container(
           height: constraints.maxHeight,
+          width: constraints.maxWidth,
           child: Column(
             children: <Widget>[
               Flexible(
                 flex: 2,
                 fit: FlexFit.tight,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  width: MediaQuery.of(context).size.width,
-                  child: GroupsView(),
-                ),
+                child: GroupView(),
               ),
               Flexible(
                 flex: 1,

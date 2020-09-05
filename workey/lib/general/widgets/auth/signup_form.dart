@@ -175,46 +175,58 @@ class _SignUpFormState extends State<SignUpForm> {
     );
     var accountTypeSelection = Column(
       children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              accountTypeChosen = AccountTypeChosen.company;
-            });
-          },
-          child: AccountSelectionCard(
-            title: 'Company Account',
-            description: 'Description',
-            color: Colors.amber,
+        Flexible(
+          fit: FlexFit.tight,
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                accountTypeChosen = AccountTypeChosen.company;
+              });
+            },
+            child: AccountSelection(
+              title: 'Company Account',
+              description: 'Description',
+              color: Colors.grey[400],
+            ),
           ),
         ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              accountTypeChosen = AccountTypeChosen.personal;
-            });
-          },
-          child: AccountSelectionCard(
-            title: 'Personal Account',
-            description: 'Description',
-            color: Colors.green,
+        Flexible(
+          fit: FlexFit.tight,
+          child: InkWell(
+            onTap: () {
+              setState(() {
+                accountTypeChosen = AccountTypeChosen.personal;
+              });
+            },
+            child: AccountSelection(
+              title: 'Personal Account',
+              description: 'Description',
+              color: Colors.black45,
+            ),
           ),
         ),
       ],
     );
 
-    return ListView(
+    return Column(
       children: <Widget>[
-        BackButtonWidget(),
-        accountTypeChosen == AccountTypeChosen.nothing
-            ? accountTypeSelection
-            : form,
+        Flexible(
+          flex: 1,
+          child: BackButtonWidget(),
+        ),
+        Flexible(
+          flex: 2,
+          child: accountTypeChosen == AccountTypeChosen.nothing
+              ? accountTypeSelection
+              : form,
+        ),
       ],
     );
   }
 }
 
-class AccountSelectionCard extends StatelessWidget {
-  const AccountSelectionCard({
+class AccountSelection extends StatelessWidget {
+  const AccountSelection({
     Key key,
     @required this.title,
     @required this.description,
@@ -228,35 +240,26 @@ class AccountSelectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      margin: EdgeInsets.all(10),
-      height: 200,
-      child: Card(
-        margin: EdgeInsets.symmetric(vertical: 5),
-        color: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
-        ),
-        elevation: 10,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Text(
-                title,
-                textAlign: TextAlign.center,
-                style: GoogleFonts.aBeeZee(
-                  fontSize: 40,
-                ),
+      color: color,
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.aBeeZee(
+                fontSize: 40,
               ),
-              Divider(),
-              Text(
-                description,
-                style: GoogleFonts.aBeeZee(fontSize: 20),
-              ),
-            ],
-          ),
+            ),
+            Divider(),
+            Text(
+              description,
+              style: GoogleFonts.aBeeZee(fontSize: 20),
+            ),
+          ],
         ),
       ),
+      // ),
     );
   }
 }
@@ -269,11 +272,10 @@ class BackButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: NetworkImage(
-            'https://www.druid.fi/sites/default/files/laptop-desk-table-coffee-light-wood-912411-pxhere.com__0.jpg',
+            'https://i1.pickpik.com/photos/648/390/362/business-desk-diary-iphone-preview.jpg',
           ),
           fit: BoxFit.cover,
         ),
@@ -281,7 +283,7 @@ class BackButtonWidget extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           Positioned(
-            top: 20,
+            top: 40,
             child: Row(
               children: <Widget>[
                 IconButton(
