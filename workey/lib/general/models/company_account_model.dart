@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'dart:convert';
 
-class CompanyUserModel {
+class CompanyAccountModel {
   String id;
   String companyEmail;
   String companyName;
@@ -11,7 +10,7 @@ class CompanyUserModel {
   String owenrLastName;
   String dateOfCreation;
 
-  CompanyUserModel({
+  CompanyAccountModel({
     this.id,
     @required this.companyEmail,
     @required this.companyName,
@@ -21,10 +20,6 @@ class CompanyUserModel {
     @required this.owenrLastName,
     @required this.dateOfCreation,
   });
-
-  void addId(String id) {
-    this.id = id;
-  }
 
   Map<String, Object> toJson() {
     return {

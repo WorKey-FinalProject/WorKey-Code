@@ -1,8 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:workey/general/models/company_user_model.dart';
-import 'package:workey/general/models/personal_user_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
+
+import '../models/company_account_model.dart';
+import '../models/personal_account_model.dart';
 import 'package:workey/general/widgets/auth/signup_form.dart';
 
 class Auth with ChangeNotifier {
@@ -12,20 +14,23 @@ class Auth with ChangeNotifier {
   String userId;
   AccountTypeChosen accountType;
 
-  CompanyUserModel companyUserModel = CompanyUserModel(
+  CompanyAccountModel companyUserModel = CompanyAccountModel(
       companyEmail: null,
       companyName: null,
       owenrFirstName: null,
       owenrLastName: null,
       dateOfCreation: null);
+
+  CompanyGroups companyGroups = CompanyGroups(
+    dateOfCration: null,
+    companyName: null,
+  );
   PersonalUserModel personalUserModel = PersonalUserModel(
     email: null,
     dateOfCreation: null,
     firstName: null,
     lastName: null,
   );
-
-  var value;
 
   Future<void> signup(
     String email,
@@ -39,7 +44,9 @@ class Auth with ChangeNotifier {
       password: password,
     );
     if (accountTypeChosen == AccountTypeChosen.company) {
-      companyUserModel = CompanyUserModel(
+
+      companyUserModel = CompanyAccountModel(
+
         id: authResult.user.uid,
         companyEmail: email,
         companyName: 'companyName',
@@ -47,11 +54,28 @@ class Auth with ChangeNotifier {
         owenrLastName: lastName,
         dateOfCreation: DateTime.now().toString(),
       );
-      await dbRef
-          .child('Users')
-          .child('Company Accounts')
-          .child(authResult.user.uid)
-          .set(companyUserModel.toJson());
+      try {
+        await dbRef
+            .child('Users')
+            .child('Company Accounts')
+            .child(authResult.user.uid)
+            .set(companyUserModel.toJson());
+      } on Exception {
+        throw ErrorHint;
+      }
+
+      companyGroups = CompanyGroups(
+        dateOfCration: DateTime.now().toString(),
+        companyName: 'companyName',
+      );
+      try {
+        await dbRef
+            .child('Company Groups')
+            .child(authResult.user.uid)
+            .set(companyGroups.toJson());
+      } on Exception {
+        throw ErrorHint;
+      }
     }
     if (accountTypeChosen == AccountTypeChosen.personal) {
       personalUserModel = PersonalUserModel(
