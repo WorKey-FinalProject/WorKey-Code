@@ -9,7 +9,7 @@ class WorkGroupModel {
   String parentWorkGroupId;
   String dateOfCreation;
   String workGroupLocation;
-  List<Employee> employees;
+  List<Employee> employeeList;
   List<WorkGroupModel> workGroupList;
 
   final dbRef = FirebaseDatabase.instance.reference();
@@ -20,6 +20,7 @@ class WorkGroupModel {
     @required this.managerId,
     @required this.parentWorkGroupId,
     @required this.dateOfCreation,
+    this.employeeList,
     this.workGroupLocation,
   });
 
@@ -30,6 +31,7 @@ class WorkGroupModel {
       'parentWorkGroupId': this.parentWorkGroupId,
       'dateOfCreation': this.dateOfCreation,
       'workGroupLocation': this.workGroupLocation,
+      'employeeList': this.employeeList,
     };
   }
 
@@ -39,6 +41,7 @@ class WorkGroupModel {
     managerId = snapshot['managerId'];
     parentWorkGroupId = snapshot['parentWorkGroupId'];
     dateOfCreation = snapshot['dateOfCreation'];
+    employeeList = snapshot['employeeList'] ?? '';
     workGroupLocation = snapshot['workGroupLocation'] ?? '';
   }
 }
