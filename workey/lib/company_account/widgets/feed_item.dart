@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/widgets/speed_dial_button.dart';
 
 class FeedItem extends StatelessWidget {
   final String title;
@@ -12,7 +13,7 @@ class FeedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 20),
+      margin: EdgeInsets.symmetric(vertical: 25),
       // color: Theme.of(context).cardColor,
       color: Colors.white,
       shape: RoundedRectangleBorder(

@@ -13,87 +13,116 @@ class IconsRow extends StatefulWidget {
 }
 
 class _IconsRowState extends State<IconsRow> {
+  SelectedIcon selectedIcon = SelectedIcon.employees;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 5,
-        vertical: 5,
-      ),
-      child: Card(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Flexible(
-              fit: FlexFit.tight,
-              child: FlatButton(
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.employees),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
+    return Card(
+      elevation: 5,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Flexible(
+            fit: FlexFit.tight,
+            child: FlatButton(
+              onPressed: () {
+                selectedIcon = SelectedIcon.employees;
+                widget.selectedIconHandler(selectedIcon);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
+                    child: Icon(
                       Icons.people,
-                      size: 35,
+                      color: selectedIcon == SelectedIcon.employees
+                          ? Theme.of(context).accentColor
+                          : Colors.black,
+                      // size: 35,
                     ),
-                    FittedBox(child: const Text('Employees')),
-                  ],
-                ),
+                  ),
+                  FittedBox(
+                    child: const Text(
+                      'Employees',
+                    ),
+                  ),
+                ],
               ),
             ),
-            Flexible(
-              fit: FlexFit.tight,
-              child: FlatButton(
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.employees),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: FlatButton(
+              onPressed: () {
+                selectedIcon = SelectedIcon.location;
+                widget.selectedIconHandler(selectedIcon);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
+                    child: Icon(
                       Icons.place,
-                      size: 35,
+                      color: selectedIcon == SelectedIcon.location
+                          ? Theme.of(context).accentColor
+                          : Colors.black,
+                      // size: 35,
                     ),
-                    FittedBox(child: const Text('Location')),
-                  ],
-                ),
+                  ),
+                  FittedBox(child: const Text('Location')),
+                ],
               ),
             ),
-            Flexible(
-              fit: FlexFit.tight,
-              child: FlatButton(
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.employees),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: FlatButton(
+              onPressed: () {
+                selectedIcon = SelectedIcon.subGroups;
+                widget.selectedIconHandler(selectedIcon);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
+                    child: Icon(
                       MdiIcons.graph,
-                      size: 35,
+                      color: selectedIcon == SelectedIcon.subGroups
+                          ? Theme.of(context).accentColor
+                          : Colors.black,
+                      // size: 35,
                     ),
-                    FittedBox(child: const Text('Sub Groups')),
-                  ],
-                ),
+                  ),
+                  FittedBox(child: const Text('Sub Groups')),
+                ],
               ),
             ),
-            Flexible(
-              fit: FlexFit.tight,
-              child: FlatButton(
-                onPressed: () =>
-                    widget.selectedIconHandler(SelectedIcon.employees),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
+          ),
+          Flexible(
+            fit: FlexFit.tight,
+            child: FlatButton(
+              onPressed: () {
+                selectedIcon = SelectedIcon.settings;
+                widget.selectedIconHandler(selectedIcon);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
+                    child: Icon(
                       Icons.settings,
-                      size: 35,
+                      color: selectedIcon == SelectedIcon.settings
+                          ? Theme.of(context).accentColor
+                          : Colors.black,
+                      // size: 35,
                     ),
-                    FittedBox(child: const Text('Settings')),
-                  ],
-                ),
+                  ),
+                  FittedBox(child: const Text('Settings')),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

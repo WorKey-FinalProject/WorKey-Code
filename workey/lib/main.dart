@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/screens/splash_screen.dart';
+
 import './general/screens/signup_screen.dart';
 import './company_account/screens/tabs_screen.dart';
 import './general/screens/auth_screen.dart';
+import './general/providers/auth.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,37 +24,47 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        //primaryColor: Colors.green,
-        accentColor: Colors.amber,
-        bottomAppBarColor: Color(hexColor('#27AE60')),
-        buttonColor: Colors.amber,
-        primaryColor: Color(hexColor('#27AE60')),
-        // accentColor: Color(hexColor('#68829e')),
-        // bottomAppBarColor: Color(hexColor('#20232a')),
-        // buttonColor: Color(hexColor('#a01d26')),
-        // cardColor: Color(hexColor('#bcbabe')),
-        // backgroundColor: Colors.white,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      // home: TabsScreen(),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.onAuthStateChanged,
-        builder: (ctx, userSnapshot) {
-          if (userSnapshot.hasData) {
-            return TabsScreen();
-          }
-          return AuthScreen();
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Auth>(
+          create: (ctx) => Auth(),
+        ),
+        ChangeNotifierProvider<CompanyGroups>(
+          create: (ctx) => CompanyGroups(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          //primaryColor: Color(hexColor('#27AE60')),
+          primaryColor: Color(hexColor('#27AE60')),
+          //primaryColor: Colors.blue,
+          accentColor: Colors.amber,
+          // accentColor: Color(hexColor('#68829e')),
+          buttonColor: Colors.amber,
+          // buttonColor: Color(hexColor('#a01d26')),
+          bottomAppBarColor: Colors.white,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        // home: TabsScreen(),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.onAuthStateChanged,
+          builder: (ctx, userSnapshot) {
+            if (userSnapshot.connectionState == ConnectionState.waiting) {
+              return SplashScreen();
+            }
+            if (userSnapshot.hasData) {
+              return TabsScreen();
+            }
+            return AuthScreen();
+          },
+        ),
+        routes: {
+          TabsScreen.nameRoute: (ctx) => TabsScreen(),
+          AuthScreen.routeName: (ctx) => AuthScreen(),
+          SignUpScreen.routeName: (ctx) => SignUpScreen(),
         },
       ),
-      //initialRoute: '/',
-      routes: {
-        TabsScreen.nameRoute: (ctx) => TabsScreen(),
-        AuthScreen.routeName: (ctx) => AuthScreen(),
-        SignUpScreen.routeName: (ctx) => SignUpScreen(),
-      },
     );
   }
 }

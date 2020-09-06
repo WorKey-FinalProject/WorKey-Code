@@ -1,13 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/services.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
 
-import 'package:workey/general/widgets/auth/auth_form.dart';
-
-import './signup_screen.dart';
+import '../widgets/auth/auth_form.dart';
+import '../providers/auth.dart';
 
 class AuthScreen extends StatefulWidget {
   static const routeName = '/auth';
@@ -17,30 +16,35 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final _auth = FirebaseAuth.instance;
+  var _isLoading = false;
 
   void _submitAuthForm(
     String email,
     String password,
+    Function updateLoadingStatus,
     BuildContext ctx,
   ) async {
+    updateLoadingStatus(true);
     try {
-      AuthResult authResult = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
+      await Provider.of<Auth>(context, listen: false).signin(
+        email,
+        password,
       );
-      await Firestore.instance
-          .collection('users')
-          .document(authResult.user.uid)
-          .setData(
-        {
-          'email': email,
-        },
+      await Provider.of<CompanyGroups>(context, listen: false).getUserId();
+      WorkGroupModel workGroupModel = WorkGroupModel(
+        workGroupName: 'fck off',
+        managerId: 'fck sshhit',
+        parentWorkGroupId: 'lol',
+        dateOfCreation: 'dddd',
+        workGroupLogo: '22',
       );
+      await Provider.of<CompanyGroups>(context, listen: false)
+          .addWorkGroupToList(workGroupModel);
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
       if (err.message != null) {
+        updateLoadingStatus(false);
         message = err.message;
       }
 
@@ -51,8 +55,10 @@ class _AuthScreenState extends State<AuthScreen> {
         ),
       );
     } catch (err) {
+      updateLoadingStatus(false);
       print(err);
     }
+    updateLoadingStatus(false);
   }
 
   @override

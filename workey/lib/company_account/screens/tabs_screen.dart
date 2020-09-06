@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -77,7 +75,7 @@ class _TabsScreenState extends State<TabsScreen> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         backgroundColor: Theme.of(context).bottomAppBarColor,
-        unselectedItemColor: Colors.white,
+        unselectedItemColor: Colors.black,
         selectedItemColor: Theme.of(context).buttonColor,
         currentIndex: _selectedPageIndex,
         items: [
