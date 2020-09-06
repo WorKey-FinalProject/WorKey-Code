@@ -28,8 +28,7 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  // worked !!!!!
-  Future<void> addWorkGroupToList(WorkGroupModel workGroupModel) async {
+  Future<void> addWorkGroup(WorkGroupModel workGroupModel) async {
     var db =
         dbRef.child("Company Groups").child(userId).child('workGroupsList');
     try {
@@ -43,26 +42,30 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  // need to check if works
-  void deleteWorkGroupFromListById(String workGroupId) {
+  Future<void> updateWorkGroup(
+      String workGroupToUpdateId, WorkGroupModel workGroupModel) async {
     try {
-      workGroupsList.removeWhere((workGroup) => workGroup.id == workGroupId);
-      deleteWorkGroupByIdInDatabase(workGroupId);
-      notifyListeners();
+      dbRef
+          .child("Company Groups")
+          .child(userId)
+          .child('workGroupsList')
+          .child(workGroupToUpdateId)
+          .update(workGroupModel.toJson());
     } on Exception {
       throw ErrorHint;
     }
   }
 
-  // need to check if works
-  void deleteWorkGroupByIdInDatabase(String workGroupId) async {
+  Future<void> deleteWorkGroupById(String workGroupId) async {
     try {
       await dbRef
-          .child("Company")
+          .child("Company Groups")
           .child(userId)
           .child('workGroupsList')
           .child(workGroupId)
           .remove();
+      workGroupsList.removeWhere((workGroup) => workGroup.id == workGroupId);
+      notifyListeners();
     } on Exception {
       throw ErrorHint;
     }

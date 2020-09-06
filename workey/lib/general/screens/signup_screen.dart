@@ -67,6 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         //   password,
         //   firstName,
         //   lastName,
+
         // );
       } on PlatformException catch (err) {
         var message = 'An error occurred, please check your credentials!';
