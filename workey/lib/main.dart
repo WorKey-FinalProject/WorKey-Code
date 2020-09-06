@@ -60,8 +60,6 @@ class MyApp extends StatelessWidget {
                 return TabsScreen();
               } else if (auth.accountType == AccountTypeChosen.personal) {
                 return PersonalTabsScreen();
-              } else {
-                return PersonalTabsScreen();
               }
             }
             return AuthScreen();
