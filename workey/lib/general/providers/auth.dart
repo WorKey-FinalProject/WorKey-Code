@@ -13,14 +13,14 @@ class Auth with ChangeNotifier {
   String userId;
   AccountTypeChosen accountType;
 
-  CompanyAccountModel companyUserModel = CompanyAccountModel(
+  CompanyAccountModel companyAccountModel = CompanyAccountModel(
       companyEmail: null,
       companyName: null,
       owenrFirstName: null,
       owenrLastName: null,
       dateOfCreation: null);
 
-  PersonalUserModel personalUserModel = PersonalUserModel(
+  PersonalUserModel personalAccountModel = PersonalUserModel(
     email: null,
     dateOfCreation: null,
     firstName: null,
@@ -44,7 +44,7 @@ class Auth with ChangeNotifier {
       email: email,
       password: password,
     );
-    personalUserModel = PersonalUserModel(
+    personalAccountModel = PersonalUserModel(
       id: authResult.user.uid,
       email: email,
       firstName: firstName,
@@ -63,7 +63,7 @@ class Auth with ChangeNotifier {
           .child('Users')
           .child('Personal Accounts')
           .child(authResult.user.uid)
-          .set(personalUserModel.toJson());
+          .set(personalAccountModel.toJson());
     } on Exception {
       throw ErrorHint;
     }
@@ -83,7 +83,7 @@ class Auth with ChangeNotifier {
       password: password,
     );
 
-    companyUserModel = CompanyAccountModel(
+    companyAccountModel = CompanyAccountModel(
         id: authResult.user.uid,
         companyEmail: companyEmail,
         companyName: companyName,
@@ -106,7 +106,7 @@ class Auth with ChangeNotifier {
           .child('Users')
           .child('Company Accounts')
           .child(authResult.user.uid)
-          .set(companyUserModel.toJson());
+          .set(companyAccountModel.toJson());
     } on Exception {
       throw ErrorHint;
     }
@@ -218,28 +218,32 @@ class Auth with ChangeNotifier {
     });
   }
 
-  Future<dynamic> getUserData() async {
+  Future<dynamic> getCurrUserData() async {
     try {
       if (accountType == AccountTypeChosen.company) {
-        dbRef
-            .child("Company Accounts")
-            .orderByKey()
-            .equalTo(userId)
+        await dbRef
+            .child('Users')
+            .child('Company Accounts')
+            .child(userId)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          return companyUserModel.fromJson(dataSnapshot.value, userId);
+          companyAccountModel.fromJson(dataSnapshot.value, userId);
+          companyAccountModel.id = userId;
+          return companyAccountModel;
         });
       } else if (accountType == AccountTypeChosen.personal) {
-        dbRef
-            .child("Personal Accounts")
-            .orderByKey()
-            .equalTo(userId)
+        await dbRef
+            .child('Users')
+            .child('Personal Accounts')
+            .child(userId)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          return personalUserModel.fromJson(dataSnapshot.value, userId);
+          personalAccountModel.fromJson(dataSnapshot.value, userId);
+          personalAccountModel.id = userId;
+          return personalAccountModel;
         });
       } else {
-        throw 'faild to get user data: error - accountType == nothing.';
+        throw 'failed to get user data: error - accountType == nothing.';
       }
     } on Exception {
       throw ErrorHint;

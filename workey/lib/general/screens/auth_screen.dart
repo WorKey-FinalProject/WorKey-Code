@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/providers/company_groups.dart';
 
 import '../widgets/auth/auth_form.dart';
@@ -47,9 +49,11 @@ class _AuthScreenState extends State<AuthScreen> {
       //     .addWorkGroup(workGroupModel);
       // await Provider.of<CompanyGroups>(context, listen: false)
       //     .addWorkGroup(workGroupModel2);
+      /*
       List<WorkGroupModel> list =
           Provider.of<CompanyGroups>(context, listen: false).getWorkGroupsList;
       print(list.length);
+      */
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 

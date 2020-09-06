@@ -19,10 +19,10 @@ class CompanyGroups with ChangeNotifier {
     return workGroupsList.firstWhere((workGroup) => workGroup.id == id);
   }
 
-  Future<void> fatchAndSetWorkGroupsInList() async {
-    var db =
-        dbRef.child('Company Groups').child(userId).child('workGroupsList');
-  }
+  // Future<void> fatchAndSetWorkGroupsInList() async {
+  //   var db =
+  //       dbRef.child('Company Groups').child(userId).child('workGroupsList').
+  // }
 
   Future<void> getUserId() async {
     try {
