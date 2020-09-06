@@ -13,6 +13,11 @@ class Auth with ChangeNotifier {
   String userId;
   AccountTypeChosen accountType;
 
+  get accountTypeChosen {
+    findCurrAccountType();
+    return accountType;
+  }
+
   CompanyAccountModel companyUserModel = CompanyAccountModel(
       companyEmail: null,
       companyName: null,
@@ -196,25 +201,28 @@ class Auth with ChangeNotifier {
         .orderByKey()
         .equalTo(userId)
         .once()
-        .then((DataSnapshot dataSnapshot) {
-      if (dataSnapshot.value == null) {
-        dbRef
-            .child('Users')
-            .child('Company Accounts')
-            .orderByKey()
-            .equalTo(userId)
-            .once()
-            .then((DataSnapshot dataSnapshot) {
-          if (dataSnapshot.value == null) {
-            accountType = AccountTypeChosen.nothing;
-          } else {
-            accountType = AccountTypeChosen.company;
-          }
-        });
-      } else {
-        accountType = AccountTypeChosen.personal;
-      }
-    });
+        .then(
+      (DataSnapshot dataSnapshot) {
+        if (dataSnapshot.value == null) {
+          dbRef
+              .child('Users')
+              .child('Company Accounts')
+              .orderByKey()
+              .equalTo(userId)
+              .once()
+              .then((DataSnapshot dataSnapshot) {
+            if (dataSnapshot.value == null) {
+              accountType = AccountTypeChosen.nothing;
+            } else {
+              accountType = AccountTypeChosen.company;
+            }
+          });
+        } else {
+          accountType = AccountTypeChosen.personal;
+        }
+      },
+    );
+    notifyListeners();
   }
 
   Future<void> updateCurrUserData(dynamic userNewData) async {
