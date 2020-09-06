@@ -49,18 +49,25 @@ class Logo extends StatelessWidget {
                   ),
                 ],
               ),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  hintStyle: TextStyle(
-                    color: Theme.of(context).primaryColor.withOpacity(0.5),
+              child: Row(
+                children: [
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: FlatButton(
+                      onPressed: () {},
+                      child: FittedBox(
+                        child: Icon(
+                          Icons.mail,
+                          color: Colors.blue,
+                          // size: 35,
+                        ),
+                      ),
+                    ),
                   ),
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                ),
+                ],
               ),
             ),
-          )
+          ),
         ],
         overflow: Overflow.visible,
       ),
