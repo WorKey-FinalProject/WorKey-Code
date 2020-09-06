@@ -1,8 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:workey/general/providers/company_groups.dart';
-
+import 'package:workey/general/models/work_group_model.dart';
 import '../models/company_account_model.dart';
 import '../models/personal_account_model.dart';
 import 'package:workey/general/widgets/auth/signup_form.dart';
@@ -21,10 +20,6 @@ class Auth with ChangeNotifier {
       owenrLastName: null,
       dateOfCreation: null);
 
-  CompanyGroups companyGroups = CompanyGroups(
-    dateOfCration: null,
-    companyName: null,
-  );
   PersonalUserModel personalUserModel = PersonalUserModel(
     email: null,
     dateOfCreation: null,
@@ -44,15 +39,20 @@ class Auth with ChangeNotifier {
       password: password,
     );
     if (accountTypeChosen == AccountTypeChosen.company) {
-
       companyUserModel = CompanyAccountModel(
-
         id: authResult.user.uid,
         companyEmail: email,
         companyName: 'companyName',
         owenrFirstName: firstName,
         owenrLastName: lastName,
         dateOfCreation: DateTime.now().toString(),
+      );
+      WorkGroupModel workGroupModel = WorkGroupModel(
+        workGroupName: 'Root',
+        managerId: null,
+        parentWorkGroupId: null,
+        dateOfCreation: DateTime.now().toString(),
+        workGroupLogo: null,
       );
       try {
         await dbRef
@@ -63,16 +63,11 @@ class Auth with ChangeNotifier {
       } on Exception {
         throw ErrorHint;
       }
-
-      companyGroups = CompanyGroups(
-        dateOfCration: DateTime.now().toString(),
-        companyName: 'companyName',
-      );
       try {
         await dbRef
             .child('Company Groups')
             .child(authResult.user.uid)
-            .set(companyGroups.toJson());
+            .set(workGroupModel.toJson());
       } on Exception {
         throw ErrorHint;
       }
