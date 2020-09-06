@@ -27,12 +27,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       BuildContext ctx,
     ) async {
       try {
-        // await Provider.of<Auth>(context, listen: false).signup(
-        //   email,
-        //   password,
-        //   firstName,
-        //   lastName,
-        // );
+        await Provider.of<Auth>(context, listen: false).signUpCompanyAccount(
+          companyEmail: email,
+          password: password,
+          owenrFirstName: firstName,
+          owenrLastName: lastName,
+          companyName: companyName,
+          companyLogo: '',
+          location: '',
+        );
       } on PlatformException catch (err) {
         var message = 'An error occurred, please check your credentials!';
 
@@ -57,18 +60,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
       String password,
       String firstName,
       String lastName,
-      String companyName,
-      String companyLogo,
       BuildContext ctx,
     ) async {
       try {
-        // await Provider.of<Auth>(context, listen: false).signup(
-        //   email,
-        //   password,
-        //   firstName,
-        //   lastName,
-
-        // );
+        await Provider.of<Auth>(context, listen: false).signUpPersonalAccount(
+          email: email,
+          password: password,
+          firstName: firstName,
+          lastName: lastName,
+          profilePicture: '',
+          phoneNumber: '',
+          occupation: '',
+          dateOfBirth: '',
+          address: '',
+          faceRecognitionPicture: '',
+          fingerPrint: '',
+        );
       } on PlatformException catch (err) {
         var message = 'An error occurred, please check your credentials!';
 

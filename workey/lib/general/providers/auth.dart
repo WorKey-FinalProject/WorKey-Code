@@ -27,7 +27,7 @@ class Auth with ChangeNotifier {
     lastName: null,
   );
 
-  Future<void> signUpPersonalAccount(
+  Future<void> signUpPersonalAccount({
     String email,
     String password,
     String firstName,
@@ -39,7 +39,7 @@ class Auth with ChangeNotifier {
     String faceRecognitionPicture,
     String fingerPrint,
     String profilePicture,
-  ) async {
+  }) async {
     AuthResult authResult = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
@@ -69,7 +69,7 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> signUpCompanyAccount(
+  Future<void> signUpCompanyAccount({
     String companyEmail,
     String password,
     String companyName,
@@ -77,7 +77,7 @@ class Auth with ChangeNotifier {
     String companyLogo,
     String owenrFirstName,
     String owenrLastName,
-  ) async {
+  }) async {
     AuthResult authResult = await _auth.createUserWithEmailAndPassword(
       email: companyEmail,
       password: password,
