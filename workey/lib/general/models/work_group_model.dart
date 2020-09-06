@@ -9,6 +9,7 @@ class WorkGroupModel {
   String parentWorkGroupId;
   String dateOfCreation;
   String workGroupLocation;
+  String workGroupLogo;
   List<GroupEmployeeModel> employeeList;
   List<WorkGroupModel> workGroupList;
 
@@ -20,6 +21,7 @@ class WorkGroupModel {
     @required this.managerId,
     @required this.parentWorkGroupId,
     @required this.dateOfCreation,
+    @required this.workGroupLogo,
     this.employeeList,
     this.workGroupLocation,
   });
@@ -30,6 +32,7 @@ class WorkGroupModel {
       'managerId': this.managerId,
       'parentWorkGroupId': this.parentWorkGroupId,
       'dateOfCreation': this.dateOfCreation,
+      'workGroupLogo': this.workGroupLogo,
       'workGroupLocation': this.workGroupLocation,
       'employeeList': this.employeeList,
     };
@@ -40,6 +43,7 @@ class WorkGroupModel {
     workGroupName = snapshot['workGroupName'];
     managerId = snapshot['managerId'];
     parentWorkGroupId = snapshot['parentWorkGroupId'];
+    workGroupLogo = snapshot['workGroupLogo'];
     dateOfCreation = snapshot['dateOfCreation'];
     employeeList = snapshot['employeeList'] ?? '';
     workGroupLocation = snapshot['workGroupLocation'] ?? '';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/screens/splash_screen.dart';
 
 import './general/screens/signup_screen.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<Auth>(
           create: (ctx) => Auth(),
+        ),
+        ChangeNotifierProvider<CompanyGroups>(
+          create: (ctx) => CompanyGroups(),
         ),
       ],
       child: MaterialApp(
