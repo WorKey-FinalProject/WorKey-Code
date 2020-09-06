@@ -29,8 +29,6 @@ class SignUpType extends StatefulWidget {
     String password,
     String firstName,
     String lastName,
-    String companyName,
-    String companyLogo,
     BuildContext ctx,
   ) submitFnPersonal;
 
