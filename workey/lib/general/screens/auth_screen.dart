@@ -30,11 +30,6 @@ class _AuthScreenState extends State<AuthScreen> {
         email,
         password,
       );
-      await Provider.of<CompanyGroups>(context, listen: false).getUserId();
-      print("start");
-      await Provider.of<CompanyGroups>(context, listen: false)
-          .deleteWorkGroupFromListById("-MGVbDlaBr2s8UNCALQS");
-      print("end");
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 

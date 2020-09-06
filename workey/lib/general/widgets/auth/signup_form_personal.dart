@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../previous_next_button.dart';
 
-class SignUpFormCompany extends StatefulWidget {
+class SignUpFormPersonal extends StatefulWidget {
   final void Function(
     String email,
     String password,
     String firstName,
     String lastName,
-    String companyName,
-    String companyLogo,
     BuildContext ctx,
   ) submitFn;
 
-  SignUpFormCompany(this.submitFn);
+  SignUpFormPersonal(this.submitFn);
 
   @override
-  _SignUpFormCompanyState createState() => _SignUpFormCompanyState();
+  _SignUpFormPersonalState createState() => _SignUpFormPersonalState();
 }
 
-class _SignUpFormCompanyState extends State<SignUpFormCompany> {
+class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
   var step = 0;
 
   final _formKey = GlobalKey<FormState>();
@@ -27,8 +25,6 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
   var _userPassword = '';
   var _userFirstName = '';
   var _userLastName = '';
-  var _companyName = "";
-  var _companyLogoImagePath = "";
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
@@ -41,8 +37,6 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
         _userPassword.trim(),
         _userFirstName.trim(),
         _userLastName.trim(),
-        _companyName.trim(),
-        _companyLogoImagePath.trim(),
         context,
       );
     }

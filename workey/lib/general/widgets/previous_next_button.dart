@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 class PreviousNextButton extends StatelessWidget {
   const PreviousNextButton({
     Key key,
+    this.currentStep,
+    this.maxStep,
   }) : super(key: key);
+
+  final int maxStep;
+  final int currentStep;
 
   @override
   Widget build(BuildContext context) {
