@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/icons_row_pages/settings_view.dart';
-import '../widgets/icons_row_pages/location_view.dart';
 import '../widgets/group_view.dart';
 import '../widgets/icons_row_pages/sub_groups_list.dart';
 import '../widgets/icons_row_pages/employees_list.dart';
@@ -11,7 +10,6 @@ import '../widgets/icons_row.dart';
 enum SelectedIcon {
   subGroups,
   employees,
-  location,
   settings,
 }
 
@@ -21,7 +19,7 @@ class GroupsScreen extends StatefulWidget {
 }
 
 class _GroupsScreenState extends State<GroupsScreen> {
-  SelectedIcon selectedIcon = SelectedIcon.employees;
+  SelectedIcon selectedIcon = SelectedIcon.settings;
 
   void _selectedIconHandler(SelectedIcon newSelectedIcon) {
     setState(() {
@@ -31,17 +29,14 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   Widget _contantHandler() {
     switch (selectedIcon) {
+      case SelectedIcon.settings:
+        return SettingsView();
+        break;
       case SelectedIcon.subGroups:
         return SubGroupsList();
         break;
       case SelectedIcon.employees:
         return EmployeesList();
-        break;
-      case SelectedIcon.location:
-        return LocationView();
-        break;
-      case SelectedIcon.settings:
-        return SettingsView();
         break;
       default:
     }

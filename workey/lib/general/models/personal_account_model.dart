@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-class PersonalUserModel {
+class PersonalAccountModel {
   String id;
   String email;
   String firstName;
@@ -14,7 +14,7 @@ class PersonalUserModel {
   String fingerPrint;
   String profilePicture;
 
-  PersonalUserModel({
+  PersonalAccountModel({
     this.id,
     @required this.email,
     @required this.firstName,
@@ -64,7 +64,7 @@ class PersonalUserModel {
     fingerPrint = snapshot['fingerPrint'] ?? '';
   }
 
-  void updateUser(PersonalUserModel personalUserModel) {
+  void updateUser(PersonalAccountModel personalUserModel) {
     this.id = personalUserModel.id;
     this.address = personalUserModel.address;
     this.dateOfBirth = personalUserModel.dateOfBirth;
