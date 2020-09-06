@@ -12,43 +12,39 @@ class ProfileInfoBigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // width: 200,
-      // height: MediaQuery.of(context).size.height,
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      elevation: 5,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          top: 16,
+          bottom: 24,
+          right: 16,
         ),
-        child: Padding(
-          padding: const EdgeInsets.only(
-            left: 16.0,
-            top: 16,
-            bottom: 24,
-            right: 16,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: icon,
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      fontSize: 22.0,
-                      fontWeight: FontWeight.w300,
-                    ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: icon,
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 22.0,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

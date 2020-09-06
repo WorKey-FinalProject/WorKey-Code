@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/screens/account_status.dart';
+import 'package:workey/company_account/screens/general_settings.dart';
+import 'package:workey/company_account/screens/payment_settings.dart';
 
+import 'account_status.dart';
+import 'payment_settings.dart';
+import 'general_settings.dart';
+import 'info_screen.dart';
 import '../widgets/profile_screen_widgets/profile_info_big_card.dart';
 import '../widgets/profile_screen_widgets/my_info.dart';
 import '../widgets/profile_screen_widgets/opaque_image.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   var imageUrl =
       'https://image.shutterstock.com/image-photo/kiev-ukraine-april-16-2015-260nw-276697244.jpg';
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -47,150 +60,115 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-                flex: 5,
-                // child: GridView.count(
-                //   primary: false,
-                //   crossAxisCount: 2,
-                //   padding: const EdgeInsets.all(20),
-                //   crossAxisSpacing: 10,
-                //   mainAxisSpacing: 10,
-                //   children: <Widget>[
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Flexible(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: ProfileInfoBigCard(
-                              text: 'Personal Info',
-                              icon: Icon(
-                                Icons.person,
-                                color: Theme.of(context).primaryColor,
+              flex: 5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InfoScreen(),
+                              ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, top: 8.0),
+                              child: ProfileInfoBigCard(
+                                text: 'Personal Info',
+                                icon: Icon(
+                                  Icons.person,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                           ),
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: ProfileInfoBigCard(
-                              text: 'General Settings',
-                              icon: Icon(
-                                Icons.settings,
-                                color: Theme.of(context).primaryColor,
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => GeneralSettings(),
+                              ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(right: 8.0, top: 8.0),
+                              child: ProfileInfoBigCard(
+                                text: 'General Settings',
+                                icon: Icon(
+                                  Icons.settings,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Flexible(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: ProfileInfoBigCard(
-                              text: 'Personal Info',
-                              icon: Icon(
-                                Icons.person,
-                                color: Theme.of(context).primaryColor,
+                  ),
+                  Flexible(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PaymentSettings(),
+                              ),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                              child: ProfileInfoBigCard(
+                                text: 'Payment Settings',
+                                icon: Icon(
+                                  Icons.payment,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                           ),
-                          Flexible(
-                            fit: FlexFit.tight,
-                            child: ProfileInfoBigCard(
-                              text: 'General Settings',
-                              icon: Icon(
-                                Icons.settings,
-                                color: Theme.of(context).primaryColor,
+                        ),
+                        Flexible(
+                          fit: FlexFit.tight,
+                          child: GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AccountStatus(),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 8.0, bottom: 8.0),
+                              child: ProfileInfoBigCard(
+                                text: 'Account Status',
+                                icon: Icon(
+                                  Icons.info,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    )
-                  ],
-                )
-                // ProfileInfoBigCard(
-                //   text: 'Personal Info',
-                //   icon: Icon(
-                //     Icons.person,
-                //     color: Theme.of(context).primaryColor,
-                //   ),
-                // ),
-                // ProfileInfoBigCard(
-                //   text: 'General Settings',
-                //   icon: Icon(
-                //     Icons.settings,
-                //     color: Theme.of(context).primaryColor,
-                //   ),
-                // ),
-                // ProfileInfoBigCard(
-                //   text: 'Payment Settings',
-                //   icon: Icon(
-                //     Icons.payment,
-                //     color: Theme.of(context).primaryColor,
-                //   ),
-                // ),
-                // ProfileInfoBigCard(
-                //   text: 'Account Status',
-                //   icon: Icon(
-                //     Icons.info,
-                //     color: Theme.of(context).primaryColor,
-                //   ),
-                // ),
-                //],
-                ),
-            //child: SingleChildScrollView(
-            // child: Container(
-            //   color: Colors.white,
-            //   child: Table(
-            //     defaultColumnWidth: FlexColumnWidth(0.5),
-            //     children: [
-            //       TableRow(
-            //         children: [
-            //           ProfileInfoBigCard(
-            //             text: 'Personal Info',
-            //             icon: Icon(
-            //               Icons.person,
-            //               color: Theme.of(context).primaryColor,
-            //             ),
-            //           ),
-            //           ProfileInfoBigCard(
-            //             text: 'General Settings',
-            //             icon: Icon(
-            //               Icons.settings,
-            //               color: Theme.of(context).primaryColor,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //       TableRow(
-            //         children: [
-            //           ProfileInfoBigCard(
-            //             text: 'Payment Settings',
-            //             icon: Icon(
-            //               Icons.payment,
-            //               color: Theme.of(context).primaryColor,
-            //             ),
-            //           ),
-            //           ProfileInfoBigCard(
-            //             text: 'Account Status',
-            //             icon: Icon(
-            //               Icons.info,
-            //               color: Theme.of(context).primaryColor,
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            //),
-            // ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ],

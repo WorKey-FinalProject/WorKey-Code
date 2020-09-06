@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           },
         ),
         routes: {
-          TabsScreen.nameRoute: (ctx) => TabsScreen(),
+          TabsScreen.routeName: (ctx) => TabsScreen(),
           AuthScreen.routeName: (ctx) => AuthScreen(),
           SignUpScreen.routeName: (ctx) => SignUpScreen(),
         },
