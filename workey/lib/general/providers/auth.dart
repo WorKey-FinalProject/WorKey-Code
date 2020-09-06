@@ -20,7 +20,7 @@ class Auth with ChangeNotifier {
       owenrLastName: null,
       dateOfCreation: null);
 
-  PersonalUserModel personalAccountModel = PersonalUserModel(
+  PersonalAccountModel personalAccountModel = PersonalAccountModel(
     email: null,
     dateOfCreation: null,
     firstName: null,
@@ -44,7 +44,7 @@ class Auth with ChangeNotifier {
       email: email,
       password: password,
     );
-    personalAccountModel = PersonalUserModel(
+    personalAccountModel = PersonalAccountModel(
       id: authResult.user.uid,
       email: email,
       firstName: firstName,
