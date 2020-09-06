@@ -27,6 +27,99 @@ class Auth with ChangeNotifier {
     lastName: null,
   );
 
+  Future<void> signUpPersonalAccount(
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String phoneNumber,
+    String dateOfBirth,
+    String address,
+    String occupation,
+    String faceRecognitionPicture,
+    String fingerPrint,
+    String profilePicture,
+  ) async {
+    AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    personalUserModel = PersonalUserModel(
+      id: authResult.user.uid,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      dateOfBirth: dateOfBirth,
+      address: address,
+      occupation: occupation,
+      faceRecognitionPicture: faceRecognitionPicture,
+      profilePicture: profilePicture,
+      fingerPrint: fingerPrint,
+      dateOfCreation: DateTime.now().toString(),
+    );
+    try {
+      await dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child(authResult.user.uid)
+          .set(personalUserModel.toJson());
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> signUpCompanyAccount(
+    String companyEmail,
+    String password,
+    String companyName,
+    String location,
+    String companyLogo,
+    String owenrFirstName,
+    String owenrLastName,
+  ) async {
+    AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      email: companyEmail,
+      password: password,
+    );
+
+    companyUserModel = CompanyAccountModel(
+        id: authResult.user.uid,
+        companyEmail: companyEmail,
+        companyName: companyName,
+        owenrFirstName: owenrFirstName,
+        owenrLastName: owenrLastName,
+        dateOfCreation: DateTime.now().toString(),
+        companyLogo: companyLogo,
+        location: location);
+
+    WorkGroupModel workGroupModel = WorkGroupModel(
+      workGroupName: 'Root',
+      managerId: null,
+      parentWorkGroupId: null,
+      dateOfCreation: DateTime.now().toString(),
+      workGroupLogo: null,
+    );
+
+    try {
+      await dbRef
+          .child('Users')
+          .child('Company Accounts')
+          .child(authResult.user.uid)
+          .set(companyUserModel.toJson());
+    } on Exception {
+      throw ErrorHint;
+    }
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(authResult.user.uid)
+          .set(workGroupModel.toJson());
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
   Future<void> signup(
     String email,
     String password,
