@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
+  var imageUrl =
+      'https://image.shutterstock.com/image-photo/kiev-ukraine-april-16-2015-260nw-276697244.jpg';
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: <Widget>[
-        Flexible(
-          fit: FlexFit.tight,
-          child: Container(
-            color: Colors.black,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Flexible(
+              flex: 4,
+              child: Stack(
+                children: <Widget>[
+                  Image.network(
+                    imageUrl,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Container(),
+            ),
+          ],
         ),
-        Flexible(fit: FlexFit.tight, child: Container(color: Colors.blue)),
       ],
     );
   }
