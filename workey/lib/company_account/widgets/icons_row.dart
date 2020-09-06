@@ -13,7 +13,7 @@ class IconsRow extends StatefulWidget {
 }
 
 class _IconsRowState extends State<IconsRow> {
-  SelectedIcon selectedIcon = SelectedIcon.employees;
+  SelectedIcon selectedIcon = SelectedIcon.settings;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +22,30 @@ class _IconsRowState extends State<IconsRow> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
+          Flexible(
+            fit: FlexFit.tight,
+            child: FlatButton(
+              onPressed: () {
+                selectedIcon = SelectedIcon.settings;
+                widget.selectedIconHandler(selectedIcon);
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox(
+                    child: Icon(
+                      Icons.settings,
+                      color: selectedIcon == SelectedIcon.settings
+                          ? Theme.of(context).accentColor
+                          : Colors.black,
+                      // size: 35,
+                    ),
+                  ),
+                  FittedBox(child: const Text('Settings')),
+                ],
+              ),
+            ),
+          ),
           Flexible(
             fit: FlexFit.tight,
             child: FlatButton(
@@ -54,30 +78,6 @@ class _IconsRowState extends State<IconsRow> {
             fit: FlexFit.tight,
             child: FlatButton(
               onPressed: () {
-                selectedIcon = SelectedIcon.location;
-                widget.selectedIconHandler(selectedIcon);
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox(
-                    child: Icon(
-                      Icons.place,
-                      color: selectedIcon == SelectedIcon.location
-                          ? Theme.of(context).accentColor
-                          : Colors.black,
-                      // size: 35,
-                    ),
-                  ),
-                  FittedBox(child: const Text('Location')),
-                ],
-              ),
-            ),
-          ),
-          Flexible(
-            fit: FlexFit.tight,
-            child: FlatButton(
-              onPressed: () {
                 selectedIcon = SelectedIcon.subGroups;
                 widget.selectedIconHandler(selectedIcon);
               },
@@ -94,30 +94,6 @@ class _IconsRowState extends State<IconsRow> {
                     ),
                   ),
                   FittedBox(child: const Text('Sub Groups')),
-                ],
-              ),
-            ),
-          ),
-          Flexible(
-            fit: FlexFit.tight,
-            child: FlatButton(
-              onPressed: () {
-                selectedIcon = SelectedIcon.settings;
-                widget.selectedIconHandler(selectedIcon);
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox(
-                    child: Icon(
-                      Icons.settings,
-                      color: selectedIcon == SelectedIcon.settings
-                          ? Theme.of(context).accentColor
-                          : Colors.black,
-                      // size: 35,
-                    ),
-                  ),
-                  FittedBox(child: const Text('Settings')),
                 ],
               ),
             ),
