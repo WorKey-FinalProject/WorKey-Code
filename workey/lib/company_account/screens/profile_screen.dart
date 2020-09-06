@@ -47,53 +47,150 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 5,
-              child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.white,
-                  child: Table(
-                    children: [
-                      TableRow(
+                flex: 5,
+                // child: GridView.count(
+                //   primary: false,
+                //   crossAxisCount: 2,
+                //   padding: const EdgeInsets.all(20),
+                //   crossAxisSpacing: 10,
+                //   mainAxisSpacing: 10,
+                //   children: <Widget>[
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ProfileInfoBigCard(
-                            text: 'Personal Info',
-                            icon: Icon(
-                              Icons.person,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: ProfileInfoBigCard(
+                              text: 'Personal Info',
+                              icon: Icon(
+                                Icons.person,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
-                          ProfileInfoBigCard(
-                            text: 'General Settings',
-                            icon: Icon(
-                              Icons.settings,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: ProfileInfoBigCard(
+                              text: 'General Settings',
+                              icon: Icon(
+                                Icons.settings,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      TableRow(
+                    ),
+                    Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          ProfileInfoBigCard(
-                            text: 'Payment Settings',
-                            icon: Icon(
-                              Icons.payment,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: ProfileInfoBigCard(
+                              text: 'Personal Info',
+                              icon: Icon(
+                                Icons.person,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
-                          ProfileInfoBigCard(
-                            text: 'Account Status',
-                            icon: Icon(
-                              Icons.info,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            fit: FlexFit.tight,
+                            child: ProfileInfoBigCard(
+                              text: 'General Settings',
+                              icon: Icon(
+                                Icons.settings,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    )
+                  ],
+                )
+                // ProfileInfoBigCard(
+                //   text: 'Personal Info',
+                //   icon: Icon(
+                //     Icons.person,
+                //     color: Theme.of(context).primaryColor,
+                //   ),
+                // ),
+                // ProfileInfoBigCard(
+                //   text: 'General Settings',
+                //   icon: Icon(
+                //     Icons.settings,
+                //     color: Theme.of(context).primaryColor,
+                //   ),
+                // ),
+                // ProfileInfoBigCard(
+                //   text: 'Payment Settings',
+                //   icon: Icon(
+                //     Icons.payment,
+                //     color: Theme.of(context).primaryColor,
+                //   ),
+                // ),
+                // ProfileInfoBigCard(
+                //   text: 'Account Status',
+                //   icon: Icon(
+                //     Icons.info,
+                //     color: Theme.of(context).primaryColor,
+                //   ),
+                // ),
+                //],
                 ),
-              ),
-            ),
+            //child: SingleChildScrollView(
+            // child: Container(
+            //   color: Colors.white,
+            //   child: Table(
+            //     defaultColumnWidth: FlexColumnWidth(0.5),
+            //     children: [
+            //       TableRow(
+            //         children: [
+            //           ProfileInfoBigCard(
+            //             text: 'Personal Info',
+            //             icon: Icon(
+            //               Icons.person,
+            //               color: Theme.of(context).primaryColor,
+            //             ),
+            //           ),
+            //           ProfileInfoBigCard(
+            //             text: 'General Settings',
+            //             icon: Icon(
+            //               Icons.settings,
+            //               color: Theme.of(context).primaryColor,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //       TableRow(
+            //         children: [
+            //           ProfileInfoBigCard(
+            //             text: 'Payment Settings',
+            //             icon: Icon(
+            //               Icons.payment,
+            //               color: Theme.of(context).primaryColor,
+            //             ),
+            //           ),
+            //           ProfileInfoBigCard(
+            //             text: 'Account Status',
+            //             icon: Icon(
+            //               Icons.info,
+            //               color: Theme.of(context).primaryColor,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            //),
+            // ),
           ],
         ),
       ],

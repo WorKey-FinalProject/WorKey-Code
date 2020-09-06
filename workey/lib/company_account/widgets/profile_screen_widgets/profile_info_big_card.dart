@@ -13,8 +13,8 @@ class ProfileInfoBigCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 150,
+      // width: 200,
+      // height: MediaQuery.of(context).size.height,
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         elevation: 5,
@@ -37,11 +37,13 @@ class ProfileInfoBigCard extends StatelessWidget {
               ),
               Align(
                 alignment: Alignment.bottomLeft,
-                child: Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 22.0,
-                    fontWeight: FontWeight.w300,
+                child: Container(
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ),
               )
