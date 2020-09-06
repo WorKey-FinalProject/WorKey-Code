@@ -28,7 +28,7 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> addWorkGroupToList(WorkGroupModel workGroupModel) async {
+  Future<void> addWorkGroup(WorkGroupModel workGroupModel) async {
     var db =
         dbRef.child("Company Groups").child(userId).child('workGroupsList');
     try {
@@ -42,7 +42,21 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> deleteWorkGroupFromListById(String workGroupId) async {
+  Future<void> updateWorkGroup(
+      String workGroupToUpdateId, WorkGroupModel workGroupModel) async {
+    try {
+      dbRef
+          .child("Company Groups")
+          .child(userId)
+          .child('workGroupsList')
+          .child(workGroupToUpdateId)
+          .update(workGroupModel.toJson());
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> deleteWorkGroupById(String workGroupId) async {
     try {
       await dbRef
           .child("Company Groups")

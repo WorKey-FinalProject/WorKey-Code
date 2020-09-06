@@ -26,13 +26,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       AccountTypeChosen accountTypeChosen,
     ) async {
       try {
-        await Provider.of<Auth>(context, listen: false).signup(
-          email,
-          password,
-          firstName,
-          lastName,
-          accountTypeChosen,
-        );
+        // await Provider.of<Auth>(context, listen: false).signup(
+        //   email,
+        //   password,
+        //   firstName,
+        //   lastName,
+        //   accountTypeChosen,
+        // );
       } on PlatformException catch (err) {
         var message = 'An error occurred, please check your credentials!';
 

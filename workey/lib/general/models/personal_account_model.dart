@@ -6,7 +6,7 @@ class PersonalUserModel {
   String firstName;
   String lastName;
   String dateOfCreation;
-  int phoneNumber;
+  String phoneNumber;
   String dateOfBirth;
   String address;
   String occupation;
@@ -59,7 +59,7 @@ class PersonalUserModel {
     dateOfBirth = snapshot['dateOfBirth'] ?? '';
     faceRecognitionPicture = snapshot['faceRecognitionPicture'] ?? '';
     occupation = snapshot['occupation'] ?? '';
-    phoneNumber = snapshot['phoneNumber'] ?? null;
+    phoneNumber = snapshot['phoneNumber'] ?? '';
     profilePicture = snapshot['profilePicture'] ?? '';
     fingerPrint = snapshot['fingerPrint'] ?? '';
   }
