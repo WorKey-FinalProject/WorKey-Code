@@ -31,10 +31,25 @@ class _AuthScreenState extends State<AuthScreen> {
         password,
       );
       await Provider.of<CompanyGroups>(context, listen: false).getUserId();
-      print("start");
-      await Provider.of<CompanyGroups>(context, listen: false)
-          .deleteWorkGroupFromListById("-MGVbDlaBr2s8UNCALQS");
-      print("end");
+      // WorkGroupModel workGroupModel = WorkGroupModel(
+      //     workGroupName: "1",
+      //     managerId: "1",
+      //     parentWorkGroupId: "1",
+      //     dateOfCreation: "1",
+      //     workGroupLogo: "1");
+      // WorkGroupModel workGroupModel2 = WorkGroupModel(
+      //     workGroupName: "2",
+      //     managerId: "2",
+      //     parentWorkGroupId: "2",
+      //     dateOfCreation: "2",
+      //     workGroupLogo: "2");
+      // await Provider.of<CompanyGroups>(context, listen: false)
+      //     .addWorkGroup(workGroupModel);
+      // await Provider.of<CompanyGroups>(context, listen: false)
+      //     .addWorkGroup(workGroupModel2);
+      List<WorkGroupModel> list =
+          Provider.of<CompanyGroups>(context, listen: false).getWorkGroupsList;
+      print(list.length);
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 

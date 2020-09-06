@@ -19,6 +19,11 @@ class CompanyGroups with ChangeNotifier {
     return workGroupsList.firstWhere((workGroup) => workGroup.id == id);
   }
 
+  Future<void> fatchAndSetWorkGroupsInList() async {
+    var db =
+        dbRef.child('Company Groups').child(userId).child('workGroupsList');
+  }
+
   Future<void> getUserId() async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -30,7 +35,7 @@ class CompanyGroups with ChangeNotifier {
 
   Future<void> addWorkGroup(WorkGroupModel workGroupModel) async {
     var db =
-        dbRef.child("Company Groups").child(userId).child('workGroupsList');
+        dbRef.child('Company Groups').child(userId).child('workGroupsList');
     try {
       String newKew = db.push().key;
       await db.child(newKew).set(workGroupModel.toJson());
@@ -51,6 +56,9 @@ class CompanyGroups with ChangeNotifier {
           .child('workGroupsList')
           .child(workGroupToUpdateId)
           .update(workGroupModel.toJson());
+      workGroupsList[workGroupsList.indexWhere(
+          (workGroup) => workGroup.id == workGroupToUpdateId)] = workGroupModel;
+      notifyListeners();
     } on Exception {
       throw ErrorHint;
     }

@@ -120,66 +120,66 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> signup(
-    String email,
-    String password,
-    String firstName,
-    String lastName,
-    AccountTypeChosen accountTypeChosen,
-  ) async {
-    AuthResult authResult = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    if (accountTypeChosen == AccountTypeChosen.company) {
-      companyUserModel = CompanyAccountModel(
-        id: authResult.user.uid,
-        companyEmail: email,
-        companyName: 'companyName',
-        owenrFirstName: firstName,
-        owenrLastName: lastName,
-        dateOfCreation: DateTime.now().toString(),
-      );
-      WorkGroupModel workGroupModel = WorkGroupModel(
-        workGroupName: 'Root',
-        managerId: null,
-        parentWorkGroupId: null,
-        dateOfCreation: DateTime.now().toString(),
-        workGroupLogo: null,
-      );
-      try {
-        await dbRef
-            .child('Users')
-            .child('Company Accounts')
-            .child(authResult.user.uid)
-            .set(companyUserModel.toJson());
-      } on Exception {
-        throw ErrorHint;
-      }
-      try {
-        await dbRef
-            .child('Company Groups')
-            .child(authResult.user.uid)
-            .set(workGroupModel.toJson());
-      } on Exception {
-        throw ErrorHint;
-      }
-    }
-    if (accountTypeChosen == AccountTypeChosen.personal) {
-      personalUserModel = PersonalUserModel(
-        id: authResult.user.uid,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        dateOfCreation: DateTime.now().toString(),
-      );
-      await dbRef
-          .child('Users')
-          .child('Personal Accounts')
-          .child(authResult.user.uid)
-          .set(personalUserModel.toJson());
-    }
-  }
+  // Future<void> signup(
+  //   String email,
+  //   String password,
+  //   String firstName,
+  //   String lastName,
+  //   AccountTypeChosen accountTypeChosen,
+  // ) async {
+  //   AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+  //     email: email,
+  //     password: password,
+  //   );
+  //   if (accountTypeChosen == AccountTypeChosen.company) {
+  //     companyUserModel = CompanyAccountModel(
+  //       id: authResult.user.uid,
+  //       companyEmail: email,
+  //       companyName: 'companyName',
+  //       owenrFirstName: firstName,
+  //       owenrLastName: lastName,
+  //       dateOfCreation: DateTime.now().toString(),
+  //     );
+  //     WorkGroupModel workGroupModel = WorkGroupModel(
+  //       workGroupName: 'Root',
+  //       managerId: null,
+  //       parentWorkGroupId: null,
+  //       dateOfCreation: DateTime.now().toString(),
+  //       workGroupLogo: null,
+  //     );
+  //     try {
+  //       await dbRef
+  //           .child('Users')
+  //           .child('Company Accounts')
+  //           .child(authResult.user.uid)
+  //           .set(companyUserModel.toJson());
+  //     } on Exception {
+  //       throw ErrorHint;
+  //     }
+  //     try {
+  //       await dbRef
+  //           .child('Company Groups')
+  //           .child(authResult.user.uid)
+  //           .set(workGroupModel.toJson());
+  //     } on Exception {
+  //       throw ErrorHint;
+  //     }
+  //   }
+  //   if (accountTypeChosen == AccountTypeChosen.personal) {
+  //     personalUserModel = PersonalUserModel(
+  //       id: authResult.user.uid,
+  //       email: email,
+  //       firstName: firstName,
+  //       lastName: lastName,
+  //       dateOfCreation: DateTime.now().toString(),
+  //     );
+  //     await dbRef
+  //         .child('Users')
+  //         .child('Personal Accounts')
+  //         .child(authResult.user.uid)
+  //         .set(personalUserModel.toJson());
+  //   }
+  // }
 
   Future<void> signin(String email, String password) async {
     AuthResult authResult = await _auth.signInWithEmailAndPassword(
@@ -218,6 +218,34 @@ class Auth with ChangeNotifier {
     });
   }
 
+  Future<dynamic> getUserData() async {
+    try {
+      if (accountType == AccountTypeChosen.company) {
+        dbRef
+            .child("Company Accounts")
+            .orderByKey()
+            .equalTo(userId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          return companyUserModel.fromJson(dataSnapshot.value, userId);
+        });
+      } else if (accountType == AccountTypeChosen.personal) {
+        dbRef
+            .child("Personal Accounts")
+            .orderByKey()
+            .equalTo(userId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          return personalUserModel.fromJson(dataSnapshot.value, userId);
+        });
+      } else {
+        throw 'faild to get user data: error - accountType == nothing.';
+      }
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
   Future<void> updateCurrUserData(dynamic userNewData) async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -253,7 +281,7 @@ class Auth with ChangeNotifier {
       await dbRef.child('Users').child(type).child(userId).remove();
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       user.delete();
-    } on Exception catch (error) {
+    } on Exception {
       throw ErrorHint;
     }
   }
