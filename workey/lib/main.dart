@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         theme: ThemeData(
           //primaryColor: Color(hexColor('#27AE60')),
-          //primaryColor: Color(hexColor('#27AE60')),
-          primaryColor: Colors.blue,
+          primaryColor: Color(hexColor('#27AE60')),
+          //primaryColor: Colors.blue,
           accentColor: Colors.amber,
           // accentColor: Color(hexColor('#68829e')),
           buttonColor: Colors.amber,
