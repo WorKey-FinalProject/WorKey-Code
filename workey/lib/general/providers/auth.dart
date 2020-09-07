@@ -11,7 +11,11 @@ class Auth with ChangeNotifier {
   final dbRef = FirebaseDatabase.instance.reference();
 
   String userId;
-  AccountTypeChosen accountType;
+  static AccountTypeChosen accountType;
+
+  AccountTypeChosen get getAccountType {
+    return accountType;
+  }
 
   CompanyAccountModel companyAccountModel = CompanyAccountModel(
       companyEmail: null,
