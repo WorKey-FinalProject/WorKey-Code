@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/widgets/auth/signup_form_company.dart';
+import 'package:workey/general/widgets/auth/signup_form_personal.dart';
 
 import '../back_button_widget.dart';
 import '../previous_next_button.dart';
@@ -252,12 +253,13 @@ class _SignUpTypeState extends State<SignUpType> {
           child: BackButtonWidget(),
         ),
         Flexible(
-            flex: 2,
-            child: accountTypeChosen == AccountTypeChosen.nothing
-                ? accountTypeSelection
-                : accountTypeChosen == AccountTypeChosen.company
-                    ? SignUpFormCompany(widget.submitFnCompany)
-                    : CircularProgressIndicator()),
+          flex: 2,
+          child: accountTypeChosen == AccountTypeChosen.nothing
+              ? accountTypeSelection
+              : accountTypeChosen == AccountTypeChosen.company
+                  ? SignUpFormCompany(widget.submitFnCompany)
+                  : SignUpFormPersonal(widget.submitFnPersonal),
+        ),
       ],
     );
   }

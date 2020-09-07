@@ -131,7 +131,6 @@ class Auth with ChangeNotifier {
     );
     userId = authResult.user.uid;
     findCurrAccountType();
-    notifyListeners();
   }
 
   Future<void> findCurrAccountType() async {
