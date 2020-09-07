@@ -49,6 +49,12 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
     }
   }
 
+  void changeStep(int step) {
+    setState(() {
+      this.step = step;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var card1 = Card(
