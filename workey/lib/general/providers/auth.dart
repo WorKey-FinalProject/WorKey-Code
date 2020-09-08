@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workey/general/models/work_group_model.dart';
 import '../models/company_account_model.dart';
 import '../models/personal_account_model.dart';
-import 'package:workey/general/widgets/auth/signup_type.dart';
+import 'package:workey/general/widgets/auth/signup_form.dart';
 
 class Auth with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
@@ -17,14 +17,14 @@ class Auth with ChangeNotifier {
     return accountType;
   }
 
-  CompanyAccountModel companyUserModel = CompanyAccountModel(
+  CompanyAccountModel companyAccountModel = CompanyAccountModel(
       companyEmail: null,
       companyName: null,
       owenrFirstName: null,
       owenrLastName: null,
       dateOfCreation: null);
 
-  PersonalAccountModel personalUserModel = PersonalAccountModel(
+  PersonalAccountModel personalAccountModel = PersonalAccountModel(
     email: null,
     dateOfCreation: null,
     firstName: null,
@@ -48,7 +48,7 @@ class Auth with ChangeNotifier {
       email: email,
       password: password,
     );
-    personalUserModel = PersonalAccountModel(
+    personalAccountModel = PersonalAccountModel(
       id: authResult.user.uid,
       email: email,
       firstName: firstName,
@@ -67,7 +67,7 @@ class Auth with ChangeNotifier {
           .child('Users')
           .child('Personal Accounts')
           .child(authResult.user.uid)
-          .set(personalUserModel.toJson());
+          .set(personalAccountModel.toJson());
     } on Exception {
       throw ErrorHint;
     }
@@ -87,7 +87,7 @@ class Auth with ChangeNotifier {
       password: password,
     );
 
-    companyUserModel = CompanyAccountModel(
+    companyAccountModel = CompanyAccountModel(
         id: authResult.user.uid,
         companyEmail: companyEmail,
         companyName: companyName,
@@ -110,7 +110,7 @@ class Auth with ChangeNotifier {
           .child('Users')
           .child('Company Accounts')
           .child(authResult.user.uid)
-          .set(companyUserModel.toJson());
+          .set(companyAccountModel.toJson());
     } on Exception {
       throw ErrorHint;
     }
@@ -140,28 +140,58 @@ class Auth with ChangeNotifier {
         .orderByKey()
         .equalTo(userId)
         .once()
-        .then(
-      (DataSnapshot dataSnapshot) {
-        if (dataSnapshot.value == null) {
-          dbRef
-              .child('Users')
-              .child('Company Accounts')
-              .orderByKey()
-              .equalTo(userId)
-              .once()
-              .then((DataSnapshot dataSnapshot) {
-            if (dataSnapshot.value == null) {
-              accountType = AccountTypeChosen.nothing;
-            } else {
-              accountType = AccountTypeChosen.company;
-            }
-          });
-        } else {
-          accountType = AccountTypeChosen.personal;
-        }
-      },
-    );
+        .then((DataSnapshot dataSnapshot) {
+      if (dataSnapshot.value == null) {
+        dbRef
+            .child('Users')
+            .child('Company Accounts')
+            .orderByKey()
+            .equalTo(userId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          if (dataSnapshot.value == null) {
+            accountType = AccountTypeChosen.nothing;
+          } else {
+            accountType = AccountTypeChosen.company;
+          }
+        });
+      } else {
+        accountType = AccountTypeChosen.personal;
+      }
+    });
     notifyListeners();
+  }
+
+  Future<dynamic> getCurrUserData() async {
+    try {
+      if (accountType == AccountTypeChosen.company) {
+        await dbRef
+            .child('Users')
+            .child('Company Accounts')
+            .child(userId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          companyAccountModel.fromJson(dataSnapshot.value, userId);
+          companyAccountModel.id = userId;
+          return companyAccountModel;
+        });
+      } else if (accountType == AccountTypeChosen.personal) {
+        await dbRef
+            .child('Users')
+            .child('Personal Accounts')
+            .child(userId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          personalAccountModel.fromJson(dataSnapshot.value, userId);
+          personalAccountModel.id = userId;
+          return personalAccountModel;
+        });
+      } else {
+        throw 'failed to get user data: error - accountType == nothing.';
+      }
+    } on Exception {
+      throw ErrorHint;
+    }
   }
 
   Future<void> updateCurrUserData(dynamic userNewData) async {
@@ -199,7 +229,7 @@ class Auth with ChangeNotifier {
       await dbRef.child('Users').child(type).child(userId).remove();
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       user.delete();
-    } on Exception catch (error) {
+    } on Exception {
       throw ErrorHint;
     }
   }
