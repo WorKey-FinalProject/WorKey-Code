@@ -10,12 +10,8 @@ class Auth with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   final dbRef = FirebaseDatabase.instance.reference();
 
-  String userId;
-  static AccountTypeChosen accountType;
-
-  AccountTypeChosen get getAccountType {
-    return accountType;
-  }
+  AccountTypeChosen accountType;
+  FirebaseUser user;
 
   CompanyAccountModel companyAccountModel = CompanyAccountModel(
       companyEmail: null,
@@ -125,41 +121,52 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signin(String email, String password) async {
-    AuthResult authResult = await _auth.signInWithEmailAndPassword(
+    await _auth
+        .signInWithEmailAndPassword(
       email: email,
       password: password,
+    )
+        .then(
+      (authResult) {
+        user = authResult.user;
+      },
     );
-    userId = authResult.user.uid;
-    findCurrAccountType();
   }
 
-  Future<void> findCurrAccountType() async {
+  Future<AccountTypeChosen> findCurrAccountType(FirebaseUser user) async {
     await dbRef
         .child('Users')
         .child('Personal Accounts')
         .orderByKey()
-        .equalTo(userId)
+        .equalTo(user.uid)
         .once()
-        .then((DataSnapshot dataSnapshot) {
-      if (dataSnapshot.value == null) {
-        dbRef
-            .child('Users')
-            .child('Company Accounts')
-            .orderByKey()
-            .equalTo(userId)
-            .once()
-            .then((DataSnapshot dataSnapshot) {
-          if (dataSnapshot.value == null) {
-            accountType = AccountTypeChosen.nothing;
-          } else {
-            accountType = AccountTypeChosen.company;
-          }
-        });
-      } else {
-        accountType = AccountTypeChosen.personal;
-      }
-    });
-    notifyListeners();
+
+        .then(
+      (DataSnapshot dataSnapshot) async {
+        if (dataSnapshot.value == null) {
+          await dbRef
+              .child('Users')
+              .child('Company Accounts')
+              .orderByKey()
+              .equalTo(user.uid)
+              .once()
+              .then((DataSnapshot dataSnapshot) {
+            if (dataSnapshot.value == null) {
+              accountType = AccountTypeChosen.nothing;
+            } else {
+              accountType = AccountTypeChosen.company;
+              print('$accountType ccccooommm');
+            }
+          });
+        } else {
+          accountType = AccountTypeChosen.personal;
+        }
+      },
+    );
+    //print('$accountType wtffffffffffffffff');
+    return accountType;
+    //print('${accountType} ----- findCurrAccountType');
+
   }
 
   Future<dynamic> getCurrUserData() async {
@@ -211,7 +218,7 @@ class Auth with ChangeNotifier {
       await dbRef
           .child('Users')
           .child(type)
-          .child(userId)
+          .child(user.uid)
           .update(userNewData.toJson());
     } on Exception catch (error) {
       throw error;
@@ -226,10 +233,12 @@ class Auth with ChangeNotifier {
       } else {
         type = 'Personal Accounts';
       }
-      await dbRef.child('Users').child(type).child(userId).remove();
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      user.delete();
+
+      await dbRef.child('Users').child(type).child(user.uid).remove();
+      FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+      firebaseUser.delete();
     } on Exception {
+
       throw ErrorHint;
     }
   }
