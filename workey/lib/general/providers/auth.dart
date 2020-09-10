@@ -2,9 +2,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
 import '../models/company_account_model.dart';
 import '../models/personal_account_model.dart';
-import 'package:workey/general/widgets/auth/signup_form.dart';
 
 class Auth with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
