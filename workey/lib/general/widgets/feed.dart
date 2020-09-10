@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-import './feed_item.dart';
+import 'feed_item.dart';
 
 class Feed extends StatefulWidget {
   @override

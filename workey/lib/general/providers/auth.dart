@@ -154,6 +154,7 @@ class Auth with ChangeNotifier {
               accountType = AccountTypeChosen.nothing;
             } else {
               accountType = AccountTypeChosen.company;
+
               print('$accountType ccccooommm');
             }
           });
@@ -162,6 +163,7 @@ class Auth with ChangeNotifier {
         }
       },
     );
+
     //print('$accountType wtffffffffffffffff');
     return accountType;
     //print('${accountType} ----- findCurrAccountType');

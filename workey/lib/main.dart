@@ -4,9 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/screens/splash_screen.dart';
+
 import 'package:workey/general/widgets/auth/signin_account_type.dart';
 import 'package:workey/personal_account/screens/personal_tabs_screen.dart';
 
+import './personal_account/screens/personal_tabs_screen.dart';
 import './general/screens/signup_screen.dart';
 import './company_account/screens/tabs_screen.dart';
 import './general/screens/auth_screen.dart';
@@ -48,7 +50,6 @@ class MyApp extends StatelessWidget {
           bottomAppBarColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        // home: TabsScreen(),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.onAuthStateChanged,
           builder: (ctx, userSnapshot) {
