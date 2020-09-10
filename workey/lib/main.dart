@@ -4,7 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/screens/splash_screen.dart';
-import 'package:workey/general/widgets/auth/signup_type.dart';
+
+import 'package:workey/general/widgets/auth/signin_account_type.dart';
+import 'package:workey/personal_account/screens/personal_tabs_screen.dart';
 
 import './personal_account/screens/personal_tabs_screen.dart';
 import './general/screens/signup_screen.dart';
@@ -55,12 +57,8 @@ class MyApp extends StatelessWidget {
               return SplashScreen();
             }
             if (userSnapshot.hasData) {
-              final auth = Provider.of<Auth>(ctx);
-              if (auth.accountType == AccountTypeChosen.company) {
-                return TabsScreen();
-              } else if (auth.accountType == AccountTypeChosen.personal) {
-                return PersonalTabsScreen();
-              }
+              //return TabsScreen();
+              return SignInAccountType();
             }
             return AuthScreen();
           },
