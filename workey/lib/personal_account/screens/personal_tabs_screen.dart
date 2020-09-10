@@ -95,7 +95,7 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.table),
-            title: Text('Groups'),
+            title: Text('Shifts'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.perm_identity),
