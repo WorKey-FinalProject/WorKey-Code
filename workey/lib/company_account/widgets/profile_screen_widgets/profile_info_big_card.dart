@@ -13,8 +13,8 @@ class ProfileInfoBigCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      height: 150,
+      // width: 200,
+      // height: 150,
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         elevation: 5,

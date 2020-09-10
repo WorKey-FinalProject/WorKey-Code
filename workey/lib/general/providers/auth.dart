@@ -2,9 +2,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
 import '../models/company_account_model.dart';
 import '../models/personal_account_model.dart';
-import 'package:workey/general/widgets/auth/signup_form.dart';
 
 class Auth with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
@@ -140,7 +140,6 @@ class Auth with ChangeNotifier {
         .orderByKey()
         .equalTo(user.uid)
         .once()
-
         .then(
       (DataSnapshot dataSnapshot) async {
         if (dataSnapshot.value == null) {
@@ -166,7 +165,6 @@ class Auth with ChangeNotifier {
     //print('$accountType wtffffffffffffffff');
     return accountType;
     //print('${accountType} ----- findCurrAccountType');
-
   }
 
   Future<dynamic> getCurrUserData() async {
@@ -175,22 +173,22 @@ class Auth with ChangeNotifier {
         await dbRef
             .child('Users')
             .child('Company Accounts')
-            .child(userId)
+            .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          companyAccountModel.fromJson(dataSnapshot.value, userId);
-          companyAccountModel.id = userId;
+          companyAccountModel.fromJson(dataSnapshot.value, user.uid);
+          companyAccountModel.id = user.uid;
           return companyAccountModel;
         });
       } else if (accountType == AccountTypeChosen.personal) {
         await dbRef
             .child('Users')
             .child('Personal Accounts')
-            .child(userId)
+            .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          personalAccountModel.fromJson(dataSnapshot.value, userId);
-          personalAccountModel.id = userId;
+          personalAccountModel.fromJson(dataSnapshot.value, user.uid);
+          personalAccountModel.id = user.uid;
           return personalAccountModel;
         });
       } else {
@@ -238,7 +236,6 @@ class Auth with ChangeNotifier {
       FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
       firebaseUser.delete();
     } on Exception {
-
       throw ErrorHint;
     }
   }

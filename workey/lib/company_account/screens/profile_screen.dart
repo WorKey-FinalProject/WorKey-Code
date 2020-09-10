@@ -46,49 +46,59 @@ class ProfileScreen extends StatelessWidget {
             ),
             Expanded(
               flex: 5,
-              child: SingleChildScrollView(
-                child: Container(
-                  color: Colors.white,
-                  child: Table(
-                    children: [
-                      TableRow(
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: Row(
                         children: [
-                          ProfileInfoBigCard(
-                            text: 'Personal Info',
-                            icon: Icon(
-                              Icons.person,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            child: ProfileInfoBigCard(
+                              text: 'Personal Info',
+                              icon: Icon(
+                                Icons.person,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
-                          ProfileInfoBigCard(
-                            text: 'General Settings',
-                            icon: Icon(
-                              Icons.settings,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            child: ProfileInfoBigCard(
+                              text: 'General Settings',
+                              icon: Icon(
+                                Icons.settings,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      TableRow(
+                    ),
+                    Flexible(
+                      child: Row(
                         children: [
-                          ProfileInfoBigCard(
-                            text: 'Payment Settings',
-                            icon: Icon(
-                              Icons.payment,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            child: ProfileInfoBigCard(
+                              text: 'Payment Settings',
+                              icon: Icon(
+                                Icons.payment,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
-                          ProfileInfoBigCard(
-                            text: 'Account Status',
-                            icon: Icon(
-                              Icons.info,
-                              color: Theme.of(context).primaryColor,
+                          Flexible(
+                            child: ProfileInfoBigCard(
+                              text: 'Account Status',
+                              icon: Icon(
+                                Icons.info,
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
