@@ -36,32 +36,35 @@ class _PreviousNextButtonState extends State<PreviousNextButton> {
               child: CircularProgressIndicator(),
             )
           : Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: widget.currStep > 0
+                  ? MainAxisAlignment.spaceBetween
+                  : MainAxisAlignment.end,
               children: [
-                FlatButton(
-                  onPressed: () {
-                    if (widget.currStep > 0) {
-                      setState(() {
-                        widget.currStep--;
-                      });
-                    }
-                    widget.changeStep(widget.currStep);
-                  },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.arrow_back_ios,
-                      ),
-                      Text(
-                        'Prevoius',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                if (widget.currStep > 0)
+                  FlatButton(
+                    onPressed: () {
+                      if (widget.currStep > 0) {
+                        setState(() {
+                          widget.currStep--;
+                        });
+                      }
+                      widget.changeStep(widget.currStep);
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.arrow_back_ios,
                         ),
-                      ),
-                    ],
+                        Text(
+                          'Prevoius',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
                 widget.currStep == widget.maxStep
                     ? RaisedButton(
                         color: Theme.of(context).buttonColor,
