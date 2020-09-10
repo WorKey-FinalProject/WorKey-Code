@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/logo.dart';
-import '../widgets/feed.dart';
+import '../../general/widgets/feed.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return //SingleChildScrollView(
-        LayoutBuilder(
+    return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
           height: constraints.maxHeight,

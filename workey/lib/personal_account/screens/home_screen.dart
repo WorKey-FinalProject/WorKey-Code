@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:workey/company_account/widgets/feed.dart';
+
+import '../widgets/face_ID.dart';
+import '../../general/widgets/feed.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -13,7 +15,7 @@ class HomeScreen extends StatelessWidget {
             children: <Widget>[
               Container(
                 height: constraints.maxHeight * 0.25,
-                //child: FaceRecognition(),
+                child: FaceID(),
               ),
               SizedBox(
                 height: constraints.maxHeight * 0.05,
