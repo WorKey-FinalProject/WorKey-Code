@@ -24,9 +24,11 @@ class _AuthFormState extends State<AuthForm> {
   var _isLoading = false;
 
   void updateLoadingStatus(bool isLoading) {
-    setState(() {
-      _isLoading = isLoading;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoading = isLoading;
+      });
+    }
   }
 
   void _trySubmit() {

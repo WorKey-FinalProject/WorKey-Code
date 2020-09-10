@@ -6,7 +6,12 @@ import 'package:flutter/foundation.dart';
 
 class CompanyGroups with ChangeNotifier {
   List<WorkGroupModel> workGroupsList = [];
-  WorkGroupModel workGroupModel;
+  WorkGroupModel workGroupModel = WorkGroupModel(
+      workGroupName: null,
+      managerId: null,
+      parentWorkGroupId: null,
+      dateOfCreation: null,
+      workGroupLogo: null);
 
   final dbRef = FirebaseDatabase.instance.reference();
   String userId;
@@ -19,15 +24,28 @@ class CompanyGroups with ChangeNotifier {
     return workGroupsList.firstWhere((workGroup) => workGroup.id == id);
   }
 
-  // Future<void> fatchAndSetWorkGroupsInList() async {
-  //   var db =
-  //       dbRef.child('Company Groups').child(userId).child('workGroupsList').
-  // }
+  Future<void> fatchAndSetWorkGroupsInList() async {
+    print("2");
+    await dbRef
+        .child('Company Groups')
+        .child(userId)
+        .child('workGroupsList')
+        .orderByKey()
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      Map<dynamic, dynamic> workGroupsList = dataSnapshot.value;
+      workGroupsList.forEach((key, value) {
+        workGroupModel.fromJson(value, key);
+        addWorkGroup(workGroupModel);
+      });
+    });
+  }
 
   Future<void> getUserId() async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       userId = user.uid;
+      fatchAndSetWorkGroupsInList();
     } on Exception {
       throw ErrorHint;
     }
