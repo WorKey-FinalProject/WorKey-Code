@@ -97,7 +97,7 @@ class Auth with ChangeNotifier {
       workGroupName: 'Root',
       managerId: null,
       parentWorkGroupId: null,
-      dateOfCreation: DateTime.now().toString(),
+      dateOfCreation: null,
       workGroupLogo: null,
     );
 
@@ -173,7 +173,7 @@ class Auth with ChangeNotifier {
             .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          companyAccountModel.fromJson(dataSnapshot.value, user.uid);
+          companyAccountModel.fromJsonToObject(dataSnapshot.value, user.uid);
           companyAccountModel.id = user.uid;
           return companyAccountModel;
         });
@@ -184,7 +184,7 @@ class Auth with ChangeNotifier {
             .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          personalAccountModel.fromJson(dataSnapshot.value, user.uid);
+          personalAccountModel.fromJsonToObject(dataSnapshot.value, user.uid);
           personalAccountModel.id = user.uid;
           return personalAccountModel;
         });

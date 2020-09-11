@@ -33,7 +33,7 @@ class CompanyAccountModel {
     };
   }
 
-  void fromJson(Map snapshot, String uid) {
+  void fromJsonToObject(Map snapshot, String uid) {
     id = uid;
     companyEmail = snapshot['companyEmail'];
     companyName = snapshot['companyName'];
@@ -42,5 +42,14 @@ class CompanyAccountModel {
     dateOfCreation = snapshot['dateOfCreation'];
     location = snapshot['location'] ?? '';
     companyLogo = snapshot['companyLogo'] ?? '';
+  }
+
+  void updateUser(CompanyAccountModel companyAccountModel) {
+    this.companyEmail = companyAccountModel.companyEmail;
+    this.companyName = companyAccountModel.companyName;
+    this.companyLogo = companyAccountModel.companyLogo;
+    this.location = companyAccountModel.location;
+    this.owenrFirstName = companyAccountModel.owenrFirstName;
+    this.owenrLastName = companyAccountModel.owenrLastName;
   }
 }

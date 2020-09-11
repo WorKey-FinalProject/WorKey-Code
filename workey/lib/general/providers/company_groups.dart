@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
 
 class CompanyGroups with ChangeNotifier {
   List<WorkGroupModel> workGroupsList = [];
+  List<GroupEmployeeModel> employeeList = [];
   WorkGroupModel workGroupModel = WorkGroupModel(
       workGroupName: null,
       managerId: null,
@@ -20,25 +22,50 @@ class CompanyGroups with ChangeNotifier {
     return [...workGroupsList];
   }
 
+  List<GroupEmployeeModel> get getWorkGroupEmployeeList {
+    return [...employeeList];
+  }
+
   WorkGroupModel findWorkGroupById(String id) {
     return workGroupsList.firstWhere((workGroup) => workGroup.id == id);
   }
 
+  GroupEmployeeModel findEmployeeById(String id) {
+    return employeeList.firstWhere((employee) => employee.id == id);
+  }
+
+  /*
+  Future<void> fatchAndSetEmployeesInList() async {
+    try{
+      await dbRef
+      .child('Company Groups')
+      .child(userId)
+      .child(path)
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+  */
+
   Future<void> fatchAndSetWorkGroupsInList() async {
-    print("2");
-    await dbRef
-        .child('Company Groups')
-        .child(userId)
-        .child('workGroupsList')
-        .orderByKey()
-        .once()
-        .then((DataSnapshot dataSnapshot) {
-      Map<dynamic, dynamic> workGroupsList = dataSnapshot.value;
-      workGroupsList.forEach((key, value) {
-        workGroupModel.fromJson(value, key);
-        addWorkGroup(workGroupModel);
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('workGroupsList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> list = dataSnapshot.value;
+        list.forEach((key, value) {
+          workGroupModel.fromJson(value, key);
+          workGroupsList.add(workGroupModel);
+        });
+        notifyListeners();
       });
-    });
+    } on Exception {
+      throw ErrorHint;
+    }
   }
 
   Future<void> getUserId() async {
@@ -49,9 +76,27 @@ class CompanyGroups with ChangeNotifier {
     } on Exception {
       throw ErrorHint;
     }
+    print(employeeList.length);
   }
 
-  Future<void> addWorkGroup(WorkGroupModel workGroupModel) async {
+  Future<void> addEmployeeToFirebaseAndList(
+      GroupEmployeeModel groupEmployeeModel) async {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('empolyeeList')
+          .child(groupEmployeeModel.id)
+          .set(groupEmployeeModel.toJson());
+      employeeList.add(groupEmployeeModel);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> addWorkGroupToFirebaseAndList(
+      WorkGroupModel workGroupModel) async {
     var db =
         dbRef.child('Company Groups').child(userId).child('workGroupsList');
     try {
