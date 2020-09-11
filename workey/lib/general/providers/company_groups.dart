@@ -64,7 +64,6 @@ class CompanyGroups with ChangeNotifier {
         Map<dynamic, dynamic> list = dataSnapshot.value;
         list.forEach((key, value) {
           groupEmployeeModel.fromJsonToObject(value, key);
-          print(key);
           employeeList.add(groupEmployeeModel);
         });
         notifyListeners();
@@ -86,7 +85,6 @@ class CompanyGroups with ChangeNotifier {
         Map<dynamic, dynamic> list = dataSnapshot.value;
         list.forEach((key, value) {
           workGroupModel.fromJson(value, key);
-          print(key);
           workGroupsList.add(workGroupModel);
         });
         notifyListeners();
@@ -127,17 +125,48 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> updateWorkGroup(
-      String workGroupToUpdateId, WorkGroupModel workGroupModel) async {
+  Future<void> updateEmployee(GroupEmployeeModel groupEmployeeModel) async {
+    try {
+      dbRef
+          .child("Company Groups")
+          .child(userId)
+          .child('empolyeeList')
+          .child(groupEmployeeModel.id)
+          .update(groupEmployeeModel.toJson());
+      employeeList[employeeList
+              .indexWhere((employee) => employee.id == groupEmployeeModel.id)] =
+          groupEmployeeModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> updateWorkGroup(WorkGroupModel workGroupModel) async {
     try {
       dbRef
           .child("Company Groups")
           .child(userId)
           .child('workGroupsList')
-          .child(workGroupToUpdateId)
+          .child(workGroupModel.id)
           .update(workGroupModel.toJson());
       workGroupsList[workGroupsList.indexWhere(
-          (workGroup) => workGroup.id == workGroupToUpdateId)] = workGroupModel;
+          (workGroup) => workGroup.id == workGroupModel.id)] = workGroupModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> deleteEmployeeById(String employeeId) async {
+    try {
+      await dbRef
+          .child("Company Groups")
+          .child(userId)
+          .child('empolyeeList')
+          .child(employeeId)
+          .remove();
+      employeeList.removeWhere((employee) => employee.id == employeeId);
       notifyListeners();
     } on Exception {
       throw ErrorHint;
