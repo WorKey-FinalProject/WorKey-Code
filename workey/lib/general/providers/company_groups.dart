@@ -14,6 +14,13 @@ class CompanyGroups with ChangeNotifier {
       parentWorkGroupId: null,
       dateOfCreation: null,
       workGroupLogo: null);
+  GroupEmployeeModel groupEmployeeModel = GroupEmployeeModel(
+    id: null,
+    workGroupId: null,
+    email: null,
+    firstName: null,
+    lastName: null,
+  );
 
   final dbRef = FirebaseDatabase.instance.reference();
   String userId;
@@ -34,18 +41,38 @@ class CompanyGroups with ChangeNotifier {
     return employeeList.firstWhere((employee) => employee.id == id);
   }
 
-  /*
-  Future<void> fatchAndSetEmployeesInList() async {
-    try{
-      await dbRef
-      .child('Company Groups')
-      .child(userId)
-      .child(path)
+  Future<void> getUserId() async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+      fatchAndSetWorkGroupsInList();
+      fatchAndSetEmployeesInList();
     } on Exception {
       throw ErrorHint;
     }
   }
-  */
+
+  Future<void> fatchAndSetEmployeesInList() async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('empolyeeList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> list = dataSnapshot.value;
+        list.forEach((key, value) {
+          groupEmployeeModel.fromJsonToObject(value, key);
+          print(key);
+          employeeList.add(groupEmployeeModel);
+        });
+        notifyListeners();
+      });
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
 
   Future<void> fatchAndSetWorkGroupsInList() async {
     try {
@@ -59,6 +86,7 @@ class CompanyGroups with ChangeNotifier {
         Map<dynamic, dynamic> list = dataSnapshot.value;
         list.forEach((key, value) {
           workGroupModel.fromJson(value, key);
+          print(key);
           workGroupsList.add(workGroupModel);
         });
         notifyListeners();
@@ -66,17 +94,6 @@ class CompanyGroups with ChangeNotifier {
     } on Exception {
       throw ErrorHint;
     }
-  }
-
-  Future<void> getUserId() async {
-    try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
-      userId = user.uid;
-      fatchAndSetWorkGroupsInList();
-    } on Exception {
-      throw ErrorHint;
-    }
-    print(employeeList.length);
   }
 
   Future<void> addEmployeeToFirebaseAndList(
