@@ -97,6 +97,25 @@ class _SubGroupsListState extends State<SubGroupsList> {
             ),
           ),
         ),
+        Container(
+          width: double.infinity,
+          margin: EdgeInsets.only(
+            left: 10,
+            right: 10,
+            bottom: 5,
+          ),
+          child: RaisedButton(
+            onPressed: () {},
+            color: Theme.of(context).accentColor,
+            child: Text(
+              'Add new work group',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }

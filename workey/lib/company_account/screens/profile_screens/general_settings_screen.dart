@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GeneralSettings extends StatelessWidget {
+class GeneralSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class PaymentSettings extends StatelessWidget {
+class AccountStatusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment Settings'),
+        title: const Text('Account Status'),
         elevation: 0,
       ),
       body: Center(
-        child: Text('payment'),
+        child: Text('status'),
       ),
     );
   }

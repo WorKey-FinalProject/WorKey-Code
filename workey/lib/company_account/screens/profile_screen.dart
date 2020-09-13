@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:workey/company_account/screens/account_status.dart';
-import 'package:workey/company_account/screens/general_settings.dart';
-import 'package:workey/company_account/screens/payment_settings.dart';
 
-import 'account_status.dart';
-import 'payment_settings.dart';
-import 'general_settings.dart';
-import 'info_screen.dart';
+import 'profile_screens/account_status_screen.dart';
+import 'profile_screens/general_settings_screen.dart';
+import 'profile_screens/payment_screen.dart';
+import 'profile_screens/account_status_screen.dart';
+import 'profile_screens/payment_screen.dart';
+import 'profile_screens/general_settings_screen.dart';
+import 'profile_screens/info_screen.dart';
 import '../widgets/profile_screen_widgets/profile_info_big_card.dart';
-import '../widgets/profile_screen_widgets/my_info.dart';
+import '../widgets/profile_screen_widgets/profile_picture.dart';
 import '../widgets/profile_screen_widgets/opaque_image.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -26,36 +26,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: <Widget>[
         Column(
           children: <Widget>[
-            Expanded(
+            Flexible(
               flex: 4,
+              fit: FlexFit.tight,
               child: Stack(
                 children: <Widget>[
-                  OpaqueImage(
-                    imageUrl:
-                        'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
-                  ),
-                  SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Company Name',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                              ),
-                            ),
+                  // OpaqueImage(
+                  //   imageUrl:
+                  //       'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
+                  // ),
+
+                  Container(
+                    height: double.infinity,
+                    width: double.infinity,
+                    padding: EdgeInsets.only(
+                      left: 30,
+                      right: 30,
+                      bottom: 10,
+                      top: 30,
+                    ),
+                    margin: EdgeInsets.only(top: 60),
+                    child: Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(66),
+                      ),
+                      elevation: 10,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 20,
+                        ),
+                        alignment: Alignment.bottomCenter,
+                        child: Text(
+                          'Company Name',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
                           ),
-                          MyInfo(),
-                        ],
+                        ),
                       ),
                     ),
-                  )
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(16),
+                      child: ProfilePicture(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -96,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => GeneralSettings(),
+                                builder: (context) => GeneralSettingsScreen(),
                               ),
                             ),
                             child: Padding(
@@ -125,7 +146,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PaymentSettings(),
+                                builder: (context) => PaymentSettingsScreen(),
                               ),
                             ),
                             child: Padding(
@@ -147,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AccountStatus(),
+                                builder: (context) => AccountStatusScreen(),
                               ),
                             ),
                             child: Padding(
