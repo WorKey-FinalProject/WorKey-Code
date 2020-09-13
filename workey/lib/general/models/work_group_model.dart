@@ -45,7 +45,7 @@ class WorkGroupModel {
     parentWorkGroupId = snapshot['parentWorkGroupId'];
     workGroupLogo = snapshot['workGroupLogo'];
     dateOfCreation = snapshot['dateOfCreation'];
-    employeeList = snapshot['employeeList'] ?? '';
+    employeeList = snapshot['employeeList'] ?? null;
     workGroupLocation = snapshot['workGroupLocation'] ?? '';
   }
 }
