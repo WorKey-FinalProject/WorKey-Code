@@ -49,7 +49,7 @@ class PersonalAccountModel {
     };
   }
 
-  void fromJson(Map snapshot, String uid) {
+  void fromJsonToObject(Map snapshot, String uid) {
     id = uid;
     email = snapshot['email'];
     firstName = snapshot['firstName'];
@@ -65,7 +65,6 @@ class PersonalAccountModel {
   }
 
   void updateUser(PersonalAccountModel personalUserModel) {
-    this.id = personalUserModel.id;
     this.address = personalUserModel.address;
     this.dateOfBirth = personalUserModel.dateOfBirth;
     this.dateOfCreation = personalUserModel.dateOfCreation;

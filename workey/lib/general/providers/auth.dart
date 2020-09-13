@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:workey/general/models/work_group_model.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
 import '../models/company_account_model.dart';
@@ -27,6 +29,8 @@ class Auth with ChangeNotifier {
     lastName: null,
   );
 
+  BuildContext get context => null;
+
   Future<void> signUpPersonalAccount({
     String email,
     String password,
@@ -40,32 +44,45 @@ class Auth with ChangeNotifier {
     String fingerPrint,
     String profilePicture,
   }) async {
-    AuthResult authResult = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    personalAccountModel = PersonalAccountModel(
-      id: authResult.user.uid,
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      phoneNumber: phoneNumber,
-      dateOfBirth: dateOfBirth,
-      address: address,
-      occupation: occupation,
-      faceRecognitionPicture: faceRecognitionPicture,
-      profilePicture: profilePicture,
-      fingerPrint: fingerPrint,
-      dateOfCreation: DateTime.now().toString(),
-    );
     try {
+      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      personalAccountModel = PersonalAccountModel(
+        id: authResult.user.uid,
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        dateOfBirth: dateOfBirth,
+        address: address,
+        occupation: occupation,
+        faceRecognitionPicture: faceRecognitionPicture,
+        profilePicture: profilePicture,
+        fingerPrint: fingerPrint,
+        dateOfCreation: DateTime.now().toString(),
+      );
       await dbRef
           .child('Users')
           .child('Personal Accounts')
           .child(authResult.user.uid)
           .set(personalAccountModel.toJson());
-    } on Exception {
-      throw ErrorHint;
+    } on PlatformException catch (error) {
+      var message = 'An error occurred, please check your credentials!';
+
+      if (error.message != null) {
+        message = error.message;
+      }
+
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+    } catch (err) {
+      print(err);
     }
   }
 
@@ -78,59 +95,79 @@ class Auth with ChangeNotifier {
     String owenrFirstName,
     String owenrLastName,
   }) async {
-    AuthResult authResult = await _auth.createUserWithEmailAndPassword(
-      email: companyEmail,
-      password: password,
-    );
-
-    companyAccountModel = CompanyAccountModel(
-        id: authResult.user.uid,
-        companyEmail: companyEmail,
-        companyName: companyName,
-        owenrFirstName: owenrFirstName,
-        owenrLastName: owenrLastName,
-        dateOfCreation: DateTime.now().toString(),
-        companyLogo: companyLogo,
-        location: location);
-
-    WorkGroupModel workGroupModel = WorkGroupModel(
-      workGroupName: 'Root',
-      managerId: null,
-      parentWorkGroupId: null,
-      dateOfCreation: DateTime.now().toString(),
-      workGroupLogo: null,
-    );
-
     try {
+      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+        email: companyEmail,
+        password: password,
+      );
+      companyAccountModel = CompanyAccountModel(
+          id: authResult.user.uid,
+          companyEmail: companyEmail,
+          companyName: companyName,
+          owenrFirstName: owenrFirstName,
+          owenrLastName: owenrLastName,
+          dateOfCreation: DateTime.now().toString(),
+          companyLogo: companyLogo,
+          location: location);
+
+      WorkGroupModel workGroupModel = WorkGroupModel(
+        workGroupName: 'Root',
+        managerId: null,
+        parentWorkGroupId: null,
+        dateOfCreation: null,
+        workGroupLogo: null,
+      );
       await dbRef
           .child('Users')
           .child('Company Accounts')
           .child(authResult.user.uid)
           .set(companyAccountModel.toJson());
-    } on Exception {
-      throw ErrorHint;
-    }
-    try {
       await dbRef
           .child('Company Groups')
           .child(authResult.user.uid)
           .set(workGroupModel.toJson());
-    } on Exception {
-      throw ErrorHint;
+    } on PlatformException catch (error) {
+      var message = 'An error occurred, please check your credentials!';
+      if (error.message != null) {
+        message = error.message;
+      }
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+    } catch (err) {
+      print(err);
     }
   }
 
   Future<void> signin(String email, String password) async {
-    await _auth
-        .signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    )
-        .then(
-      (authResult) {
-        user = authResult.user;
-      },
-    );
+    try {
+      _auth
+          .signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      )
+          .then(
+        (authResult) {
+          user = authResult.user;
+        },
+      );
+    } on PlatformException catch (error) {
+      var message = 'An error occurred, please check your credentials!';
+      if (error.message != null) {
+        message = error.message;
+      }
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor: Theme.of(context).errorColor,
+        ),
+      );
+    } catch (err) {
+      print(err);
+    }
   }
 
   Future<AccountTypeChosen> findCurrAccountType(FirebaseUser user) async {
@@ -154,8 +191,6 @@ class Auth with ChangeNotifier {
               accountType = AccountTypeChosen.nothing;
             } else {
               accountType = AccountTypeChosen.company;
-
-              print('$accountType ccccooommm');
             }
           });
         } else {
@@ -163,10 +198,7 @@ class Auth with ChangeNotifier {
         }
       },
     );
-
-    //print('$accountType wtffffffffffffffff');
     return accountType;
-    //print('${accountType} ----- findCurrAccountType');
   }
 
   Future<dynamic> getCurrUserData() async {
@@ -178,7 +210,7 @@ class Auth with ChangeNotifier {
             .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          companyAccountModel.fromJson(dataSnapshot.value, user.uid);
+          companyAccountModel.fromJsonToObject(dataSnapshot.value, user.uid);
           companyAccountModel.id = user.uid;
           return companyAccountModel;
         });
@@ -189,7 +221,7 @@ class Auth with ChangeNotifier {
             .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          personalAccountModel.fromJson(dataSnapshot.value, user.uid);
+          personalAccountModel.fromJsonToObject(dataSnapshot.value, user.uid);
           personalAccountModel.id = user.uid;
           return personalAccountModel;
         });

@@ -32,7 +32,6 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
           _auth.findCurrAccountType(user).then(
             (accountType) {
               accountTypeChosen = accountType;
-              print('$accountType ----- findAccountType!');
               setState(() {
                 _isLoading = false;
               });
