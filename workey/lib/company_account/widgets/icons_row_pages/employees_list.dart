@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../screens/employee_detail_screen.dart';
+
 class EmployeesList extends StatefulWidget {
   @override
   _State createState() => _State();
@@ -67,7 +69,12 @@ class _State extends State<EmployeesList> {
         : ListView.builder(
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () => null,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EmployeeDetailScreen(),
+                  ),
+                ),
                 child: Card(
                   elevation: 5,
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),

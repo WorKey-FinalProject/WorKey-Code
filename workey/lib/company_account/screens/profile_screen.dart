@@ -9,7 +9,7 @@ import 'general_settings.dart';
 import 'info_screen.dart';
 import '../widgets/profile_screen_widgets/profile_info_big_card.dart';
 import '../widgets/profile_screen_widgets/my_info.dart';
-import '../widgets/profile_screen_widgets/opaque_image.dart';
+import '../widgets/group_screen_widgets/opaque_image.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override

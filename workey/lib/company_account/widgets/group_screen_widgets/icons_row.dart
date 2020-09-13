@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../screens/groups_screen.dart';
+import '../../screens/groups_screen.dart';
 
 class IconsRow extends StatefulWidget {
   final Function selectedIconHandler;
