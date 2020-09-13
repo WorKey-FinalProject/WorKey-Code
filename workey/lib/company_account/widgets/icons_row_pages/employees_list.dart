@@ -66,39 +66,42 @@ class _State extends State<EmployeesList> {
           )
         : ListView.builder(
             itemBuilder: (context, index) {
-              return Card(
-                elevation: 5,
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    radius: 30,
-                    child: Padding(
-                      padding: EdgeInsets.all(6),
-                      child: FittedBox(
-                        child: Text('Profile Pic'),
+              return GestureDetector(
+                onTap: () => null,
+                child: Card(
+                  elevation: 5,
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      radius: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(6),
+                        child: FittedBox(
+                          child: Text('Profile Pic'),
+                        ),
                       ),
                     ),
+                    title: Text(
+                      emp[index],
+                      style: Theme.of(context).textTheme.title,
+                    ),
+                    subtitle: Text(
+                      DateFormat.yMMMd().format(DateTime.now()),
+                    ),
+                    trailing: MediaQuery.of(context).size.width > 460
+                        ? FlatButton.icon(
+                            icon: Icon(Icons.more),
+                            label: Text('Employee details'),
+                            onPressed: null, //() => deleteTx(emp[index].id),
+                            textColor: Theme.of(context).accentColor,
+                          )
+                        : IconButton(
+                            icon: Icon(Icons.more),
+                            color: Theme.of(context).accentColor,
+                            onPressed: () =>
+                                null //deleteTx(transactions[index].id),
+                            ),
                   ),
-                  title: Text(
-                    emp[index],
-                    style: Theme.of(context).textTheme.title,
-                  ),
-                  subtitle: Text(
-                    DateFormat.yMMMd().format(DateTime.now()),
-                  ),
-                  trailing: MediaQuery.of(context).size.width > 460
-                      ? FlatButton.icon(
-                          icon: Icon(Icons.more),
-                          label: Text('Employee details'),
-                          onPressed: null, //() => deleteTx(emp[index].id),
-                          textColor: Theme.of(context).accentColor,
-                        )
-                      : IconButton(
-                          icon: Icon(Icons.more),
-                          color: Theme.of(context).accentColor,
-                          onPressed: () =>
-                              null //deleteTx(transactions[index].id),
-                          ),
                 ),
               );
             },
