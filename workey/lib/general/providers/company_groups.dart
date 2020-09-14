@@ -4,8 +4,10 @@ import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
+import 'package:workey/general/widgets/auth/auth_form.dart';
 
 class CompanyGroups with ChangeNotifier {
+  AuthForm authForm;
   List<WorkGroupModel> workGroupsList = [];
   List<GroupEmployeeModel> employeeList = [];
   WorkGroupModel workGroupModel = WorkGroupModel(
@@ -17,9 +19,6 @@ class CompanyGroups with ChangeNotifier {
   GroupEmployeeModel groupEmployeeModel = GroupEmployeeModel(
     id: null,
     workGroupId: null,
-    email: null,
-    firstName: null,
-    lastName: null,
   );
 
   final dbRef = FirebaseDatabase.instance.reference();
@@ -45,8 +44,8 @@ class CompanyGroups with ChangeNotifier {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       userId = user.uid;
-      fatchAndSetWorkGroupsInList();
-      fatchAndSetEmployeesInList();
+      //fatchAndSetWorkGroupsInList();
+      //fatchAndSetEmployeesInList();
     } on Exception {
       throw ErrorHint;
     }
