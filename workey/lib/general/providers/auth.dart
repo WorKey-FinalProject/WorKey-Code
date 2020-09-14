@@ -129,6 +129,7 @@ class Auth with ChangeNotifier {
   }
 
   Future<AccountTypeChosen> findCurrAccountType(FirebaseUser user) async {
+    this.user = user;
     await dbRef.child('Users').once().then((DataSnapshot dataSnapshot) {
       Map<dynamic, dynamic> map = dataSnapshot.value;
       map.forEach((key, value) {
@@ -186,6 +187,7 @@ class Auth with ChangeNotifier {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       String type;
+      print(userNewData.companyEmail);
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
         user.updateEmail(userNewData.companyEmail);
