@@ -10,7 +10,10 @@ class ProfilePicture extends StatelessWidget {
           width: 150,
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            border: Border.all(width: 4, color: Colors.white),
+            border: Border.all(
+              width: 4,
+              color: Colors.white,
+            ),
             boxShadow: [
               BoxShadow(
                 spreadRadius: 2,

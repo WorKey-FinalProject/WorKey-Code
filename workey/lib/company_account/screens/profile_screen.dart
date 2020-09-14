@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:workey/company_account/screens/profile_screens/general_settings_screen.dart';
+import 'package:workey/company_account/screens/profile_screens/payment_info_screen.dart';
 
-import 'profile_screens/account_status_screen.dart';
-import 'profile_screens/general_settings_screen.dart';
-import 'profile_screens/payment_screen.dart';
 import 'profile_screens/personal_info_screen.dart';
-import '../widgets/profile_screen_widgets/profile_info_big_card.dart';
-import '../widgets/profile_screen_widgets/profile_picture.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -19,35 +15,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50),
-            child: Container(
-              color: Theme.of(context).primaryColor,
-              child: TabBar(
-                unselectedLabelColor: Colors.white,
-                labelColor: Theme.of(context).accentColor,
-                indicatorColor: Theme.of(context).accentColor,
-                tabs: [
-                  Tab(icon: Icon(Icons.person)),
-                  Tab(icon: Icon(Icons.payment)),
-                  Tab(icon: Icon(Icons.info)),
-                  Tab(icon: Icon(Icons.settings)),
-                ],
-              ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            child: TabBar(
+              unselectedLabelColor: Colors.white,
+              labelColor: Theme.of(context).accentColor,
+              indicatorColor: Theme.of(context).accentColor,
+              tabs: [
+                Tab(icon: Icon(Icons.person_outline)),
+                Tab(icon: Icon(Icons.payment)),
+                Tab(icon: Icon(Icons.settings)),
+              ],
             ),
           ),
-          body: TabBarView(
-            children: [
-              Icon(Icons.info),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
-              Icon(Icons.directions_bike),
-            ],
-          ),
+        ),
+        body: TabBarView(
+          children: [
+            PersonalInfoScreen(),
+            PaymentInfoScreen(),
+            GeneralSettingsScreen(),
+          ],
         ),
       ),
     );
