@@ -30,30 +30,39 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final passwordNameTextController = TextEditingController();
   bool showPassword = true;
   final _formKey = GlobalKey<FormState>();
+
   var _userEmail = '';
   var _userFirstName = '';
   var _userLastName = '';
   var _userPassword = '';
+  CompanyAccountModel userAccount;
 
-  CompanyAccountModel companyAccountModel;
+  void _trySubmit() {
+    final isValid = _formKey.currentState.validate();
+    FocusScope.of(context).unfocus();
 
-  void getUserData() async {
-    companyAccountModel = await widget.auth.getCurrUserData().then((value) {
-      print('${value.companyEmail} @@@@@@@@@@@@@@@@@');
-    });
+    if (isValid) {
+      _formKey.currentState.save();
+      userAccount.companyEmail = emailNameTextController.text;
+      widget.auth.updateCurrUserData(userAccount);
+    }
   }
 
-  // @override
-  // void initState() {
-  //   getUserData();
-  //   companyNameTextController.text = 'company name';
-  //   firstNameTextController.text = 'first name';
-  //   lastNameTextController.text = 'last name';
-  //   emailNameTextController.text = 'email address';
-  //   passwordNameTextController.text = 'password';
+  void getUserData() async {
+    userAccount = await widget.auth.getCurrUserData();
+    companyNameTextController.text = userAccount.companyName;
+    firstNameTextController.text = userAccount.owenrFirstName;
+    lastNameTextController.text = userAccount.owenrLastName;
+    emailNameTextController.text = userAccount.companyEmail;
+    passwordNameTextController.text = 'password';
+  }
 
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    getUserData();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +127,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             ),
             RaisedButton(
               onPressed: () {
-                getUserData();
+                _trySubmit();
               },
               padding: EdgeInsets.symmetric(horizontal: 50),
               elevation: 2,
@@ -151,7 +160,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         controller: textEditingController,
         onSaved: textFieldType == TextFieldType.email
             ? (value) {
-                _userEmail = value;
+                emailNameTextController.text = value;
               }
             : textFieldType == TextFieldType.password
                 ? (value) {

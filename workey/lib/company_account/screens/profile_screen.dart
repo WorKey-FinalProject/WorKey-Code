@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<Auth>(context);
+    final _auth = Provider.of<Auth>(context, listen: false);
 
     return DefaultTabController(
       length: 3,
