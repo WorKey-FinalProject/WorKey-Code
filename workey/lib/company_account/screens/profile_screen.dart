@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:workey/company_account/screens/profile_screens/general_settings_screen.dart';
-import 'package:workey/company_account/screens/profile_screens/payment_info_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/models/company_account_model.dart';
 
+import '../../general/providers/auth.dart';
+import '../screens/profile_screens/general_settings_screen.dart';
+import '../screens/profile_screens/payment_info_screen.dart';
 import 'profile_screens/personal_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -13,8 +16,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   var imageUrl =
       'https://image.shutterstock.com/image-photo/kiev-ukraine-april-16-2015-260nw-276697244.jpg';
 
+  CompanyAccountModel userData;
+
   @override
   Widget build(BuildContext context) {
+    final _auth = Provider.of<Auth>(context);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -36,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         body: TabBarView(
           children: [
-            PersonalInfoScreen(),
+            PersonalInfoScreen(_auth),
             PaymentInfoScreen(),
             GeneralSettingsScreen(),
           ],
