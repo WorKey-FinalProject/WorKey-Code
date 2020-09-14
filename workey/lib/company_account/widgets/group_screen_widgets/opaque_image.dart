@@ -15,9 +15,6 @@ class OpaqueImage extends StatelessWidget {
           height: double.maxFinite,
           fit: BoxFit.fill,
         ),
-        Container(
-          color: Colors.white.withOpacity(0.80),
-        )
       ],
     );
   }
