@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/providers/global_sizes.dart';
 import 'package:workey/general/screens/splash_screen.dart';
 
 import 'package:workey/general/widgets/auth/signin_account_type.dart';
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<CompanyGroups>(
           create: (ctx) => CompanyGroups(),
         ),
+        ChangeNotifierProvider<GlobalSizes>(
+          create: (ctx) => GlobalSizes(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

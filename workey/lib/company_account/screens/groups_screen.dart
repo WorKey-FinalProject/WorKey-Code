@@ -33,7 +33,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
         return SettingsView();
         break;
       case SelectedIcon.subGroups:
-        return SubGroupsList();
+        //return SubGroupsList();
         break;
       case SelectedIcon.employees:
         return EmployeesList();
