@@ -66,6 +66,15 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> fatch() async {
+    fatch2('feedList');
+  }
+
+  Future<void> fatch2(String name) async {
+    if (name == 'feedList') {
+    } else if (name == 'empolyeeList') {}
+  }
+
   Future<void> fatchAndSetFeedInList() async {
     try {
       await dbRef
