@@ -58,6 +58,7 @@ class CompanyGroups with ChangeNotifier {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       _userId = user.uid;
+      fatchAndSetToLists();
     } on Exception {
       throw ErrorHint;
     }
