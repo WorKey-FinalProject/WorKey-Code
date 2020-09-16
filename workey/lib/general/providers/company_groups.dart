@@ -71,7 +71,6 @@ class CompanyGroups with ChangeNotifier {
     _employeeList = [];
   }
 
-
   Future<void> fetchAndSetToLists() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     _userId = user.uid;

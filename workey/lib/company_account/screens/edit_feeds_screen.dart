@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/widgets/feed_item.dart';
@@ -38,16 +39,43 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
       _fetchListOnce = true;
     }
 
-    print('${feedList[0].toJson()} , ${feedList[1].toJson()}');
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Feeds'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {
-              feedProvider.updateFeedInFirebaseAndList(feedList);
+          Builder(
+            builder: (ctx) {
+              return IconButton(
+                  icon: Icon(Icons.save),
+                  onPressed: () async {
+                    try {
+                      await feedProvider.updateFeedInFirebaseAndList(feedList);
+                    } on PlatformException catch (err) {
+                      var message = 'An error occurred';
+
+                      if (err.message != null) {
+                        message = err.message;
+                      }
+
+                      Scaffold.of(ctx).showSnackBar(
+                        SnackBar(
+                          content: Text(message),
+                          backgroundColor: Theme.of(context).errorColor,
+                        ),
+                      );
+                    } catch (err) {
+                      print(err);
+                    }
+                    Scaffold.of(ctx).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Changes saved successfully',
+                          textAlign: TextAlign.center,
+                        ),
+                        backgroundColor: Colors.blue,
+                      ),
+                    );
+                  });
             },
           )
         ],
