@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:workey/general/models/feed_model.dart';
-import 'package:workey/general/providers/global_sizes.dart';
 
 import '../../general/models/work_group_model.dart';
 import '../../general/widgets/auth/signup_type.dart';
