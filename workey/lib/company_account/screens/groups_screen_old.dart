@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/icons_row_pages/settings_view.dart';
+import '../widgets/groups_screen_bottom_pages/settings_view.dart';
 import '../widgets/group_screen_widgets/group_view.dart';
-import '../widgets/icons_row_pages/sub_groups_list.dart';
-import '../widgets/icons_row_pages/employees_list.dart';
+import '../widgets/groups_screen_bottom_pages/sub_groups_list.dart';
+import '../widgets/groups_screen_bottom_pages/employees_list.dart';
 import '../widgets/group_screen_widgets/icons_row.dart';
 
 enum SelectedIcon {

@@ -3,29 +3,29 @@ import 'package:flutter/foundation.dart';
 class FeedModel {
   String id;
   String title;
-  String description;
+  String text;
 
   FeedModel({
     this.id,
     @required this.title,
-    this.description,
+    this.text,
   });
 
   Map<String, Object> toJson() {
     return {
       'title': this.title,
-      'description': this.description,
+      'description': this.text,
     };
   }
 
   void fromJsonToObject(Map snapshot, String uid) {
     id = uid;
     title = snapshot['title'];
-    description = snapshot['description'] ?? '';
+    text = snapshot['description'] ?? '';
   }
 
   void updateFeed(FeedModel feedModel) {
     this.title = feedModel.title;
-    this.description = feedModel.description;
+    this.text = feedModel.text;
   }
 }

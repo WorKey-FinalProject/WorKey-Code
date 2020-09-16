@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../company_account/screens/edit_feeds_screen.dart';
+
 class Logo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -53,8 +55,14 @@ class Logo extends StatelessWidget {
                 height: double.infinity,
                 width: double.infinity,
                 child: RaisedButton(
-                  onPressed: () {},
-                  //padding: EdgeInsets.symmetric(horizontal: 140),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditFeedsScreen(),
+                      ),
+                    );
+                  },
                   elevation: 2,
                   color: Colors.white,
                   shape: RoundedRectangleBorder(
