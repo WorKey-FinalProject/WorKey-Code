@@ -4,7 +4,7 @@ import 'package:workey/company_account/widgets/groups_screen_bottom_pages/employ
 import 'package:workey/company_account/widgets/groups_screen_bottom_pages/settings_view.dart';
 import 'package:workey/company_account/widgets/groups_screen_bottom_pages/sub_groups_list.dart';
 
-import 'package:workey/company_account/widgets/profile_screen_widgets/profile_picture.dart';
+import 'package:workey/company_account/widgets/profile_picture.dart';
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -121,7 +121,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   indicatorColor: Theme.of(context).accentColor,
                   tabs: [
                     Tab(icon: Icon(Icons.settings)),
-                    Tab(icon: Icon(MdiIcons.graph)),
+                    Tab(icon: Icon(Icons.group_work)),
                     Tab(icon: Icon(Icons.people)),
                   ],
                 ),

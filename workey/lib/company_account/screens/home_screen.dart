@@ -14,8 +14,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                height: constraints.maxHeight * 0.25,
-                child: Logo(),
+                child: Logo(constraints.maxHeight * 0.25),
               ),
               SizedBox(
                 height: constraints.maxHeight * 0.05,
