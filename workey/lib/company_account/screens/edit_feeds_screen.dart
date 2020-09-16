@@ -11,6 +11,8 @@ class EditFeedsScreen extends StatefulWidget {
 }
 
 class _EditFeedsScreenState extends State<EditFeedsScreen> {
+  var _fetchListOnce = false;
+  List<FeedModel> feedList = [];
   final titleTextController = TextEditingController();
   final textTextController = TextEditingController();
 
@@ -21,11 +23,22 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
     super.dispose();
   }
 
+  void _addNewFeed(FeedModel feedModel) {
+    setState(() {
+      feedList.add(feedModel);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    final feedProvider = Provider.of<CompanyGroups>(context);
-    final feedList = feedProvider.getFeedList;
+    final feedProvider = Provider.of<CompanyGroups>(context, listen: false);
+    if (!_fetchListOnce) {
+      feedList = feedProvider.getFeedList;
+      _fetchListOnce = true;
+    }
+
+    print('${feedList[0].toJson()} , ${feedList[1].toJson()}');
 
     return Scaffold(
       appBar: AppBar(
@@ -42,9 +55,9 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
       body: GridView(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
+          childAspectRatio: 3 / 5,
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 10,
         ),
         children: feedList.map(
           (feed) {
@@ -52,7 +65,9 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
               builder: (BuildContext context) {
                 return Container(
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 10.0),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                  ),
                   child: FeedItem(
                     title: feed.title,
                     text: feed.text,
@@ -69,7 +84,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () {
-              addNewFeedItemShowDialog(context, _formKey, feedList);
+              addNewFeedItemShowDialog(context, _formKey);
             },
             child: Icon(Icons.add),
             backgroundColor: Colors.green,
@@ -79,8 +94,10 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
     );
   }
 
-  Future addNewFeedItemShowDialog(BuildContext context,
-      GlobalKey<FormState> _formKey, List<FeedModel> feedList) {
+  Future addNewFeedItemShowDialog(
+    BuildContext context,
+    GlobalKey<FormState> _formKey,
+  ) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -142,7 +159,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                           if (value.isEmpty) {
                             return 'Please enter a description.';
                           }
-                          if (value.length < 10) {
+                          if (value.length < 5) {
                             return 'Should be at least 10 characters long.';
                           }
                           return null;
@@ -154,8 +171,10 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                           onPressed: () {
                             final isValid = _formKey.currentState.validate();
                             if (isValid) {
+                              Navigator.pop(context);
                               _formKey.currentState.save();
-                              feedList.add(
+
+                              _addNewFeed(
                                 FeedModel(
                                   title: titleTextController.text,
                                   text: textTextController.text,
