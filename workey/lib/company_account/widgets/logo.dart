@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 import '../../company_account/screens/edit_feeds_screen.dart';
 
 class Logo extends StatelessWidget {
+  double constraintsMaxHeight;
+
+  Logo(this.constraintsMaxHeight);
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: constraintsMaxHeight,
       child: Stack(
         children: <Widget>[
           Container(
+            height: constraintsMaxHeight * 0.85,
             padding: EdgeInsets.only(
               left: 20,
               right: 20,
@@ -32,13 +38,12 @@ class Logo extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: -27,
+            bottom: 0,
             left: 0,
             right: 0,
             child: Container(
               alignment: Alignment.center,
               margin: EdgeInsets.symmetric(horizontal: 20),
-              //padding: EdgeInsets.symmetric(horizontal: 20),
               height: 54,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -81,7 +86,7 @@ class Logo extends StatelessWidget {
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 5),
-                        child: Text('Edit Feed'),
+                        child: Text('Edit Feeds'),
                       ),
                     ],
                   ),

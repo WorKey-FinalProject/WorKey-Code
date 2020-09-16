@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
 
-import '../../widgets/profile_screen_widgets/profile_picture.dart';
+import '../../widgets/profile_picture.dart';
 
 enum TextFieldType {
   companyName,
@@ -65,6 +65,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     lastNameTextController.text = userAccount.owenrLastName;
     emailTextController.text = userAccount.companyEmail;
     passwordTextController.text = '';
+  }
+
+  @override
+  void dispose() {
+    companyNameTextController.dispose();
+    firstNameTextController.dispose();
+    lastNameTextController.dispose();
+    emailTextController.dispose();
+    passwordTextController.dispose();
+    verifyPasswordTextController.dispose();
+    super.dispose();
   }
 
   @override

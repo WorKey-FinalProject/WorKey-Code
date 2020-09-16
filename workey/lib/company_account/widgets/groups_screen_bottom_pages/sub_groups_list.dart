@@ -46,10 +46,8 @@ class _SubGroupsListState extends State<SubGroupsList> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.isShrink);
     return LayoutBuilder(
       builder: (context, constraints) {
-        print(constraints.maxHeight);
         return Column(
           children: <Widget>[
             Flexible(
