@@ -185,11 +185,19 @@ class Auth with ChangeNotifier {
     return dynamicUser;
   }
 
+  Future<void> updateCurrUserPassword(String newPassword) async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      user.updatePassword(newPassword);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<void> updateCurrUserData(dynamic userNewData) async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       String type;
-      print(userNewData.companyEmail);
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
         user.updateEmail(userNewData.companyEmail);

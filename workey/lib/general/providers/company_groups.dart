@@ -1,28 +1,38 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:workey/general/widgets/auth/auth_form.dart';
 
 class CompanyGroups with ChangeNotifier {
-  AuthForm authForm;
+  final dbRef = FirebaseDatabase.instance.reference();
+  String userId;
+
+  List<FeedModel> feedList = [];
   List<WorkGroupModel> workGroupsList = [];
   List<GroupEmployeeModel> employeeList = [];
+
+  FeedModel feedModel = FeedModel(
+    title: null,
+  );
+
   WorkGroupModel workGroupModel = WorkGroupModel(
       workGroupName: null,
       managerId: null,
       parentWorkGroupId: null,
       dateOfCreation: null,
       workGroupLogo: null);
+
   GroupEmployeeModel groupEmployeeModel = GroupEmployeeModel(
     id: null,
     workGroupId: null,
   );
 
-  final dbRef = FirebaseDatabase.instance.reference();
-  String userId;
+  List<FeedModel> get getFeedList {
+    return [...feedList];
+  }
 
   List<WorkGroupModel> get getWorkGroupsList {
     return [...workGroupsList];
@@ -30,6 +40,10 @@ class CompanyGroups with ChangeNotifier {
 
   List<GroupEmployeeModel> get getWorkGroupEmployeeList {
     return [...employeeList];
+  }
+
+  FeedModel findFeedById(String id) {
+    return feedList.firstWhere((feed) => feed.id == id);
   }
 
   WorkGroupModel findWorkGroupById(String id) {
@@ -46,6 +60,37 @@ class CompanyGroups with ChangeNotifier {
       userId = user.uid;
       //fatchAndSetWorkGroupsInList();
       //fatchAndSetEmployeesInList();
+      //fatchAndSetFeedInList();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> fatch() async {
+    fatch2('feedList');
+  }
+
+  Future<void> fatch2(String name) async {
+    if (name == 'feedList') {
+    } else if (name == 'empolyeeList') {}
+  }
+
+  Future<void> fatchAndSetFeedInList() async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('feedList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> list = dataSnapshot.value;
+        list.forEach((key, value) {
+          feedModel.fromJsonToObject(value, key);
+          feedList.add(feedModel);
+        });
+        notifyListeners();
+      });
     } on Exception {
       throw ErrorHint;
     }
@@ -109,6 +154,19 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> addFeedToFirebaseAndList(FeedModel feedModel) async {
+    var db = dbRef.child('Company Groups').child(userId).child('feedList');
+    try {
+      String newKey = db.push().key;
+      await db.child(newKey).set(feedModel.toJson());
+      feedModel.id = newKey;
+      feedList.add(feedModel);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
   Future<void> addWorkGroupToFirebaseAndList(
       WorkGroupModel workGroupModel) async {
     var db =
@@ -141,10 +199,26 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> updateFeed(FeedModel feedModel) {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('feedList')
+          .child(feedModel.id)
+          .update(feedModel.toJson());
+      feedList[feedList.indexWhere((feed) => feed.id == feedModel.id)] =
+          feedModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
   Future<void> updateWorkGroup(WorkGroupModel workGroupModel) async {
     try {
       dbRef
-          .child("Company Groups")
+          .child('Company Groups')
           .child(userId)
           .child('workGroupsList')
           .child(workGroupModel.id)
@@ -172,10 +246,25 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> deleteFeedById(String feedId) async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('feedList')
+          .child(feedId)
+          .remove();
+      feedList.removeWhere((feed) => feed.id == feedId);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
   Future<void> deleteWorkGroupById(String workGroupId) async {
     try {
       await dbRef
-          .child("Company Groups")
+          .child('Company Groups')
           .child(userId)
           .child('workGroupsList')
           .child(workGroupId)
