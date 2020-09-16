@@ -24,8 +24,10 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
 
   @override
   Widget build(BuildContext context) {
+
     final _companyGroupsProvider =
         Provider.of<CompanyGroups>(context, listen: false);
+
     final _auth = Provider.of<Auth>(context, listen: false);
 
     Future<void> findAccountType() async {
@@ -35,7 +37,9 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
             (accountType) {
               accountTypeChosen = accountType;
               if (accountTypeChosen == AccountTypeChosen.company) {
+
                 _companyGroupsProvider.fetchAndSetToLists();
+
               }
               setState(() {
                 _isLoading = false;

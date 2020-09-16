@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:workey/general/models/feed_model.dart';
@@ -69,6 +71,7 @@ class CompanyGroups with ChangeNotifier {
     _employeeList = [];
   }
 
+
   Future<void> fetchAndSetToLists() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     _userId = user.uid;
@@ -91,18 +94,27 @@ class CompanyGroups with ChangeNotifier {
         if (list != null) {
           if (name == 'feedList') {
             list.forEach((key, value) {
-              feedModel.fromJsonToObject(value, key);
-              _feedList.add(feedModel);
+              FeedModel feed = FeedModel(title: null);
+              feed.fromJsonToObject(value, key);
+              _feedList.add(feed);
             });
           } else if (name == 'empolyeeList') {
             list.forEach((key, value) {
-              groupEmployeeModel.fromJsonToObject(value, key);
-              _employeeList.add(groupEmployeeModel);
+              GroupEmployeeModel emp =
+                  GroupEmployeeModel(id: null, workGroupId: null);
+              emp.fromJsonToObject(value, key);
+              _employeeList.add(emp);
             });
           } else if (name == 'workGroupsList') {
             list.forEach((key, value) {
-              workGroupModel.fromJson(value, key);
-              _workGroupsList.add(workGroupModel);
+              WorkGroupModel wg = WorkGroupModel(
+                  workGroupName: null,
+                  managerId: null,
+                  parentWorkGroupId: null,
+                  dateOfCreation: null,
+                  workGroupLogo: null);
+              wg.fromJson(value, key);
+              _workGroupsList.add(wg);
             });
           } else {
             throw 'Error in fatchAndSetToListHandler function';
