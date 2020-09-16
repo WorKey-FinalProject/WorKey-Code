@@ -8,6 +8,7 @@ import 'package:workey/general/screens/auth_screen.dart';
 import 'package:workey/general/widgets/auth/waiting_screen.dart';
 
 import '../../../company_account/screens/tabs_screen.dart';
+import '../../../general/screens/splash_screen.dart';
 import '../../../general/widgets/auth/signup_type.dart';
 import '../../../personal_account/screens/personal_tabs_screen.dart';
 
@@ -24,20 +25,15 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
 
   @override
   Widget build(BuildContext context) {
-    final _companyGroupsProvider =
-        Provider.of<CompanyGroups>(context, listen: false);
-
     final _auth = Provider.of<Auth>(context, listen: false);
 
     Future<void> findAccountType() async {
       await FirebaseAuth.instance.currentUser().then(
         (user) {
           _auth.findCurrAccountType(user).then(
-            (accountType) async {
+            (accountType) {
               accountTypeChosen = accountType;
-              if (accountTypeChosen == AccountTypeChosen.company) {
-                await _companyGroupsProvider.fetchAndSetToLists();
-              }
+              if (accountTypeChosen == AccountTypeChosen.company) {}
               setState(() {
                 _isLoading = false;
               });

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:workey/general/models/feed_model.dart';
@@ -71,17 +69,16 @@ class CompanyGroups with ChangeNotifier {
     _employeeList = [];
   }
 
-
   Future<void> fetchAndSetToLists() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     _userId = user.uid;
     clearLists();
-    await _fatchAndSetToListHandler('feedList');
-    await _fatchAndSetToListHandler('empolyeeList');
-    await _fatchAndSetToListHandler('workGroupsList');
+    await _fetchAndSetToListHandler('feedList');
+    await _fetchAndSetToListHandler('empolyeeList');
+    await _fetchAndSetToListHandler('workGroupsList');
   }
 
-  Future<void> _fatchAndSetToListHandler(String name) async {
+  Future<void> _fetchAndSetToListHandler(String name) async {
     try {
       await _dbRef
           .child('Company Groups')
