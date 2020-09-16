@@ -40,75 +40,104 @@ class _FeedState extends State<Feed> {
     final feedList = Provider.of<CompanyGroups>(context).getFeedList;
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Container(
-          height: constraints.maxHeight,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: constraints.maxHeight * 0.9,
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    enlargeCenterPage: true,
-                    autoPlay: true,
-                    reverse: false,
-                    autoPlayInterval: Duration(seconds: 5),
-                    autoPlayAnimationDuration: Duration(milliseconds: 2000),
-                    pauseAutoPlayOnTouch: true,
-                    scrollDirection: Axis.horizontal,
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    initialPage: 0,
-                    onPageChanged: (index, _) {
-                      setState(() {
-                        _current = index;
-                      });
-                    },
+        return feedList.isEmpty
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      'There are no feeds yet',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  items: feedList.map(
-                    (feed) {
-                      return Builder(
-                        builder: (BuildContext context) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: FeedItem(
-                              title: feed.title,
-                              text: feed.text,
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ).toList(),
-                ),
-              ),
-              SizedBox(
-                height: constraints.maxHeight * 0.01,
-              ),
-              Container(
-                height: constraints.maxHeight * 0.09,
-                child: Row(
+                  Text(
+                    'To create a new feed click on \'Edit Feeds\' button',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
+            : Container(
+                height: constraints.maxHeight,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: map<Widget>(
-                    feedList,
-                    (index, _) {
-                      return Container(
-                        width: _current == index ? 13 : 10,
-                        margin:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _current == index ? Colors.green : Colors.grey,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: constraints.maxHeight * 0.9,
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          reverse: false,
+                          autoPlayInterval: Duration(seconds: 5),
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 2000),
+                          pauseAutoPlayOnTouch: true,
+                          scrollDirection: Axis.horizontal,
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          initialPage: 0,
+                          onPageChanged: (index, _) {
+                            setState(() {
+                              _current = index;
+                            });
+                          },
                         ),
-                      );
-                    },
-                  ),
+                        items: feedList.map(
+                          (feed) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: FeedItem(
+                                    title: feed.title,
+                                    text: feed.text,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ).toList(),
+                      ),
+                    ),
+                    SizedBox(
+                      height: constraints.maxHeight * 0.01,
+                    ),
+                    Container(
+                      height: constraints.maxHeight * 0.09,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: map<Widget>(
+                          feedList,
+                          (index, _) {
+                            return Container(
+                              width: _current == index ? 13 : 10,
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 2),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _current == index
+                                    ? Colors.green
+                                    : Colors.grey,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        );
+              );
       },
     );
   }
