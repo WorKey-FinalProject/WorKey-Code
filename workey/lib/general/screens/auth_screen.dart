@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 import 'package:workey/general/providers/company_groups.dart';
 
