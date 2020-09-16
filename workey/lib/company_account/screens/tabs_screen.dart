@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/company_account/screens/groups_screen.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/providers/global_sizes.dart';
 
 import 'groups_screen_old.dart';
