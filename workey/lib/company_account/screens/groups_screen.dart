@@ -1,17 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:workey/company_account/widgets/icons_row_pages/employees_list.dart';
+import 'package:workey/company_account/widgets/icons_row_pages/settings_view.dart';
+import 'package:workey/company_account/widgets/icons_row_pages/sub_groups_list.dart';
 
-import '../widgets/icons_row_pages/settings_view.dart';
-import '../widgets/group_screen_widgets/group_view.dart';
-import '../widgets/icons_row_pages/sub_groups_list.dart';
-import '../widgets/icons_row_pages/employees_list.dart';
-import '../widgets/group_screen_widgets/icons_row.dart';
-
-enum SelectedIcon {
-  subGroups,
-  employees,
-  settings,
-}
+import 'package:workey/company_account/widgets/profile_screen_widgets/profile_picture.dart';
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -19,63 +12,131 @@ class GroupsScreen extends StatefulWidget {
 }
 
 class _GroupsScreenState extends State<GroupsScreen> {
-  SelectedIcon selectedIcon = SelectedIcon.settings;
+  ScrollController _scrollController;
+  bool lastStatus = true;
+  double height;
 
-  void _selectedIconHandler(SelectedIcon newSelectedIcon) {
-    setState(() {
-      this.selectedIcon = newSelectedIcon;
-    });
+  void _scrollListener() {
+    if (_isShrink != lastStatus) {
+      setState(() {
+        lastStatus = _isShrink;
+      });
+    }
   }
 
-  Widget _contantHandler() {
-    switch (selectedIcon) {
-      case SelectedIcon.settings:
-        return SettingsView();
-        break;
-      case SelectedIcon.subGroups:
-        return SubGroupsList();
-        break;
-      case SelectedIcon.employees:
-        return EmployeesList();
-        break;
-      default:
-    }
+  bool get _isShrink {
+    return _scrollController.hasClients &&
+        _scrollController.offset > (height - kToolbarHeight - 150);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Container(
-          height: constraints.maxHeight,
-          width: constraints.maxWidth,
-          child: Column(
-            children: <Widget>[
-              Flexible(
-                flex: 2,
-                fit: FlexFit.tight,
-                child: GroupView(),
-              ),
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  width: MediaQuery.of(context).size.width,
-                  child: IconsRow(_selectedIconHandler),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        body: NestedScrollView(
+          controller: _scrollController,
+          headerSliverBuilder: (ctx, innerBoxIsScrolled) {
+            height = MediaQuery.of(ctx).size.height * 0.35;
+
+            return <Widget>[
+              SliverAppBar(
+                expandedHeight: height,
+                toolbarHeight: MediaQuery.of(context).size.height * 0.16,
+                pinned: true,
+                floating: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  centerTitle: true,
+                  title: SingleChildScrollView(
+                    child: AnimatedSwitcher(
+                      switchInCurve: Curves.easeInSine,
+                      switchOutCurve: Curves.easeInSine,
+                      duration: Duration(milliseconds: 200),
+                      child: !_isShrink
+                          ? Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: ProfilePicture(
+                                    imageUrl:
+                                        'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
+                                    size: MediaQuery.of(context).size.height *
+                                        0.14,
+                                    isEditable: false,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: 22,
+                                  ),
+                                  child: Text('text'),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(
+                                    right: 10,
+                                    left: 10,
+                                    bottom: 45,
+                                  ),
+                                  child: ProfilePicture(
+                                    imageUrl:
+                                        'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
+                                    size: MediaQuery.of(context).size.height *
+                                        0.14,
+                                    isEditable: false,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: 40,
+                                  ),
+                                  child: Text('text'),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                ),
+                bottom: TabBar(
+                  unselectedLabelColor: Colors.white,
+                  labelColor: Theme.of(context).accentColor,
+                  indicatorColor: Theme.of(context).accentColor,
+                  tabs: [
+                    Tab(icon: Icon(Icons.settings)),
+                    Tab(icon: Icon(MdiIcons.graph)),
+                    Tab(icon: Icon(Icons.people)),
+                  ],
                 ),
               ),
-              Flexible(
-                flex: 5,
-                fit: FlexFit.tight,
-                child: Container(
-                  child: _contantHandler(),
-                ),
-              ),
+            ];
+          },
+          body: TabBarView(
+            children: [
+              SettingsView(),
+              SubGroupsList(_isShrink),
+              EmployeesList(),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
