@@ -63,7 +63,16 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> fatchAndSetToLists() async {
+  Future<void> clearLists() async {
+    _feedList = [];
+    _workGroupsList = [];
+    _employeeList = [];
+  }
+
+  Future<void> fetchAndSetToLists() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    _userId = user.uid;
+    clearLists();
     await _fatchAndSetToListHandler('feedList');
     await _fatchAndSetToListHandler('empolyeeList');
     await _fatchAndSetToListHandler('workGroupsList');
