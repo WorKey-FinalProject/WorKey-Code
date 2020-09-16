@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/providers/company_groups.dart';
 
 import 'feed_item.dart';
 
@@ -10,20 +12,20 @@ class Feed extends StatefulWidget {
 
 class _FeedState extends State<Feed> {
   int _current = 0;
-  List<FeedItem> feedsList = [
-    FeedItem(
-      title: 'one',
-      text: 'oneeeeeeeeeeeeee',
-    ),
-    FeedItem(
-      title: 'two',
-      text: 'tweeeeeeeeeeeeee',
-    ),
-    FeedItem(
-      title: 'three',
-      text: 'threeeeeeeeeeeeee',
-    ),
-  ];
+  List<FeedItem> feedList; //= [
+  //   FeedItem(
+  //     title: 'one',
+  //     text: 'oneeeeeeeeeeeeee',
+  //   ),
+  //   FeedItem(
+  //     title: 'two',
+  //     text: 'tweeeeeeeeeeeeee',
+  //   ),
+  //   FeedItem(
+  //     title: 'three',
+  //     text: 'threeeeeeeeeeeeee',
+  //   ),
+  // ];
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
@@ -35,6 +37,7 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
+    final feedList = Provider.of<CompanyGroups>(context).getFeedList;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
@@ -62,14 +65,17 @@ class _FeedState extends State<Feed> {
                       });
                     },
                   ),
-                  items: feedsList.map(
+                  items: feedList.map(
                     (feed) {
                       return Builder(
                         builder: (BuildContext context) {
                           return Container(
                             width: MediaQuery.of(context).size.width,
                             margin: EdgeInsets.symmetric(horizontal: 10.0),
-                            child: feed,
+                            child: FeedItem(
+                              title: feed.title,
+                              text: feed.text,
+                            ),
                           );
                         },
                       );
@@ -85,7 +91,7 @@ class _FeedState extends State<Feed> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: map<Widget>(
-                    feedsList,
+                    feedList,
                     (index, _) {
                       return Container(
                         width: _current == index ? 13 : 10,
