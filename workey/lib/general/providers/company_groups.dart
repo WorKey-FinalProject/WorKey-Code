@@ -105,38 +105,6 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  // Future<void> addToFirebaseAndList(dynamic model) async {
-  //   var db = dbRef.child('Company Groups').child(userId);
-  //   if (model is FeedModel) {
-  //     db.child('feedList');
-  //     String newKey = db.push().key;
-  //     await db.child(newKey).set(model.toJson());
-  //     model.id = newKey;
-  //     feedList.add(feedModel);
-  //   } else if (model is WorkGroupModel) {
-  //     db.child('workGroupsList');
-  //   } else if (model is GroupEmployeeModel) {
-  //   } else {
-  //     throw 'Error in addToFirebaseAndList funcrion';
-  //   }
-  // }
-
-  Future<void> addEmployeeToFirebaseAndList(
-      GroupEmployeeModel groupEmployeeModel) async {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('empolyeeList')
-          .child(groupEmployeeModel.id)
-          .set(groupEmployeeModel.toJson());
-      employeeList.add(groupEmployeeModel);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
   Future<void> updateFeedInFirebaseAndList(List<FeedModel> newFeedList) async {
     var db = dbRef.child('Company Groups').child(userId).child('feedList');
     try {
@@ -155,48 +123,42 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> addWorkGroupToFirebaseAndList(
-      WorkGroupModel workGroupModel) async {
-    var db =
-        dbRef.child('Company Groups').child(userId).child('workGroupsList');
+  Future<void> addToFirebaseAndList(dynamic model) async {
     try {
-      String newKew = db.push().key;
-      await db.child(newKew).set(workGroupModel.toJson());
-      workGroupModel.id = newKew;
-      workGroupsList.add(workGroupModel);
+      var db = dbRef.child('Company Groups').child(userId);
+      if (model is WorkGroupModel) {
+        db.child('workGroupsList');
+        String newKey = db.push().key;
+        await db.child(newKey).set(model.toJson());
+        model.id = newKey;
+        workGroupsList.add(model);
+      } else if (model is GroupEmployeeModel) {
+        db.child('empolyeeList').child(model.id).set(model.toJson());
+        employeeList.add(model);
+      } else {
+        throw 'Error in addToFirebaseAndList function';
+      }
       notifyListeners();
     } on Exception {
       throw ErrorHint;
     }
   }
 
-  Future<void> updateEmployee(GroupEmployeeModel groupEmployeeModel) async {
+  Future<void> updateInFirebaseAndList(dynamic model) async {
     try {
-      dbRef
-          .child("Company Groups")
-          .child(userId)
-          .child('empolyeeList')
-          .child(groupEmployeeModel.id)
-          .update(groupEmployeeModel.toJson());
-      employeeList[employeeList
-              .indexWhere((employee) => employee.id == groupEmployeeModel.id)] =
-          groupEmployeeModel;
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> updateWorkGroup(WorkGroupModel workGroupModel) async {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('workGroupsList')
-          .child(workGroupModel.id)
-          .update(workGroupModel.toJson());
-      workGroupsList[workGroupsList.indexWhere(
-          (workGroup) => workGroup.id == workGroupModel.id)] = workGroupModel;
+      var db = dbRef.child('Company Groups').child(userId);
+      if (model is WorkGroupModel) {
+        db.child('workGroupsList');
+        workGroupsList[workGroupsList
+            .indexWhere((workGroup) => workGroup.id == model.id)] = model;
+      } else if (model is GroupEmployeeModel) {
+        db.child('empolyeeList');
+        employeeList[employeeList
+            .indexWhere((employee) => employee.id == model.id)] = model;
+      } else {
+        throw 'Error in updateInFirebaseAndList function';
+      }
+      db.child(model.id).update(model.toJson());
       notifyListeners();
     } on Exception {
       throw ErrorHint;
@@ -343,4 +305,72 @@ class CompanyGroups with ChangeNotifier {
     }
   }
     */
+
+  /*
+  Future<void> addEmployeeToFirebaseAndList(
+      GroupEmployeeModel groupEmployeeModel) async {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('empolyeeList')
+          .child(groupEmployeeModel.id)
+          .set(groupEmployeeModel.toJson());
+      employeeList.add(groupEmployeeModel);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> addWorkGroupToFirebaseAndList(
+      WorkGroupModel workGroupModel) async {
+    var db =
+        dbRef.child('Company Groups').child(userId).child('workGroupsList');
+    try {
+      String newKew = db.push().key;
+      await db.child(newKew).set(workGroupModel.toJson());
+      workGroupModel.id = newKew;
+      workGroupsList.add(workGroupModel);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+  */
+
+  /*
+  Future<void> updateEmployee(GroupEmployeeModel groupEmployeeModel) async {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('empolyeeList')
+          .child(groupEmployeeModel.id)
+          .update(groupEmployeeModel.toJson());
+      employeeList[employeeList
+              .indexWhere((employee) => employee.id == groupEmployeeModel.id)] =
+          groupEmployeeModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> updateWorkGroup(WorkGroupModel workGroupModel) async {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('workGroupsList')
+          .child(workGroupModel.id)
+          .update(workGroupModel.toJson());
+      workGroupsList[workGroupsList.indexWhere(
+          (workGroup) => workGroup.id == workGroupModel.id)] = workGroupModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+  */
 }
