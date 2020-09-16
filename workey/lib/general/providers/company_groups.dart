@@ -58,23 +58,182 @@ class CompanyGroups with ChangeNotifier {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       userId = user.uid;
-      //fatchAndSetWorkGroupsInList();
-      //fatchAndSetEmployeesInList();
-      //fatchAndSetFeedInList();
+      //fatchAndSetToLists();
     } on Exception {
       throw ErrorHint;
     }
   }
 
-  Future<void> fatch() async {
-    fatch2('feedList');
+  Future<void> fatchAndSetToLists() async {
+    await fatchAndSetToListHandler('feedList');
+    await fatchAndSetToListHandler('empolyeeList');
+    await fatchAndSetToListHandler('workGroupsList');
   }
 
-  Future<void> fatch2(String name) async {
-    if (name == 'feedList') {
-    } else if (name == 'empolyeeList') {}
+  Future<void> fatchAndSetToListHandler(String name) async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child(name)
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> list = dataSnapshot.value;
+        if (name == 'feedList') {
+          list.forEach((key, value) {
+            feedModel.fromJsonToObject(value, key);
+            feedList.add(feedModel);
+          });
+        } else if (name == 'empolyeeList') {
+          list.forEach((key, value) {
+            groupEmployeeModel.fromJsonToObject(value, key);
+            employeeList.add(groupEmployeeModel);
+          });
+        } else if (name == 'workGroupsList') {
+          list.forEach((key, value) {
+            workGroupModel.fromJson(value, key);
+            workGroupsList.add(workGroupModel);
+          });
+        } else {
+          throw 'Error in fatchAndSetToListHandler function';
+        }
+        notifyListeners();
+      });
+    } on Exception {
+      throw ErrorHint;
+    }
   }
 
+  // Future<void> addToFirebaseAndList(dynamic model) async {
+  //   var db = dbRef.child('Company Groups').child(userId);
+  //   if (model is FeedModel) {
+  //     db.child('feedList');
+  //     String newKey = db.push().key;
+  //     await db.child(newKey).set(model.toJson());
+  //     model.id = newKey;
+  //     feedList.add(feedModel);
+  //   } else if (model is WorkGroupModel) {
+  //     db.child('workGroupsList');
+  //   } else if (model is GroupEmployeeModel) {
+  //   } else {
+  //     throw 'Error in addToFirebaseAndList funcrion';
+  //   }
+  // }
+
+  Future<void> addEmployeeToFirebaseAndList(
+      GroupEmployeeModel groupEmployeeModel) async {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('empolyeeList')
+          .child(groupEmployeeModel.id)
+          .set(groupEmployeeModel.toJson());
+      employeeList.add(groupEmployeeModel);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> updateFeedInFirebaseAndList(List<FeedModel> newFeedList) async {
+    var db = dbRef.child('Company Groups').child(userId).child('feedList');
+    try {
+      await db.remove();
+      if (newFeedList.isNotEmpty) {
+        newFeedList.forEach((feed) {
+          db.child(feed.id).set(feed.toJson());
+        });
+      } else {
+        throw 'the list is empty';
+      }
+      feedList = newFeedList;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> addWorkGroupToFirebaseAndList(
+      WorkGroupModel workGroupModel) async {
+    var db =
+        dbRef.child('Company Groups').child(userId).child('workGroupsList');
+    try {
+      String newKew = db.push().key;
+      await db.child(newKew).set(workGroupModel.toJson());
+      workGroupModel.id = newKew;
+      workGroupsList.add(workGroupModel);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> updateEmployee(GroupEmployeeModel groupEmployeeModel) async {
+    try {
+      dbRef
+          .child("Company Groups")
+          .child(userId)
+          .child('empolyeeList')
+          .child(groupEmployeeModel.id)
+          .update(groupEmployeeModel.toJson());
+      employeeList[employeeList
+              .indexWhere((employee) => employee.id == groupEmployeeModel.id)] =
+          groupEmployeeModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> updateWorkGroup(WorkGroupModel workGroupModel) async {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('workGroupsList')
+          .child(workGroupModel.id)
+          .update(workGroupModel.toJson());
+      workGroupsList[workGroupsList.indexWhere(
+          (workGroup) => workGroup.id == workGroupModel.id)] = workGroupModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> deleteEmployeeById(String employeeId) async {
+    try {
+      await dbRef
+          .child("Company Groups")
+          .child(userId)
+          .child('empolyeeList')
+          .child(employeeId)
+          .remove();
+      employeeList.removeWhere((employee) => employee.id == employeeId);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> deleteWorkGroupById(String workGroupId) async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('workGroupsList')
+          .child(workGroupId)
+          .remove();
+      workGroupsList.removeWhere((workGroup) => workGroup.id == workGroupId);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  /*
   Future<void> fatchAndSetFeedInList() async {
     try {
       await dbRef
@@ -137,23 +296,9 @@ class CompanyGroups with ChangeNotifier {
       throw ErrorHint;
     }
   }
+  */
 
-  Future<void> addEmployeeToFirebaseAndList(
-      GroupEmployeeModel groupEmployeeModel) async {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('empolyeeList')
-          .child(groupEmployeeModel.id)
-          .set(groupEmployeeModel.toJson());
-      employeeList.add(groupEmployeeModel);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
+  /*
   Future<void> addFeedToFirebaseAndList(FeedModel feedModel) async {
     var db = dbRef.child('Company Groups').child(userId).child('feedList');
     try {
@@ -161,38 +306,6 @@ class CompanyGroups with ChangeNotifier {
       await db.child(newKey).set(feedModel.toJson());
       feedModel.id = newKey;
       feedList.add(feedModel);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> addWorkGroupToFirebaseAndList(
-      WorkGroupModel workGroupModel) async {
-    var db =
-        dbRef.child('Company Groups').child(userId).child('workGroupsList');
-    try {
-      String newKew = db.push().key;
-      await db.child(newKew).set(workGroupModel.toJson());
-      workGroupModel.id = newKew;
-      workGroupsList.add(workGroupModel);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> updateEmployee(GroupEmployeeModel groupEmployeeModel) async {
-    try {
-      dbRef
-          .child("Company Groups")
-          .child(userId)
-          .child('empolyeeList')
-          .child(groupEmployeeModel.id)
-          .update(groupEmployeeModel.toJson());
-      employeeList[employeeList
-              .indexWhere((employee) => employee.id == groupEmployeeModel.id)] =
-          groupEmployeeModel;
       notifyListeners();
     } on Exception {
       throw ErrorHint;
@@ -215,37 +328,6 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> updateWorkGroup(WorkGroupModel workGroupModel) async {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('workGroupsList')
-          .child(workGroupModel.id)
-          .update(workGroupModel.toJson());
-      workGroupsList[workGroupsList.indexWhere(
-          (workGroup) => workGroup.id == workGroupModel.id)] = workGroupModel;
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> deleteEmployeeById(String employeeId) async {
-    try {
-      await dbRef
-          .child("Company Groups")
-          .child(userId)
-          .child('empolyeeList')
-          .child(employeeId)
-          .remove();
-      employeeList.removeWhere((employee) => employee.id == employeeId);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
   Future<void> deleteFeedById(String feedId) async {
     try {
       await dbRef
@@ -260,19 +342,5 @@ class CompanyGroups with ChangeNotifier {
       throw ErrorHint;
     }
   }
-
-  Future<void> deleteWorkGroupById(String workGroupId) async {
-    try {
-      await dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('workGroupsList')
-          .child(workGroupId)
-          .remove();
-      workGroupsList.removeWhere((workGroup) => workGroup.id == workGroupId);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
+    */
 }
