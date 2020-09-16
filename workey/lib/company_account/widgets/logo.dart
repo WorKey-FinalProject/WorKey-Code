@@ -36,7 +36,7 @@ class Logo extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               margin: EdgeInsets.symmetric(horizontal: 20),
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              //padding: EdgeInsets.symmetric(horizontal: 20),
               height: 54,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -49,22 +49,35 @@ class Logo extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Row(
-                children: [
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: FlatButton(
-                      onPressed: () {},
-                      child: FittedBox(
+              child: Container(
+                height: double.infinity,
+                width: double.infinity,
+                child: RaisedButton(
+                  onPressed: () {},
+                  //padding: EdgeInsets.symmetric(horizontal: 140),
+                  elevation: 2,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 5),
                         child: Icon(
-                          Icons.mail,
+                          Icons.edit,
                           color: Colors.blue,
-                          // size: 35,
+                          //size: 35,
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Text('Edit Feed'),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
