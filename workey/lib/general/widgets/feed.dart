@@ -12,20 +12,7 @@ class Feed extends StatefulWidget {
 
 class _FeedState extends State<Feed> {
   int _current = 0;
-  List<FeedItem> feedList; //= [
-  //   FeedItem(
-  //     title: 'one',
-  //     text: 'oneeeeeeeeeeeeee',
-  //   ),
-  //   FeedItem(
-  //     title: 'two',
-  //     text: 'tweeeeeeeeeeeeee',
-  //   ),
-  //   FeedItem(
-  //     title: 'three',
-  //     text: 'threeeeeeeeeeeeee',
-  //   ),
-  // ];
+  List<FeedItem> feedList;
 
   List<T> map<T>(List list, Function handler) {
     List<T> result = [];
