@@ -2,7 +2,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:workey/general/models/work_group_model.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
 import '../models/company_account_model.dart';
@@ -28,8 +27,6 @@ class Auth with ChangeNotifier {
     firstName: null,
     lastName: null,
   );
-
-  BuildContext get context => null;
 
   Future<void> signUpPersonalAccount({
     String email,
@@ -68,21 +65,8 @@ class Auth with ChangeNotifier {
           .child('Personal Accounts')
           .child(authResult.user.uid)
           .set(personalAccountModel.toJson());
-    } on PlatformException catch (error) {
-      var message = 'An error occurred, please check your credentials!';
-
-      if (error.message != null) {
-        message = error.message;
-      }
-
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-    } catch (err) {
-      print(err);
+    } on Exception catch (error) {
+      print(error);
     }
   }
 
@@ -126,104 +110,69 @@ class Auth with ChangeNotifier {
           .child('Company Groups')
           .child(authResult.user.uid)
           .set(workGroupModel.toJson());
-    } on PlatformException catch (error) {
-      var message = 'An error occurred, please check your credentials!';
-      if (error.message != null) {
-        message = error.message;
-      }
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-    } catch (err) {
-      print(err);
+    } on Exception catch (error) {
+      print(error);
     }
   }
 
   Future<void> signin(String email, String password) async {
-    try {
-      _auth
-          .signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      )
-          .then(
-        (authResult) {
-          user = authResult.user;
-        },
-      );
-    } on PlatformException catch (error) {
-      var message = 'An error occurred, please check your credentials!';
-      if (error.message != null) {
-        message = error.message;
-      }
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-    } catch (err) {
-      print(err);
-    }
+    await _auth
+        .signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    )
+        .then(
+      (authResult) {
+        user = authResult.user;
+      },
+    );
   }
 
   Future<AccountTypeChosen> findCurrAccountType(FirebaseUser user) async {
-    await dbRef
-        .child('Users')
-        .child('Personal Accounts')
-        .orderByKey()
-        .equalTo(user.uid)
-        .once()
-        .then(
-      (DataSnapshot dataSnapshot) async {
-        if (dataSnapshot.value == null) {
-          await dbRef
-              .child('Users')
-              .child('Company Accounts')
-              .orderByKey()
-              .equalTo(user.uid)
-              .once()
-              .then((DataSnapshot dataSnapshot) {
-            if (dataSnapshot.value == null) {
-              accountType = AccountTypeChosen.nothing;
-            } else {
+    this.user = user;
+    await dbRef.child('Users').once().then((DataSnapshot dataSnapshot) {
+      Map<dynamic, dynamic> map = dataSnapshot.value;
+      map.forEach((key, value) {
+        Map<dynamic, dynamic> map2 = value;
+        var list = map2.keys.toList();
+        list.forEach((id) {
+          if (id == user.uid) {
+            if (key == 'Personal Accounts') {
+              accountType = AccountTypeChosen.personal;
+            } else if (key == 'Company Accounts') {
               accountType = AccountTypeChosen.company;
             }
-          });
-        } else {
-          accountType = AccountTypeChosen.personal;
-        }
-      },
-    );
+          }
+        });
+      });
+    });
     return accountType;
   }
 
   Future<dynamic> getCurrUserData() async {
+    dynamic dynamicUser;
     try {
       if (accountType == AccountTypeChosen.company) {
+        dynamicUser = companyAccountModel;
         await dbRef
             .child('Users')
             .child('Company Accounts')
             .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          companyAccountModel.fromJsonToObject(dataSnapshot.value, user.uid);
-          companyAccountModel.id = user.uid;
-          return companyAccountModel;
+          dynamicUser.fromJsonToObject(dataSnapshot.value, user.uid);
+          dynamicUser.id = user.uid;
         });
       } else if (accountType == AccountTypeChosen.personal) {
+        dynamicUser = personalAccountModel;
         await dbRef
             .child('Users')
             .child('Personal Accounts')
             .child(user.uid)
             .once()
             .then((DataSnapshot dataSnapshot) {
-          personalAccountModel.fromJsonToObject(dataSnapshot.value, user.uid);
-          personalAccountModel.id = user.uid;
-          return personalAccountModel;
+          dynamicUser.fromJsonToObject(dataSnapshot.value, user.uid);
+          dynamicUser.id = user.uid;
         });
       } else {
         throw 'failed to get user data: error - accountType == nothing.';
@@ -231,12 +180,14 @@ class Auth with ChangeNotifier {
     } on Exception {
       throw ErrorHint;
     }
+    return dynamicUser;
   }
 
   Future<void> updateCurrUserData(dynamic userNewData) async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       String type;
+      print(userNewData.companyEmail);
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
         user.updateEmail(userNewData.companyEmail);
