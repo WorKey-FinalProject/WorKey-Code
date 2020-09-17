@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:workey/general/models/work_group_model.dart';
-import 'package:workey/general/widgets/auth/signup_type.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/providers/company_groups.dart';
+
+import '../../general/models/work_group_model.dart';
+import '../../general/widgets/auth/signup_type.dart';
 import '../models/company_account_model.dart';
 import '../models/personal_account_model.dart';
 
@@ -183,11 +186,19 @@ class Auth with ChangeNotifier {
     return dynamicUser;
   }
 
+  Future<void> updateCurrUserPassword(String newPassword) async {
+    try {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      user.updatePassword(newPassword);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<void> updateCurrUserData(dynamic userNewData) async {
     try {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       String type;
-      print(userNewData.companyEmail);
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
         user.updateEmail(userNewData.companyEmail);

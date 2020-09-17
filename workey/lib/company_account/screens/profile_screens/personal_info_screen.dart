@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
 
-import '../../widgets/profile_screen_widgets/profile_picture.dart';
+import '../../widgets/profile_picture.dart';
 
 enum TextFieldType {
   companyName,
@@ -26,15 +26,14 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final companyNameTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
-  final emailNameTextController = TextEditingController();
-  final passwordNameTextController = TextEditingController();
+  final emailTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
+  final verifyPasswordTextController = TextEditingController();
+
   bool showPassword = true;
   final _formKey = GlobalKey<FormState>();
+  final _formKeyForPassword = GlobalKey<FormState>();
 
-  var _userEmail = '';
-  var _userFirstName = '';
-  var _userLastName = '';
-  var _userPassword = '';
   CompanyAccountModel userAccount;
 
   void _trySubmit() {
@@ -43,8 +42,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
     if (isValid) {
       _formKey.currentState.save();
-      userAccount.companyEmail = emailNameTextController.text;
+      userAccount.companyEmail = emailTextController.text;
       widget.auth.updateCurrUserData(userAccount);
+    }
+  }
+
+  void _tryChangePassword() {
+    final isValid = _formKey.currentState.validate();
+    FocusScope.of(context).unfocus();
+
+    if (isValid) {
+      _formKeyForPassword.currentState.save();
+      //userAccount.companyEmail = emailTextController.text;
+      //widget.auth.updateCurrUserData(userAccount);
     }
   }
 
@@ -53,8 +63,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     companyNameTextController.text = userAccount.companyName;
     firstNameTextController.text = userAccount.owenrFirstName;
     lastNameTextController.text = userAccount.owenrLastName;
-    emailNameTextController.text = userAccount.companyEmail;
-    passwordNameTextController.text = 'password';
+    emailTextController.text = userAccount.companyEmail;
+    passwordTextController.text = '';
+  }
+
+  @override
+  void dispose() {
+    companyNameTextController.dispose();
+    firstNameTextController.dispose();
+    lastNameTextController.dispose();
+    emailTextController.dispose();
+    passwordTextController.dispose();
+    verifyPasswordTextController.dispose();
+    super.dispose();
   }
 
   @override
@@ -77,7 +98,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               child: InkWell(
                 borderRadius: BorderRadius.circular(90),
                 onTap: () {},
-                child: ProfilePicture(),
+                child: ProfilePicture(
+                  imageUrl:
+                      'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
+                  size: 150,
+                  isEditable: true,
+                ),
               ),
             ),
             GestureDetector(
@@ -90,34 +116,90 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   children: [
                     buildTextField(
                       'Company Name',
-                      'From database',
                       TextFieldType.companyName,
                       companyNameTextController,
                     ),
                     buildTextField(
                       'First Name',
-                      'From database',
                       TextFieldType.firstName,
                       firstNameTextController,
                     ),
                     buildTextField(
                       'Last Name',
-                      'From database',
                       TextFieldType.lastName,
                       lastNameTextController,
                     ),
                     buildTextField(
                       'E-mail',
-                      'From database',
                       TextFieldType.email,
-                      emailNameTextController,
+                      emailTextController,
                     ),
-                    buildTextField(
-                      'Password',
-                      '********',
-                      TextFieldType.password,
-                      passwordNameTextController,
-                    ),
+                    Container(
+                      alignment: Alignment.bottomLeft,
+                      margin: EdgeInsets.all(10),
+                      child: FlatButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            elevation: 5,
+                            context: context,
+                            builder: (_) {
+                              return GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Form(
+                                    key: _formKeyForPassword,
+                                    child: Column(
+                                      children: [
+                                        Flexible(
+                                          child: buildTextField(
+                                            'New Password',
+                                            TextFieldType.password,
+                                            passwordTextController,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: buildTextField(
+                                            'Verify Password',
+                                            TextFieldType.password,
+                                            verifyPasswordTextController,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: Container(
+                                            alignment: Alignment.bottomRight,
+                                            padding: EdgeInsets.all(20),
+                                            child: RaisedButton(
+                                              onPressed: () {
+                                                _tryChangePassword();
+                                              },
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Text(
+                                                'Confirm Change',
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                behavior: HitTestBehavior.opaque,
+                              );
+                            },
+                          );
+                        },
+                        color: Theme.of(context).primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text('Change password'),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -125,20 +207,24 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             SizedBox(
               height: 35,
             ),
-            RaisedButton(
-              onPressed: () {
-                _trySubmit();
-              },
-              padding: EdgeInsets.symmetric(horizontal: 50),
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20)),
-              child: Text(
-                'SAVE',
-                style: TextStyle(
-                  fontSize: 14,
-                  letterSpacing: 2.2,
-                  color: Colors.white,
+            Container(
+              margin: EdgeInsets.all(10),
+              child: RaisedButton(
+                onPressed: () {
+                  _trySubmit();
+                },
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'SAVE',
+                  style: TextStyle(
+                    fontSize: 14,
+                    letterSpacing: 2.2,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             )
@@ -150,7 +236,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   Widget buildTextField(
     String labelText,
-    String placeHolder,
     TextFieldType textFieldType,
     TextEditingController textEditingController,
   ) {
@@ -160,19 +245,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         controller: textEditingController,
         onSaved: textFieldType == TextFieldType.email
             ? (value) {
-                emailNameTextController.text = value;
+                emailTextController.text = value;
               }
             : textFieldType == TextFieldType.password
                 ? (value) {
-                    _userPassword = value;
+                    passwordTextController.text = value;
                   }
                 : textFieldType == TextFieldType.firstName
                     ? (value) {
-                        _userFirstName = value;
+                        firstNameTextController.text = value;
                       }
                     : textFieldType == TextFieldType.lastName
                         ? (value) {
-                            _userLastName = value;
+                            lastNameTextController.text = value;
                           }
                         : null,
         validator: textFieldType == TextFieldType.email
@@ -220,8 +305,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               : null,
           contentPadding: EdgeInsets.only(bottom: 3),
           labelText: labelText,
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          hintText: placeHolder,
           hintStyle: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,

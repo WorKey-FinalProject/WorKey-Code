@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:workey/company_account/widgets/speed_dial_button.dart';
 
 class FeedItem extends StatelessWidget {
   final String title;

@@ -98,13 +98,13 @@ class _State extends State<EmployeesList> {
                     ),
                     trailing: MediaQuery.of(context).size.width > 460
                         ? FlatButton.icon(
-                            icon: Icon(Icons.more),
+                            icon: Icon(Icons.person_outline_rounded),
                             label: Text('Employee details'),
                             onPressed: null, //() => deleteTx(emp[index].id),
                             textColor: Theme.of(context).accentColor,
                           )
                         : IconButton(
-                            icon: Icon(Icons.more),
+                            icon: Icon(Icons.person_outline_rounded),
                             color: Theme.of(context).accentColor,
                             onPressed: () =>
                                 null //deleteTx(transactions[index].id),
