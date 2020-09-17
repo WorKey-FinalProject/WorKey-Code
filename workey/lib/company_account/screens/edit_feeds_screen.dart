@@ -1,3 +1,4 @@
+import 'package:drag_and_drop_gridview/devdrag.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
   List<FeedModel> feedList = [];
   final titleTextController = TextEditingController();
   final textTextController = TextEditingController();
+  var _isDragging = false;
 
   @override
   void dispose() {
@@ -30,13 +32,25 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
     });
   }
 
+  //Drag and Drop Vars
+  int pos;
+  List<FeedModel> _tmpList;
+  ScrollController _scrollController;
+  bool _initTmpListOnce = false;
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     final feedProvider = Provider.of<CompanyGroups>(context, listen: false);
+
     if (!_fetchListOnce) {
       feedList = feedProvider.getFeedList;
       _fetchListOnce = true;
+    }
+
+    if (_initTmpListOnce == false) {
+      _tmpList = [...feedList];
+      _initTmpListOnce = !_initTmpListOnce;
     }
 
     return Scaffold(
@@ -46,59 +60,83 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
           Builder(
             builder: (ctx) {
               return IconButton(
-                  icon: Icon(Icons.save),
-                  onPressed: () async {
-                    try {
-                      await feedProvider.updateFeedInFirebaseAndList(feedList);
-                    } on PlatformException catch (err) {
-                      var message = 'An error occurred';
+                icon: Icon(Icons.save),
+                onPressed: () async {
+                  try {
+                    await feedProvider.updateFeedInFirebaseAndList(feedList);
+                  } on PlatformException catch (err) {
+                    var message = 'An error occurred';
 
-                      if (err.message != null) {
-                        message = err.message;
-                      }
-
-                      Scaffold.of(ctx).showSnackBar(
-                        SnackBar(
-                          content: Text(message),
-                          backgroundColor: Theme.of(context).errorColor,
-                        ),
-                      );
-                    } catch (err) {
-                      print(err);
+                    if (err.message != null) {
+                      message = err.message;
                     }
+
                     Scaffold.of(ctx).showSnackBar(
                       SnackBar(
-                        content: Text(
-                          'Changes saved successfully',
-                          textAlign: TextAlign.center,
-                        ),
-                        backgroundColor: Colors.blue,
+                        content: Text(message),
+                        backgroundColor: Theme.of(context).errorColor,
                       ),
                     );
-                  });
+                  } catch (err) {
+                    print(err);
+                  }
+                  Scaffold.of(ctx).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Changes saved successfully',
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                },
+              );
             },
           )
         ],
       ),
+      backgroundColor: Colors.white.withOpacity(0.95),
+      //body: buildDragAndDropGridView(),
       body: GridView(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
           childAspectRatio: 3 / 5,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 10,
         ),
         children: feedList.map(
           (feed) {
             return Builder(
               builder: (BuildContext context) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 10.0,
+                return LongPressDraggable(
+                  onDragStarted: () {
+                    setState(() {
+                      _isDragging = true;
+                    });
+                  },
+                  onDragEnd: (details) {
+                    setState(() {
+                      _isDragging = false;
+                    });
+                  },
+                  childWhenDragging: Text(''),
+                  feedback: Container(
+                    width: 200,
+                    height: 350,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    child: FeedItem(
+                      title: feed.title,
+                      text: feed.text,
+                    ),
                   ),
-                  child: FeedItem(
-                    title: feed.title,
-                    text: feed.text,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    child: FeedItem(
+                      title: feed.title,
+                      text: feed.text,
+                    ),
                   ),
                 );
               },
@@ -106,19 +144,114 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
           },
         ).toList(),
       ),
+
       floatingActionButton: Container(
-        height: 80,
-        width: 80,
+        height: 90,
+        width: 90,
         child: FittedBox(
           child: FloatingActionButton(
             onPressed: () {
               addNewFeedItemShowDialog(context, _formKey);
             },
-            child: Icon(Icons.add),
-            backgroundColor: Colors.green,
+            child: _isDragging ? Icon(Icons.delete) : Icon(Icons.add),
+            backgroundColor: _isDragging ? Colors.red : Colors.green,
           ),
         ),
       ),
+    );
+  }
+
+  DragAndDropGridView buildDragAndDropGridView() {
+    return DragAndDropGridView(
+      controller: _scrollController,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 3 / 5,
+      ),
+      padding: EdgeInsets.all(5),
+      itemBuilder: (context, index) {
+        return Opacity(
+          opacity: pos != null ? pos == index ? 0.6 : 1 : 1,
+          child: Container(
+            width: 200,
+            height: 350,
+            margin: EdgeInsets.symmetric(
+              horizontal: 10.0,
+            ),
+            child: FeedItem(
+              title: feedList[index].title,
+              text: feedList[index].text,
+            ),
+          ),
+        );
+      },
+      itemCount: feedList.length,
+      onWillAccept: (oldIndex, newIndex) {
+        setState(() {
+          _isDragging = true;
+        });
+        feedList = [...feedList];
+        int indexOfFirstItem = feedList.indexOf(feedList[oldIndex]);
+        int indexOfSecondItem = feedList.indexOf(feedList[newIndex]);
+
+        if (indexOfFirstItem > indexOfSecondItem) {
+          for (int i = feedList.indexOf(feedList[oldIndex]);
+              i > feedList.indexOf(feedList[newIndex]);
+              i--) {
+            var tmp = feedList[i - 1];
+            feedList[i - 1] = feedList[i];
+            feedList[i] = tmp;
+          }
+        } else {
+          for (int i = feedList.indexOf(feedList[oldIndex]);
+              i < feedList.indexOf(feedList[newIndex]);
+              i++) {
+            var tmp = feedList[i + 1];
+            feedList[i + 1] = feedList[i];
+            feedList[i] = tmp;
+          }
+        }
+
+        setState(
+          () {
+            pos = newIndex;
+          },
+        );
+
+        return true;
+      },
+      onReorder: (oldIndex, newIndex) {
+        setState(() {
+          _isDragging = false;
+        });
+        feedList = [..._tmpList];
+        int indexOfFirstItem = feedList.indexOf(feedList[oldIndex]);
+        int indexOfSecondItem = feedList.indexOf(feedList[newIndex]);
+
+        if (indexOfFirstItem > indexOfSecondItem) {
+          for (int i = feedList.indexOf(feedList[oldIndex]);
+              i > feedList.indexOf(feedList[newIndex]);
+              i--) {
+            var tmp = feedList[i - 1];
+            feedList[i - 1] = feedList[i];
+            feedList[i] = tmp;
+          }
+        } else {
+          for (int i = feedList.indexOf(feedList[oldIndex]);
+              i < feedList.indexOf(feedList[newIndex]);
+              i++) {
+            var tmp = feedList[i + 1];
+            feedList[i + 1] = feedList[i];
+            feedList[i] = tmp;
+          }
+        }
+        _tmpList = [...feedList];
+        setState(
+          () {
+            pos = null;
+          },
+        );
+      },
     );
   }
 

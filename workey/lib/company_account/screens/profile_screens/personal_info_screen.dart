@@ -193,7 +193,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             },
                           );
                         },
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.grey,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
