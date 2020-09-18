@@ -38,6 +38,8 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
   ScrollController _scrollController;
   bool _initTmpListOnce = false;
 
+  int index;
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
@@ -104,59 +106,120 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
         ),
         children: feedList.map(
           (feed) {
-            return Builder(
-              builder: (BuildContext context) {
-                return LongPressDraggable(
-                  onDragStarted: () {
-                    setState(() {
-                      _isDragging = true;
-                    });
-                  },
-                  onDragEnd: (details) {
-                    setState(() {
-                      _isDragging = false;
-                    });
-                  },
-                  childWhenDragging: Text(''),
-                  feedback: Container(
-                    width: 200,
-                    height: 350,
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                    ),
-                    child: FeedItem(
-                      title: feed.title,
-                      text: feed.text,
-                    ),
+            return LayoutBuilder(
+              builder: (context, constraints) => LongPressDraggable(
+                onDragStarted: () {
+                  index =
+                      feedList.indexWhere((element) => element.id == feed.id);
+                  setState(() {
+                    _isDragging = true;
+                  });
+                },
+                onDragEnd: (details) {
+                  setState(() {
+                    _isDragging = false;
+                  });
+                },
+                childWhenDragging: Text(''),
+                feedback: Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 10.0,
                   ),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                      horizontal: 10.0,
-                    ),
-                    child: FeedItem(
-                      title: feed.title,
-                      text: feed.text,
-                    ),
+                  child: FeedItem(
+                    title: feed.title,
+                    text: feed.text,
                   ),
-                );
-              },
+                ),
+                child: Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                  ),
+                  child: FeedItem(
+                    title: feed.title,
+                    text: feed.text,
+                  ),
+                ),
+              ),
             );
           },
         ).toList(),
       ),
 
-      floatingActionButton: Container(
-        height: 90,
-        width: 90,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {
-              addNewFeedItemShowDialog(context, _formKey);
-            },
-            child: _isDragging ? Icon(Icons.delete) : Icon(Icons.add),
-            backgroundColor: _isDragging ? Colors.red : Colors.green,
-          ),
-        ),
+      floatingActionButton: DragTarget(
+        onAccept: (data) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Are you sure?'),
+              content: Text('Do you want to delete this feed?'),
+              actions: [
+                FlatButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text("Yes"),
+                  onPressed: () {
+                    print(feedList[index].toJson());
+                    setState(() {
+                      feedList.removeAt(index);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        builder: (context, candidateData, rejectedData) {
+          return AnimatedSwitcher(
+            duration: Duration(milliseconds: 400),
+            child: _isDragging
+                ? Container(
+                    height: 90,
+                    width: 90,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {},
+                        child: Icon(Icons.delete),
+                        backgroundColor: Colors.red,
+                      ),
+                    ),
+                  )
+                : Container(
+                    height: 90,
+                    width: 90,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          addNewFeedItemShowDialog(context, _formKey);
+                        },
+                        child: Icon(Icons.add),
+                        backgroundColor: Colors.green,
+                      ),
+                    ),
+                  ),
+          );
+        },
+        // child: Container(
+        //   height: 90,
+        //   width: 90,
+        //   child: FittedBox(
+        //     child: FloatingActionButton(
+        //       onPressed: () {
+        //         addNewFeedItemShowDialog(context, _formKey);
+        //       },
+        //       child: _isDragging ? Icon(Icons.delete) : Icon(Icons.add),
+        //       backgroundColor: _isDragging ? Colors.red : Colors.green,
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }
@@ -263,98 +326,80 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Stack(
-              overflow: Overflow.visible,
-              children: <Widget>[
-                Positioned(
-                  right: -40.0,
-                  top: -40.0,
-                  child: InkResponse(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: CircleAvatar(
-                      child: Icon(Icons.close),
-                      backgroundColor: Colors.red,
+            content: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: 'Title',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        border: const OutlineInputBorder(),
+                      ),
+                      textInputAction: TextInputAction.next,
+                      onSaved: (value) {
+                        titleTextController.text = value;
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please provide a value.';
+                        }
+                        return null;
+                      },
                     ),
                   ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 20),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Title',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            border: const OutlineInputBorder(),
-                          ),
-                          textInputAction: TextInputAction.next,
-                          onSaved: (value) {
-                            titleTextController.text = value;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please provide a value.';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: 'Description',
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          border: const OutlineInputBorder(),
-                        ),
-                        maxLines: 10,
-                        keyboardType: TextInputType.multiline,
-                        onSaved: (value) {
-                          textTextController.text = value;
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter a description.';
-                          }
-                          if (value.length < 5) {
-                            return 'Should be at least 10 characters long.';
-                          }
-                          return null;
-                        },
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          onPressed: () {
-                            final isValid = _formKey.currentState.validate();
-                            if (isValid) {
-                              Navigator.pop(context);
-                              _formKey.currentState.save();
-
-                              _addNewFeed(
-                                FeedModel(
-                                  title: titleTextController.text,
-                                  text: textTextController.text,
-                                ),
-                              );
-                            }
-                          },
-                          padding: EdgeInsets.symmetric(horizontal: 50),
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text("Submit"),
-                        ),
-                      )
-                    ],
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Description',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      border: const OutlineInputBorder(),
+                    ),
+                    maxLines: 10,
+                    keyboardType: TextInputType.multiline,
+                    onSaved: (value) {
+                      textTextController.text = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter a description.';
+                      }
+                      if (value.length < 5) {
+                        return 'Should be at least 10 characters long.';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      onPressed: () {
+                        final isValid = _formKey.currentState.validate();
+                        if (isValid) {
+                          Navigator.pop(context);
+                          _formKey.currentState.save();
+
+                          _addNewFeed(
+                            FeedModel(
+                              title: titleTextController.text,
+                              text: textTextController.text,
+                            ),
+                          );
+                        }
+                      },
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text("Submit"),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         });
