@@ -1,16 +1,13 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/providers/company_groups.dart';
-import 'package:workey/general/screens/auth_screen.dart';
-import 'package:workey/general/widgets/auth/waiting_screen.dart';
 
+import '../../../general/providers/company_groups.dart';
+import '../../../general/screens/auth_screen.dart';
+import '../../../general/widgets/auth/waiting_screen.dart';
 import '../../../company_account/screens/tabs_screen.dart';
 import '../../../general/widgets/auth/signup_type.dart';
 import '../../../personal_account/screens/personal_tabs_screen.dart';
-
 import '../../providers/auth.dart';
 
 class SignInAccountType extends StatefulWidget {
@@ -30,19 +27,17 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
     final _auth = Provider.of<Auth>(context, listen: false);
 
     Future<void> findAccountType() async {
-      await FirebaseAuth.instance.currentUser().then(
-        (user) {
-          _auth.findCurrAccountType(user).then(
-            (accountType) async {
-              accountTypeChosen = accountType;
-              if (accountTypeChosen == AccountTypeChosen.company) {
-                await _companyGroupsProvider.fetchAndSetToLists();
-              }
-              setState(() {
-                _isLoading = false;
-              });
-            },
-          );
+      User user = FirebaseAuth.instance.currentUser;
+
+      _auth.findCurrAccountType(user).then(
+        (accountType) async {
+          accountTypeChosen = accountType;
+          if (accountTypeChosen == AccountTypeChosen.company) {
+            await _companyGroupsProvider.fetchAndSetToLists();
+          }
+          setState(() {
+            _isLoading = false;
+          });
         },
       );
     }

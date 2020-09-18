@@ -58,7 +58,7 @@ class CompanyGroups with ChangeNotifier {
 
   Future<void> getUserId() async {
     try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      User user = await FirebaseAuth.instance.currentUser;
       _userId = user.uid;
     } on Exception {
       throw ErrorHint;
@@ -72,7 +72,7 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> fetchAndSetToLists() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = await FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
     await _fatchAndSetToListHandler('feedList');
