@@ -26,17 +26,17 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
     super.dispose();
   }
 
-  void _addNewFeed(FeedModel feedModel) {
+  void _addNewFeed(FeedModel newFeedModel) {
     setState(() {
-      feedList.add(feedModel);
+      feedList.add(newFeedModel);
     });
   }
 
-  //Drag and Drop Vars
-  int pos;
-  List<FeedModel> _tmpList;
-  ScrollController _scrollController;
-  bool _initTmpListOnce = false;
+  void _editFeed(FeedModel editedFeedModel) {
+    setState(() {
+      feedList[index] = editedFeedModel;
+    });
+  }
 
   int index;
 
@@ -50,11 +50,6 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
       _fetchListOnce = true;
     }
 
-    if (_initTmpListOnce == false) {
-      _tmpList = [...feedList];
-      _initTmpListOnce = !_initTmpListOnce;
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Feeds'),
@@ -62,6 +57,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
           Builder(
             builder: (ctx) {
               return IconButton(
+                color: Theme.of(context).accentColor,
                 icon: Icon(Icons.save),
                 onPressed: () async {
                   try {
@@ -84,6 +80,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                   }
                   Scaffold.of(ctx).showSnackBar(
                     SnackBar(
+                      duration: Duration(seconds: 2),
                       content: Text(
                         'Changes saved successfully',
                         textAlign: TextAlign.center,
@@ -98,7 +95,6 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
         ],
       ),
       backgroundColor: Colors.white.withOpacity(0.95),
-      //body: buildDragAndDropGridView(),
       body: GridView(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
@@ -132,15 +128,24 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                     text: feed.text,
                   ),
                 ),
-                child: Container(
-                  height: constraints.maxHeight,
-                  width: constraints.maxWidth,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                  ),
-                  child: FeedItem(
-                    title: feed.title,
-                    text: feed.text,
+                child: GestureDetector(
+                  onTap: () {
+                    index =
+                        feedList.indexWhere((element) => element.id == feed.id);
+                    titleTextController.text = feed.title;
+                    textTextController.text = feed.text;
+                    feedItemShowDialog(context, _formKey, false);
+                  },
+                  child: Container(
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    child: FeedItem(
+                      title: feed.title,
+                      text: feed.text,
+                    ),
                   ),
                 ),
               ),
@@ -148,7 +153,6 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
           },
         ).toList(),
       ),
-
       floatingActionButton: DragTarget(
         onAccept: (data) {
           showDialog(
@@ -182,8 +186,8 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
             duration: Duration(milliseconds: 400),
             child: _isDragging
                 ? Container(
-                    height: 90,
-                    width: 90,
+                    height: 80,
+                    width: 80,
                     child: FittedBox(
                       child: FloatingActionButton(
                         onPressed: () {},
@@ -193,12 +197,26 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                     ),
                   )
                 : Container(
-                    height: 90,
-                    width: 90,
+                    height: 80,
+                    width: 80,
                     child: FittedBox(
                       child: FloatingActionButton(
                         onPressed: () {
-                          addNewFeedItemShowDialog(context, _formKey);
+                          feedList.length < 10
+                              ? feedItemShowDialog(context, _formKey, true)
+                              : Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    content: Text(
+                                      'There can be no more than 10 feeds',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                );
                         },
                         child: Icon(Icons.add),
                         backgroundColor: Colors.green,
@@ -207,195 +225,111 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                   ),
           );
         },
-        // child: Container(
-        //   height: 90,
-        //   width: 90,
-        //   child: FittedBox(
-        //     child: FloatingActionButton(
-        //       onPressed: () {
-        //         addNewFeedItemShowDialog(context, _formKey);
-        //       },
-        //       child: _isDragging ? Icon(Icons.delete) : Icon(Icons.add),
-        //       backgroundColor: _isDragging ? Colors.red : Colors.green,
-        //     ),
-        //   ),
-        // ),
       ),
     );
   }
 
-  DragAndDropGridView buildDragAndDropGridView() {
-    return DragAndDropGridView(
-      controller: _scrollController,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 5,
-      ),
-      padding: EdgeInsets.all(5),
-      itemBuilder: (context, index) {
-        return Opacity(
-          opacity: pos != null ? pos == index ? 0.6 : 1 : 1,
-          child: Container(
-            width: 200,
-            height: 350,
-            margin: EdgeInsets.symmetric(
-              horizontal: 10.0,
-            ),
-            child: FeedItem(
-              title: feedList[index].title,
-              text: feedList[index].text,
-            ),
-          ),
-        );
-      },
-      itemCount: feedList.length,
-      onWillAccept: (oldIndex, newIndex) {
-        setState(() {
-          _isDragging = true;
-        });
-        feedList = [...feedList];
-        int indexOfFirstItem = feedList.indexOf(feedList[oldIndex]);
-        int indexOfSecondItem = feedList.indexOf(feedList[newIndex]);
-
-        if (indexOfFirstItem > indexOfSecondItem) {
-          for (int i = feedList.indexOf(feedList[oldIndex]);
-              i > feedList.indexOf(feedList[newIndex]);
-              i--) {
-            var tmp = feedList[i - 1];
-            feedList[i - 1] = feedList[i];
-            feedList[i] = tmp;
-          }
-        } else {
-          for (int i = feedList.indexOf(feedList[oldIndex]);
-              i < feedList.indexOf(feedList[newIndex]);
-              i++) {
-            var tmp = feedList[i + 1];
-            feedList[i + 1] = feedList[i];
-            feedList[i] = tmp;
-          }
-        }
-
-        setState(
-          () {
-            pos = newIndex;
-          },
-        );
-
-        return true;
-      },
-      onReorder: (oldIndex, newIndex) {
-        setState(() {
-          _isDragging = false;
-        });
-        feedList = [..._tmpList];
-        int indexOfFirstItem = feedList.indexOf(feedList[oldIndex]);
-        int indexOfSecondItem = feedList.indexOf(feedList[newIndex]);
-
-        if (indexOfFirstItem > indexOfSecondItem) {
-          for (int i = feedList.indexOf(feedList[oldIndex]);
-              i > feedList.indexOf(feedList[newIndex]);
-              i--) {
-            var tmp = feedList[i - 1];
-            feedList[i - 1] = feedList[i];
-            feedList[i] = tmp;
-          }
-        } else {
-          for (int i = feedList.indexOf(feedList[oldIndex]);
-              i < feedList.indexOf(feedList[newIndex]);
-              i++) {
-            var tmp = feedList[i + 1];
-            feedList[i + 1] = feedList[i];
-            feedList[i] = tmp;
-          }
-        }
-        _tmpList = [...feedList];
-        setState(
-          () {
-            pos = null;
-          },
-        );
-      },
-    );
-  }
-
-  Future addNewFeedItemShowDialog(
+  Future feedItemShowDialog(
     BuildContext context,
     GlobalKey<FormState> _formKey,
+    bool isNewItem,
   ) {
+    if (isNewItem) {
+      titleTextController.text = '';
+      textTextController.text = '';
+    }
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
             content: Form(
               key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 20),
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: TextFormField(
+                        controller: titleTextController,
+                        decoration: InputDecoration(
+                          labelText: 'Title',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                          border: const OutlineInputBorder(),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        onSaved: (value) {
+                          titleTextController.text = value;
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please provide a value.';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  ),
+                  Flexible(
                     child: TextFormField(
+                      controller: textTextController,
                       decoration: InputDecoration(
-                        labelText: 'Title',
+                        labelText: 'Text',
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         border: const OutlineInputBorder(),
                       ),
-                      textInputAction: TextInputAction.next,
+                      maxLines: 10,
+                      keyboardType: TextInputType.multiline,
                       onSaved: (value) {
-                        titleTextController.text = value;
+                        textTextController.text = value;
                       },
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please provide a value.';
+                          return 'Please enter a description.';
+                        }
+                        if (value.length < 5) {
+                          return 'Should be at least 10 characters long.';
                         }
                         return null;
                       },
                     ),
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Description',
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      border: const OutlineInputBorder(),
-                    ),
-                    maxLines: 10,
-                    keyboardType: TextInputType.multiline,
-                    onSaved: (value) {
-                      textTextController.text = value;
-                    },
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter a description.';
-                      }
-                      if (value.length < 5) {
-                        return 'Should be at least 10 characters long.';
-                      }
-                      return null;
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RaisedButton(
-                      onPressed: () {
-                        final isValid = _formKey.currentState.validate();
-                        if (isValid) {
-                          Navigator.pop(context);
-                          _formKey.currentState.save();
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                        onPressed: () {
+                          final isValid = _formKey.currentState.validate();
+                          if (isValid) {
+                            Navigator.pop(context);
+                            _formKey.currentState.save();
 
-                          _addNewFeed(
-                            FeedModel(
-                              title: titleTextController.text,
-                              text: textTextController.text,
-                            ),
-                          );
-                        }
-                      },
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                            isNewItem
+                                ? _addNewFeed(
+                                    FeedModel(
+                                      title: titleTextController.text,
+                                      text: textTextController.text,
+                                    ),
+                                  )
+                                : _editFeed(
+                                    FeedModel(
+                                      title: titleTextController.text,
+                                      text: textTextController.text,
+                                    ),
+                                  );
+                          }
+                        },
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text("Done"),
                       ),
-                      child: Text("Submit"),
                     ),
                   )
                 ],
