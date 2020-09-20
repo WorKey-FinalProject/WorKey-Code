@@ -97,7 +97,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
       backgroundColor: Colors.white.withOpacity(0.95),
       body: GridView(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
+          maxCrossAxisExtent: MediaQuery.of(context).size.width * 0.6,
           childAspectRatio: 3 / 5,
         ),
         children: feedList.map(
