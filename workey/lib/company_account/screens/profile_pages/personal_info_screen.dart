@@ -204,9 +204,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 35,
-            ),
             Container(
               margin: EdgeInsets.all(10),
               child: RaisedButton(

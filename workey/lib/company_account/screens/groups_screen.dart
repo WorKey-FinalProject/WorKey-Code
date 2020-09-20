@@ -120,9 +120,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
                   labelColor: Theme.of(context).accentColor,
                   indicatorColor: Theme.of(context).accentColor,
                   tabs: [
-                    Tab(icon: Icon(Icons.settings)),
                     Tab(icon: Icon(Icons.group_work)),
                     Tab(icon: Icon(Icons.people)),
+                    Tab(icon: Icon(Icons.settings)),
                   ],
                 ),
               ),
@@ -130,9 +130,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
           },
           body: TabBarView(
             children: [
-              SettingsView(),
               SubGroupsList(_isShrink),
               EmployeesList(),
+              SettingsView(),
             ],
           ),
         ),
