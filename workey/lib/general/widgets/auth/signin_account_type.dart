@@ -25,15 +25,20 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
 
   @override
   Widget build(BuildContext context) {
+    final _companyGroupsProvider =
+        Provider.of<CompanyGroups>(context, listen: false);
+
     final _auth = Provider.of<Auth>(context, listen: false);
 
     Future<void> findAccountType() async {
       await FirebaseAuth.instance.currentUser().then(
         (user) {
           _auth.findCurrAccountType(user).then(
-            (accountType) {
+            (accountType) async {
               accountTypeChosen = accountType;
-              if (accountTypeChosen == AccountTypeChosen.company) {}
+              if (accountTypeChosen == AccountTypeChosen.company) {
+                await _companyGroupsProvider.fetchAndSetToLists();
+              }
               setState(() {
                 _isLoading = false;
               });
