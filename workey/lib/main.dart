@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,11 +12,12 @@ import 'package:workey/personal_account/screens/personal_tabs_screen.dart';
 
 import './personal_account/screens/personal_tabs_screen.dart';
 import './general/screens/signup_screen.dart';
-import './company_account/screens/tabs_screen.dart';
 import './general/screens/auth_screen.dart';
 import './general/providers/auth.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -55,7 +57,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: StreamBuilder(
-          stream: FirebaseAuth.instance.onAuthStateChanged,
+          stream: FirebaseAuth.instance.authStateChanges(),
           builder: (ctx, userSnapshot) {
             if (userSnapshot.connectionState == ConnectionState.waiting) {
               return SplashScreen();

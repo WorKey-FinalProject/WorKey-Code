@@ -1,4 +1,6 @@
+import 'package:drag_and_drop_gridview/devdrag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/widgets/feed_item.dart';
@@ -15,6 +17,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
   List<FeedModel> feedList = [];
   final titleTextController = TextEditingController();
   final textTextController = TextEditingController();
+  var _isDragging = false;
 
   @override
   void dispose() {
@@ -23,48 +26,100 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
     super.dispose();
   }
 
-  void _addNewFeed(FeedModel feedModel) {
+  void _addNewFeed(FeedModel newFeedModel) {
     setState(() {
-      feedList.add(feedModel);
+      feedList.add(newFeedModel);
     });
   }
+
+  void _editFeed(FeedModel editedFeedModel) {
+    setState(() {
+      feedList[index] = editedFeedModel;
+    });
+  }
+
+  int index;
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     final feedProvider = Provider.of<CompanyGroups>(context, listen: false);
+
     if (!_fetchListOnce) {
       feedList = feedProvider.getFeedList;
       _fetchListOnce = true;
     }
 
-    print('${feedList[0].toJson()} , ${feedList[1].toJson()}');
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit Feeds'),
         actions: [
-          IconButton(
-            icon: Icon(Icons.save),
-            onPressed: () {
-              feedProvider.updateFeedInFirebaseAndList(feedList);
+          Builder(
+            builder: (ctx) {
+              return IconButton(
+                color: Theme.of(context).accentColor,
+                icon: Icon(Icons.save),
+                onPressed: () async {
+                  try {
+                    await feedProvider.updateFeedInFirebaseAndList(feedList);
+                  } on PlatformException catch (err) {
+                    var message = 'An error occurred';
+
+                    if (err.message != null) {
+                      message = err.message;
+                    }
+
+                    Scaffold.of(ctx).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                        backgroundColor: Theme.of(context).errorColor,
+                      ),
+                    );
+                  } catch (err) {
+                    print(err);
+                  }
+                  Scaffold.of(ctx).showSnackBar(
+                    SnackBar(
+                      duration: Duration(seconds: 2),
+                      content: Text(
+                        'Changes saved successfully',
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                },
+              );
             },
           )
         ],
       ),
+      backgroundColor: Colors.white.withOpacity(0.95),
       body: GridView(
         gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           maxCrossAxisExtent: 200,
           childAspectRatio: 3 / 5,
-          crossAxisSpacing: 0,
-          mainAxisSpacing: 10,
         ),
         children: feedList.map(
           (feed) {
-            return Builder(
-              builder: (BuildContext context) {
-                return Container(
-                  width: MediaQuery.of(context).size.width,
+            return LayoutBuilder(
+              builder: (context, constraints) => LongPressDraggable(
+                onDragStarted: () {
+                  index =
+                      feedList.indexWhere((element) => element.id == feed.id);
+                  setState(() {
+                    _isDragging = true;
+                  });
+                },
+                onDragEnd: (details) {
+                  setState(() {
+                    _isDragging = false;
+                  });
+                },
+                childWhenDragging: Text(''),
+                feedback: Container(
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth,
                   margin: EdgeInsets.symmetric(
                     horizontal: 10.0,
                   ),
@@ -72,128 +127,213 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                     title: feed.title,
                     text: feed.text,
                   ),
-                );
-              },
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    index =
+                        feedList.indexWhere((element) => element.id == feed.id);
+                    titleTextController.text = feed.title;
+                    textTextController.text = feed.text;
+                    feedItemShowDialog(context, _formKey, false);
+                  },
+                  child: Container(
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                    ),
+                    child: FeedItem(
+                      title: feed.title,
+                      text: feed.text,
+                    ),
+                  ),
+                ),
+              ),
             );
           },
         ).toList(),
       ),
-      floatingActionButton: Container(
-        height: 80,
-        width: 80,
-        child: FittedBox(
-          child: FloatingActionButton(
-            onPressed: () {
-              addNewFeedItemShowDialog(context, _formKey);
-            },
-            child: Icon(Icons.add),
-            backgroundColor: Colors.green,
-          ),
-        ),
+      floatingActionButton: DragTarget(
+        onAccept: (data) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text('Are you sure?'),
+              content: Text('Do you want to delete this feed?'),
+              actions: [
+                FlatButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text("Yes"),
+                  onPressed: () {
+                    print(feedList[index].toJson());
+                    setState(() {
+                      feedList.removeAt(index);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        builder: (context, candidateData, rejectedData) {
+          return AnimatedSwitcher(
+            duration: Duration(milliseconds: 400),
+            child: _isDragging
+                ? Container(
+                    height: 80,
+                    width: 80,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {},
+                        child: Icon(Icons.delete),
+                        backgroundColor: Colors.red,
+                      ),
+                    ),
+                  )
+                : Container(
+                    height: 80,
+                    width: 80,
+                    child: FittedBox(
+                      child: FloatingActionButton(
+                        onPressed: () {
+                          feedList.length < 10
+                              ? feedItemShowDialog(context, _formKey, true)
+                              : Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    duration: Duration(seconds: 2),
+                                    content: Text(
+                                      'There can be no more than 10 feeds',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.orange,
+                                  ),
+                                );
+                        },
+                        child: Icon(Icons.add),
+                        backgroundColor: Colors.green,
+                      ),
+                    ),
+                  ),
+          );
+        },
       ),
     );
   }
 
-  Future addNewFeedItemShowDialog(
+  Future feedItemShowDialog(
     BuildContext context,
     GlobalKey<FormState> _formKey,
+    bool isNewItem,
   ) {
+    if (isNewItem) {
+      titleTextController.text = '';
+      textTextController.text = '';
+    }
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Stack(
-              overflow: Overflow.visible,
-              children: <Widget>[
-                Positioned(
-                  right: -40.0,
-                  top: -40.0,
-                  child: InkResponse(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: CircleAvatar(
-                      child: Icon(Icons.close),
-                      backgroundColor: Colors.red,
-                    ),
-                  ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 20),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Title',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                            border: const OutlineInputBorder(),
-                          ),
-                          textInputAction: TextInputAction.next,
-                          onSaved: (value) {
-                            titleTextController.text = value;
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please provide a value.';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      TextFormField(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            content: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: TextFormField(
+                        controller: titleTextController,
                         decoration: InputDecoration(
-                          labelText: 'Description',
+                          labelText: 'Title',
                           floatingLabelBehavior: FloatingLabelBehavior.always,
                           border: const OutlineInputBorder(),
                         ),
-                        maxLines: 10,
-                        keyboardType: TextInputType.multiline,
+                        textInputAction: TextInputAction.next,
                         onSaved: (value) {
-                          textTextController.text = value;
+                          titleTextController.text = value;
                         },
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter a description.';
-                          }
-                          if (value.length < 5) {
-                            return 'Should be at least 10 characters long.';
+                            return 'Please provide a value.';
                           }
                           return null;
                         },
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          onPressed: () {
-                            final isValid = _formKey.currentState.validate();
-                            if (isValid) {
-                              Navigator.pop(context);
-                              _formKey.currentState.save();
-
-                              _addNewFeed(
-                                FeedModel(
-                                  title: titleTextController.text,
-                                  text: textTextController.text,
-                                ),
-                              );
-                            }
-                          },
-                          padding: EdgeInsets.symmetric(horizontal: 50),
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text("Submit"),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                  Flexible(
+                    child: TextFormField(
+                      controller: textTextController,
+                      decoration: InputDecoration(
+                        labelText: 'Text',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        border: const OutlineInputBorder(),
+                      ),
+                      maxLines: 10,
+                      keyboardType: TextInputType.multiline,
+                      onSaved: (value) {
+                        textTextController.text = value;
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'Please enter a description.';
+                        }
+                        if (value.length < 5) {
+                          return 'Should be at least 10 characters long.';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                        onPressed: () {
+                          final isValid = _formKey.currentState.validate();
+                          if (isValid) {
+                            Navigator.pop(context);
+                            _formKey.currentState.save();
+
+                            isNewItem
+                                ? _addNewFeed(
+                                    FeedModel(
+                                      title: titleTextController.text,
+                                      text: textTextController.text,
+                                    ),
+                                  )
+                                : _editFeed(
+                                    FeedModel(
+                                      title: titleTextController.text,
+                                      text: textTextController.text,
+                                    ),
+                                  );
+                          }
+                        },
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text("Done"),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
         });
