@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/models/shift_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -52,6 +53,12 @@ class CompanyGroups with ChangeNotifier {
 
   GroupEmployeeModel findEmployeeById(String id) {
     return _employeeList.firstWhere((employee) => employee.id == id);
+  }
+
+  Future<void> setEmployeeHourlyWage(ShiftModel shiftModel) async {
+    shiftModel.hourlyWage = double.parse(_employeeList
+        .firstWhere((employee) => employee.id == shiftModel.id)
+        .salary);
   }
 
   Future<void> getUserId() async {
