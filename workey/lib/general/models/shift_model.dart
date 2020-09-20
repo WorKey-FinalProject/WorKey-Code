@@ -6,7 +6,7 @@ class ShiftModel {
   String endTime;
   double hourlyWage;
   String totalHours;
-  String totalMoney;
+  double totalMoney;
   String location;
 
   ShiftModel({

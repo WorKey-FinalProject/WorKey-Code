@@ -55,7 +55,7 @@ class CompanyGroups with ChangeNotifier {
     return _employeeList.firstWhere((employee) => employee.id == id);
   }
 
-  Future<void> setEmployeeHourlyWage(ShiftModel shiftModel) async {
+  Future<void> setHourlyWage(ShiftModel shiftModel) async {
     shiftModel.hourlyWage = double.parse(_employeeList
         .firstWhere((employee) => employee.id == shiftModel.id)
         .salary);
@@ -77,7 +77,7 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> fetchAndSetToLists() async {
-    User user = FirebaseAuth.instance.currentUser;
+    User user = await FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
     await _fetchAndSetToListHandler('feedList');
