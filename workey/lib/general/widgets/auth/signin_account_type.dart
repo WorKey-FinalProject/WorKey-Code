@@ -29,7 +29,6 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
 
     Future<void> findAccountType() async {
       User user = FirebaseAuth.instance.currentUser;
-
       _auth.findCurrAccountType(user).then(
         (accountType) async {
           accountTypeChosen = accountType;

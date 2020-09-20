@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:workey/general/models/company_account_model.dart';
 
 import '../../general/providers/auth.dart';
-import 'profile_screens/general_settings_screen.dart';
-import 'profile_screens/payment_info_screen.dart';
-import 'profile_screens/personal_info_screen.dart';
+import 'profile_pages/general_settings_screen.dart';
+import 'profile_pages/payment_info_screen.dart';
+import 'profile_pages/personal_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
