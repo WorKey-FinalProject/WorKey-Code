@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:workey/company_account/widgets/profile_picture.dart';
 
 import '../previous_next_button.dart';
 
@@ -21,6 +23,8 @@ class SignUpFormCompany extends StatefulWidget {
 }
 
 class _SignUpFormCompanyState extends State<SignUpFormCompany> {
+  File _pickedImage;
+
   final companyNameTextController = TextEditingController();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -57,6 +61,10 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
     }
   }
 
+  void _selectImage(File pickedImage) {
+    _pickedImage = pickedImage;
+  }
+
   void _changeStep(int step) {
     if (step >= maxStep + 1) {
       _trySubmit();
@@ -75,6 +83,14 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
       elevation: 5,
       child: Column(
         children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: ProfilePicture(
+              onSelectImage: _selectImage,
+              size: 150,
+              isEditable: true,
+            ),
+          ),
           Flexible(
             fit: FlexFit.tight,
             child: Form(
