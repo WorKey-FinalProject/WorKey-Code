@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
+import 'package:workey/general/widgets/loading_circle_on_screen.dart';
 
 import '../../widgets/profile_picture.dart';
 
@@ -27,7 +28,9 @@ class PersonalInfoScreen extends StatefulWidget {
 }
 
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
-  File _pickedImage;
+  var _isLoading = false;
+
+  File _userImageFile;
 
   final companyNameTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
@@ -35,6 +38,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final verifyPasswordTextController = TextEditingController();
+  String _userImage;
 
   bool showPassword = true;
   final _formKey = GlobalKey<FormState>();
@@ -42,17 +46,46 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   CompanyAccountModel userAccount;
 
-  void _trySubmit() {
+  Future<void> _trySubmit() async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
 
     if (isValid) {
       _formKey.currentState.save();
-      userAccount.companyEmail = emailTextController.text;
-      userAccount.owenrFirstName = firstNameTextController.text;
-      userAccount.owenrLastName = lastNameTextController.text;
-      userAccount.companyName = companyNameTextController.text;
-      widget.auth.updateCurrUserData(userAccount);
+      userAccount.companyEmail = emailTextController.text.trim();
+      userAccount.owenrFirstName = firstNameTextController.text.trim();
+      userAccount.owenrLastName = lastNameTextController.text.trim();
+      userAccount.companyName = companyNameTextController.text.trim();
+      userAccount.companyLogo = _userImageFile.toString();
+      try {
+        await widget.auth.updateCurrUserData(userAccount);
+      } on PlatformException catch (err) {
+        var message = 'An error occurred';
+
+        if (err.message != null) {
+          message = err.message;
+        }
+
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+      } catch (err) {
+        print(err);
+      }
+      Navigator.pop(context);
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text(
+            'Changes saved successfully',
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.blue,
+        ),
+      );
     }
   }
 
@@ -63,7 +96,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     if (isValid) {
       _formKeyForPassword.currentState.save();
       try {
-        await widget.auth.updateCurrUserPassword(passwordTextController.text);
+        await widget.auth
+            .updateCurrUserPassword(passwordTextController.text.trim());
       } on PlatformException catch (err) {
         var message = 'An error occurred';
 
@@ -95,16 +129,23 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   }
 
   void getUserData() async {
-    userAccount = await widget.auth.getCurrUserData();
+    setState(() {
+      _isLoading = true;
+    });
+    final userAccount = await widget.auth.getCurrUserData();
     companyNameTextController.text = userAccount.companyName;
     firstNameTextController.text = userAccount.owenrFirstName;
     lastNameTextController.text = userAccount.owenrLastName;
     emailTextController.text = userAccount.companyEmail;
     passwordTextController.text = '';
+    _userImage = userAccount.companyLogo;
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void _selectImage(File pickedImage) {
-    _pickedImage = pickedImage;
+    _userImageFile = pickedImage;
   }
 
   @override
@@ -127,144 +168,156 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(left: 8, right: 8),
-        child: Column(
-          children: [
-            ProfilePicture(
-              onSelectImage: _selectImage,
-              size: 150,
-              isEditable: true,
-            ),
-            GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    buildTextField(
-                      'Company Name',
-                      TextFieldType.companyName,
-                      companyNameTextController,
-                    ),
-                    buildTextField(
-                      'First Name',
-                      TextFieldType.firstName,
-                      firstNameTextController,
-                    ),
-                    buildTextField(
-                      'Last Name',
-                      TextFieldType.lastName,
-                      lastNameTextController,
-                    ),
-                    buildTextField(
-                      'E-mail',
-                      TextFieldType.email,
-                      emailTextController,
-                    ),
-                    Container(
-                      alignment: Alignment.bottomLeft,
-                      margin: EdgeInsets.all(10),
-                      child: FlatButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            elevation: 5,
-                            context: context,
-                            builder: (_) {
-                              return GestureDetector(
-                                onTap: () {},
-                                child: SingleChildScrollView(
-                                  child: Container(
-                                    padding: EdgeInsets.all(10),
-                                    height: MediaQuery.of(context).size.height *
-                                        0.75,
-                                    child: Form(
-                                      key: _formKeyForPassword,
-                                      child: Column(
-                                        children: [
-                                          Flexible(
-                                            child: buildTextField(
-                                              'New Password',
-                                              TextFieldType.password,
-                                              passwordTextController,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: buildTextField(
-                                              'Verify Password',
-                                              TextFieldType.verifyPassword,
-                                              verifyPasswordTextController,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: Container(
-                                              alignment: Alignment.bottomRight,
-                                              padding: EdgeInsets.all(20),
-                                              child: RaisedButton(
-                                                onPressed: () {
-                                                  _tryChangePassword();
-                                                },
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Text(
-                                                  'Confirm Change',
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                behavior: HitTestBehavior.opaque,
-                              );
-                            },
-                          );
-                        },
-                        color: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text('Change password'),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: RaisedButton(
-                onPressed: () {
-                  _trySubmit();
-                },
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  'SAVE',
-                  style: TextStyle(
-                    fontSize: 14,
-                    letterSpacing: 2.2,
-                    color: Colors.white,
+    return _isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(left: 8, right: 8),
+              child: Column(
+                children: [
+                  ProfilePicture(
+                    onSelectImage: _selectImage,
+                    size: 150,
+                    isEditable: true,
+                    imageUrl: _userImage,
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).unfocus();
+                    },
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          buildTextField(
+                            'Company Name',
+                            TextFieldType.companyName,
+                            companyNameTextController,
+                          ),
+                          buildTextField(
+                            'First Name',
+                            TextFieldType.firstName,
+                            firstNameTextController,
+                          ),
+                          buildTextField(
+                            'Last Name',
+                            TextFieldType.lastName,
+                            lastNameTextController,
+                          ),
+                          buildTextField(
+                            'E-mail',
+                            TextFieldType.email,
+                            emailTextController,
+                          ),
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            margin: EdgeInsets.all(10),
+                            child: FlatButton(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  elevation: 5,
+                                  context: context,
+                                  builder: (_) {
+                                    return GestureDetector(
+                                      onTap: () {},
+                                      child: SingleChildScrollView(
+                                        child: Container(
+                                          padding: EdgeInsets.all(10),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.75,
+                                          child: Form(
+                                            key: _formKeyForPassword,
+                                            child: Column(
+                                              children: [
+                                                Flexible(
+                                                  child: buildTextField(
+                                                    'New Password',
+                                                    TextFieldType.password,
+                                                    passwordTextController,
+                                                  ),
+                                                ),
+                                                Flexible(
+                                                  child: buildTextField(
+                                                    'Verify Password',
+                                                    TextFieldType
+                                                        .verifyPassword,
+                                                    verifyPasswordTextController,
+                                                  ),
+                                                ),
+                                                Flexible(
+                                                  child: Container(
+                                                    alignment:
+                                                        Alignment.bottomRight,
+                                                    padding: EdgeInsets.all(20),
+                                                    child: RaisedButton(
+                                                      onPressed: () {
+                                                        _tryChangePassword();
+                                                      },
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child: Text(
+                                                        'Confirm Change',
+                                                        style: TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      behavior: HitTestBehavior.opaque,
+                                    );
+                                  },
+                                );
+                              },
+                              color: Colors.grey,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Text('Change password'),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: RaisedButton(
+                      onPressed: () {
+                        LoadingOnScreenIndicator(context);
+                        _trySubmit();
+                      },
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        'SAVE',
+                        style: TextStyle(
+                          fontSize: 14,
+                          letterSpacing: 2.2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget buildTextField(
@@ -362,6 +415,18 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  LoadingOnScreenIndicator(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 }

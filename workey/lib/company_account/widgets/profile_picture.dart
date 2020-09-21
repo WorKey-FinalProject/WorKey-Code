@@ -2,18 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as syspaths;
+// import 'package:path/path.dart' as path;
+// import 'package:path_provider/path_provider.dart' as syspaths;
 
 class ProfilePicture extends StatefulWidget {
   final Function onSelectImage;
   final double size;
   final bool isEditable;
+  final String imageUrl;
 
   ProfilePicture({
     this.onSelectImage,
     this.size,
     this.isEditable,
+    this.imageUrl,
   });
 
   @override
@@ -21,70 +23,49 @@ class ProfilePicture extends StatefulWidget {
 }
 
 class _ProfilePictureState extends State<ProfilePicture> {
-  File _storedImage;
+  File _pickedImage;
+  ImageSource _imageSource;
 
   /// Enable ImagePicker for IOS !!
   Future<void> _takePicture() async {
-    // final picker = ImagePicker();
-    // final imageFile = await picker.getImage(
-    //   source: ImageSource.camera,
-    //   maxWidth: 600,
-    // );
-    final imageFile = await ImagePicker.pickImage(
-      source: ImageSource.gallery,
-      maxHeight: 600,
+    final picker = ImagePicker();
+    final pickedImage = await picker.getImage(
+      source: _imageSource,
+      imageQuality: 50,
+      maxWidth: 150,
     );
-    if (imageFile == null) {
-      return;
-    }
+    final pickedImageFile = File(pickedImage.path);
     setState(() {
-      _storedImage = File(imageFile.path);
+      _pickedImage = pickedImageFile;
     });
-    final appDir = await syspaths.getApplicationDocumentsDirectory();
-    final fileName = path.basename(imageFile.path);
-    final savedImage = await imageFile.copy('${appDir.path}/$fileName');
-    widget.onSelectImage(savedImage);
+    widget.onSelectImage(_pickedImage);
+
+    // final imageFile = await ImagePicker.pickImage(
+    //   source: _imageSource,
+    //   maxHeight: 600,
+    // );
+    // if (imageFile == null) {
+    //   return;
+    // }
+    // setState(() {
+    //   _storedImage = File(imageFile.path);
+    // });
+    // final appDir = await syspaths.getApplicationDocumentsDirectory();
+    // final fileName = path.basename(imageFile.path);
+    // final savedImage = await imageFile.copy('${appDir.path}/$fileName');
+    // widget.onSelectImage(savedImage);
   }
 
   @override
   Widget build(BuildContext context) {
+    print(widget.imageUrl);
     return Container(
       alignment: Alignment.center,
       padding: widget.isEditable ? const EdgeInsets.all(16) : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(90),
         onTap: () {
-          return widget.isEditable
-              ? showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      content: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(
-                              Icons.add_a_photo,
-                              color: Theme.of(context).accentColor,
-                            ),
-                            onPressed: null,
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.wallpaper,
-                              color: Theme.of(context).accentColor,
-                            ),
-                            onPressed: null,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                )
-              : null;
+          return widget.isEditable ? choosePictureMethodDialog(context) : null;
         },
         child: Stack(
           children: [
@@ -113,18 +94,28 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 //     : Image.network(
                 //         widget.imageUrl,
                 //       ),
-                child: _storedImage != null
-                    ? Image.file(
-                        _storedImage,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      )
-                    : widget.isEditable
-                        ? Text('Add Image')
-                        : Text(
-                            'No Image Found',
-                            style: TextStyle(fontSize: widget.size * 0.1),
-                          ),
+                child: widget.imageUrl == null
+                    ? _pickedImage != null
+                        ? Image.file(
+                            _pickedImage,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          )
+                        : widget.isEditable
+                            ? Text('Add Image')
+                            : Icon(
+                                Icons.photo,
+                                color: Colors.white,
+                                size: widget.size * 0.3,
+                              )
+                    : CircleAvatar(
+                        maxRadius: widget.size,
+                        minRadius: widget.size,
+                        backgroundImage: NetworkImage(
+                          widget.imageUrl,
+                        ),
+                      ),
               ),
             ),
             if (widget.isEditable)
@@ -151,6 +142,46 @@ class _ProfilePictureState extends State<ProfilePicture> {
           ],
         ),
       ),
+    );
+  }
+
+  Future choosePictureMethodDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.add_a_photo,
+                  color: Theme.of(context).accentColor,
+                ),
+                onPressed: () {
+                  _imageSource = ImageSource.camera;
+                  _takePicture();
+                  Navigator.of(context).pop();
+                },
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.wallpaper,
+                  color: Theme.of(context).accentColor,
+                ),
+                onPressed: () {
+                  _imageSource = ImageSource.gallery;
+                  _takePicture();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

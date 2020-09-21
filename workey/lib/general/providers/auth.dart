@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,11 +19,12 @@ class Auth with ChangeNotifier {
   User user;
 
   CompanyAccountModel companyAccountModel = CompanyAccountModel(
-      companyEmail: null,
-      companyName: null,
-      owenrFirstName: null,
-      owenrLastName: null,
-      dateOfCreation: null);
+    companyEmail: null,
+    companyName: null,
+    owenrFirstName: null,
+    owenrLastName: null,
+    dateOfCreation: null,
+  );
 
   PersonalAccountModel personalAccountModel = PersonalAccountModel(
     email: null,
@@ -81,18 +85,31 @@ class Auth with ChangeNotifier {
     String owenrLastName,
   }) async {
     try {
-      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: companyEmail,
         password: password,
       );
+      user = userCredential.user;
+
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('company_account_logo')
+          .child(user.uid + '.jpg');
+
+      await ref.putFile(File(companyLogo)).onComplete;
+
+      final url = await ref.getDownloadURL();
+      companyLogo = url;
+
       companyAccountModel = CompanyAccountModel(
-          id: authResult.user.uid,
+          id: userCredential.user.uid,
           companyEmail: companyEmail,
           companyName: companyName,
           owenrFirstName: owenrFirstName,
           owenrLastName: owenrLastName,
           dateOfCreation: DateTime.now().toString(),
-          companyLogo: companyLogo,
+          companyLogo: companyLogo.toString(),
           location: location);
 
       WorkGroupModel workGroupModel = WorkGroupModel(
@@ -105,11 +122,11 @@ class Auth with ChangeNotifier {
       await dbRef
           .child('Users')
           .child('Company Accounts')
-          .child(authResult.user.uid)
+          .child(userCredential.user.uid)
           .set(companyAccountModel.toJson());
       await dbRef
           .child('Company Groups')
-          .child(authResult.user.uid)
+          .child(userCredential.user.uid)
           .set(workGroupModel.toJson());
     } on Exception catch (error) {
       print(error);
@@ -199,6 +216,18 @@ class Auth with ChangeNotifier {
       String type;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
+        if (userNewData.companyLogo != null) {
+          final ref = FirebaseStorage.instance
+              .ref()
+              .child('company_account_logo')
+              .child(user.uid + '.jpg');
+
+          await ref.putFile(File(userNewData.companyLogo)).onComplete;
+
+          final url = await ref.getDownloadURL();
+          userNewData.companyLogo = url;
+        }
+
         user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {
         type = 'Personal Accounts';
