@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/company_account_model.dart';
 
+import '../widgets/profile_pages/general_settings_screen.dart';
+import '../widgets/profile_pages/payment_info_screen.dart';
+import '../widgets/profile_pages/personal_info_screen.dart';
+import '../../general/models/company_account_model.dart';
 import '../../general/providers/auth.dart';
-import 'profile_pages/general_settings_screen.dart';
-import 'profile_pages/payment_info_screen.dart';
-import 'profile_pages/personal_info_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override

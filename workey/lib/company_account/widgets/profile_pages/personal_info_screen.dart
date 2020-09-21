@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
@@ -9,12 +12,13 @@ enum TextFieldType {
   companyName,
   email,
   password,
+  verifyPassword,
   firstName,
   lastName,
 }
 
 class PersonalInfoScreen extends StatefulWidget {
-  Auth auth;
+  final Auth auth;
 
   PersonalInfoScreen(this.auth);
 
@@ -23,6 +27,8 @@ class PersonalInfoScreen extends StatefulWidget {
 }
 
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
+  File _pickedImage;
+
   final companyNameTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
@@ -43,18 +49,48 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     if (isValid) {
       _formKey.currentState.save();
       userAccount.companyEmail = emailTextController.text;
+      userAccount.owenrFirstName = firstNameTextController.text;
+      userAccount.owenrLastName = lastNameTextController.text;
+      userAccount.companyName = companyNameTextController.text;
       widget.auth.updateCurrUserData(userAccount);
     }
   }
 
-  void _tryChangePassword() {
-    final isValid = _formKey.currentState.validate();
+  Future<void> _tryChangePassword() async {
+    final isValid = _formKeyForPassword.currentState.validate();
     FocusScope.of(context).unfocus();
 
     if (isValid) {
       _formKeyForPassword.currentState.save();
-      //userAccount.companyEmail = emailTextController.text;
-      //widget.auth.updateCurrUserData(userAccount);
+      try {
+        await widget.auth.updateCurrUserPassword(passwordTextController.text);
+      } on PlatformException catch (err) {
+        var message = 'An error occurred';
+
+        if (err.message != null) {
+          message = err.message;
+        }
+
+        Scaffold.of(context).showSnackBar(
+          SnackBar(
+            content: Text(message),
+            backgroundColor: Theme.of(context).errorColor,
+          ),
+        );
+      } catch (err) {
+        print(err);
+      }
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text(
+            'Password changed successfully',
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.blue,
+        ),
+      );
+      Navigator.pop(context);
     }
   }
 
@@ -65,6 +101,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     lastNameTextController.text = userAccount.owenrLastName;
     emailTextController.text = userAccount.companyEmail;
     passwordTextController.text = '';
+  }
+
+  void _selectImage(File pickedImage) {
+    _pickedImage = pickedImage;
   }
 
   @override
@@ -92,19 +132,10 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         padding: EdgeInsets.only(left: 8, right: 8),
         child: Column(
           children: [
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(16),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(90),
-                onTap: () {},
-                child: ProfilePicture(
-                  imageUrl:
-                      'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
-                  size: 150,
-                  isEditable: true,
-                ),
-              ),
+            ProfilePicture(
+              onSelectImage: _selectImage,
+              size: 150,
+              isEditable: true,
             ),
             GestureDetector(
               onTap: () {
@@ -145,46 +176,51 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             builder: (_) {
                               return GestureDetector(
                                 onTap: () {},
-                                child: Container(
-                                  padding: EdgeInsets.all(10),
-                                  child: Form(
-                                    key: _formKeyForPassword,
-                                    child: Column(
-                                      children: [
-                                        Flexible(
-                                          child: buildTextField(
-                                            'New Password',
-                                            TextFieldType.password,
-                                            passwordTextController,
+                                child: SingleChildScrollView(
+                                  child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.75,
+                                    child: Form(
+                                      key: _formKeyForPassword,
+                                      child: Column(
+                                        children: [
+                                          Flexible(
+                                            child: buildTextField(
+                                              'New Password',
+                                              TextFieldType.password,
+                                              passwordTextController,
+                                            ),
                                           ),
-                                        ),
-                                        Flexible(
-                                          child: buildTextField(
-                                            'Verify Password',
-                                            TextFieldType.password,
-                                            verifyPasswordTextController,
+                                          Flexible(
+                                            child: buildTextField(
+                                              'Verify Password',
+                                              TextFieldType.verifyPassword,
+                                              verifyPasswordTextController,
+                                            ),
                                           ),
-                                        ),
-                                        Flexible(
-                                          child: Container(
-                                            alignment: Alignment.bottomRight,
-                                            padding: EdgeInsets.all(20),
-                                            child: RaisedButton(
-                                              onPressed: () {
-                                                _tryChangePassword();
-                                              },
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: Text(
-                                                'Confirm Change',
-                                                style: TextStyle(fontSize: 16),
+                                          Flexible(
+                                            child: Container(
+                                              alignment: Alignment.bottomRight,
+                                              padding: EdgeInsets.all(20),
+                                              child: RaisedButton(
+                                                onPressed: () {
+                                                  _tryChangePassword();
+                                                },
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                child: Text(
+                                                  'Confirm Change',
+                                                  style:
+                                                      TextStyle(fontSize: 16),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -248,15 +284,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 ? (value) {
                     passwordTextController.text = value;
                   }
-                : textFieldType == TextFieldType.firstName
+                : textFieldType == TextFieldType.verifyPassword
                     ? (value) {
-                        firstNameTextController.text = value;
+                        verifyPasswordTextController.text = value;
                       }
-                    : textFieldType == TextFieldType.lastName
+                    : textFieldType == TextFieldType.firstName
                         ? (value) {
-                            lastNameTextController.text = value;
+                            firstNameTextController.text = value;
                           }
-                        : null,
+                        : textFieldType == TextFieldType.lastName
+                            ? (value) {
+                                lastNameTextController.text = value;
+                              }
+                            : null,
         validator: textFieldType == TextFieldType.email
             ? (value) {
                 if (value.isEmpty || !value.contains('@')) {
@@ -271,25 +311,38 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     }
                     return null;
                   }
-                : textFieldType == TextFieldType.firstName
+                : textFieldType == TextFieldType.verifyPassword
                     ? (value) {
-                        if (value.isEmpty) {
-                          return 'Please enter your First name.';
+                        if (value.isEmpty || value.length < 7) {
+                          return 'Please enter at least 7 characters';
+                        }
+                        if (passwordTextController.text != value) {
+                          return 'Passwords do not match';
                         }
                         return null;
                       }
-                    : textFieldType == TextFieldType.lastName
+                    : textFieldType == TextFieldType.firstName
                         ? (value) {
                             if (value.isEmpty) {
-                              return 'Please enter your Last name.';
+                              return 'Please enter your First name.';
                             }
                             return null;
                           }
-                        : null,
-        obscureText:
-            textFieldType == TextFieldType.password ? showPassword : false,
+                        : textFieldType == TextFieldType.lastName
+                            ? (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your Last name.';
+                                }
+                                return null;
+                              }
+                            : null,
+        obscureText: (textFieldType == TextFieldType.password ||
+                textFieldType == TextFieldType.verifyPassword)
+            ? showPassword
+            : false,
         decoration: InputDecoration(
-          suffixIcon: textFieldType == TextFieldType.password
+          suffixIcon: (textFieldType == TextFieldType.password ||
+                  textFieldType == TextFieldType.verifyPassword)
               ? IconButton(
                   onPressed: () {
                     setState(() {
