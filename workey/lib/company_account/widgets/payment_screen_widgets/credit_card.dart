@@ -16,7 +16,7 @@ class CreditCard extends StatefulWidget {
   final String cvv;
   final Color frontTextColor;
   final Color backTextColor;
-  final bool showBackSide;
+  bool showBackSide;
   final Widget frontBackground;
   final Widget backBackground;
   final Widget frontLayout;
@@ -107,27 +107,30 @@ class _CreditCardState extends State<CreditCard>
         : cardHeight = widget.height;
 
     if (widget.showBackSide) {
-      setState(() {
-        _controller.forward().orCancel;
-      });
+      _controller.forward().orCancel;
     } else {
-      setState(() {
-        _controller.reverse().orCancel;
-      });
+      _controller.reverse().orCancel;
     }
 
-    return Center(
-      child: Stack(
-        children: <Widget>[
-          AwesomeCard(
-            animation: _moveToBack,
-            child: _buildFrontCard(),
-          ),
-          AwesomeCard(
-            animation: _moveToFront,
-            child: _buildBackCard(),
-          ),
-        ],
+    return InkWell(
+      onTap: () {
+        setState(() {
+          widget.showBackSide = !widget.showBackSide;
+        });
+      },
+      child: Center(
+        child: Stack(
+          children: <Widget>[
+            AwesomeCard(
+              animation: _moveToBack,
+              child: _buildFrontCard(),
+            ),
+            AwesomeCard(
+              animation: _moveToFront,
+              child: _buildBackCard(),
+            ),
+          ],
+        ),
       ),
     );
   }
