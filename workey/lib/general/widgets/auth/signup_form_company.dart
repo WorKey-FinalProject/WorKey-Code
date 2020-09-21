@@ -23,13 +23,14 @@ class SignUpFormCompany extends StatefulWidget {
 }
 
 class _SignUpFormCompanyState extends State<SignUpFormCompany> {
-  File _pickedImage;
+  File _userImageFile;
 
   final companyNameTextController = TextEditingController();
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
+  String _userImage;
 
   var step = 0;
   var maxStep = 1;
@@ -40,8 +41,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
   var _userPassword = '';
   var _userFirstName = '';
   var _userLastName = '';
-  var _companyName = "";
-  var _companyLogoImagePath = "";
+  var _companyName = '';
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
@@ -55,14 +55,15 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
         _userFirstName.trim(),
         _userLastName.trim(),
         _companyName.trim(),
-        _companyLogoImagePath.trim(),
+        _userImageFile.toString(),
         context,
       );
+      print(_userImageFile.toString());
     }
   }
 
   void _selectImage(File pickedImage) {
-    _pickedImage = pickedImage;
+    _userImageFile = pickedImage;
   }
 
   void _changeStep(int step) {
@@ -74,6 +75,16 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
     setState(() {
       this.step = step;
     });
+  }
+
+  @override
+  void dispose() {
+    companyNameTextController.dispose();
+    emailTextController.dispose();
+    passwordTextController.dispose();
+    firstNameTextController.dispose();
+    lastNameTextController.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,6 +100,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
               onSelectImage: _selectImage,
               size: 150,
               isEditable: true,
+              imageUrl: _userImage,
             ),
           ),
           Flexible(
@@ -112,7 +124,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                           return null;
                         },
                         onSaved: (value) {
-                          _companyName = value;
+                          companyNameTextController.text = value;
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(

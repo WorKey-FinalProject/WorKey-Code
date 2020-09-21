@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/company_account_model.dart';
-import 'package:workey/general/models/personal_account_model.dart';
 
 import 'package:workey/general/widgets/auth/signup_type.dart';
 import '../providers/auth.dart';
@@ -33,7 +31,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           owenrFirstName: firstName,
           owenrLastName: lastName,
           companyName: companyName,
-          companyLogo: '',
+          companyLogo: companyLogo,
           location: '',
         );
       } on PlatformException catch (err) {

@@ -31,6 +31,7 @@ dependencies:
   firebase_auth_web: ^0.3.0+1
   firebase_database: ^4.0.0
   firebase_messaging: ^6.0.16
+  firebase_storage: ^4.0.0
 
   carousel_slider: ^2.2.1
   image_picker: ^0.6.7+4

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 class CompanyAccountModel {
@@ -26,7 +28,7 @@ class CompanyAccountModel {
       'companyEmail': this.companyEmail,
       'companyName': this.companyName,
       'location': this.location,
-      'companyLogo': this.companyLogo,
+      'companyLogo': this.companyLogo.toString(),
       'owenrFirstName': this.owenrFirstName,
       'owenrLastName': this.owenrLastName,
       'dateOfCreation': this.dateOfCreation,
