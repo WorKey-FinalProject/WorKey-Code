@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:workey/general/providers/company_groups.dart';
 
 import '../../general/models/work_group_model.dart';
 import '../../general/widgets/auth/signup_type.dart';
@@ -15,7 +13,7 @@ class Auth with ChangeNotifier {
   final dbRef = FirebaseDatabase.instance.reference();
 
   AccountTypeChosen accountType;
-  FirebaseUser user;
+  User user;
 
   CompanyAccountModel companyAccountModel = CompanyAccountModel(
       companyEmail: null,
@@ -45,7 +43,7 @@ class Auth with ChangeNotifier {
     String profilePicture,
   }) async {
     try {
-      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -83,7 +81,7 @@ class Auth with ChangeNotifier {
     String owenrLastName,
   }) async {
     try {
-      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
         email: companyEmail,
         password: password,
       );
@@ -131,7 +129,7 @@ class Auth with ChangeNotifier {
     );
   }
 
-  Future<AccountTypeChosen> findCurrAccountType(FirebaseUser user) async {
+  Future<AccountTypeChosen> findCurrAccountType(User user) async {
     this.user = user;
     await dbRef.child('Users').once().then((DataSnapshot dataSnapshot) {
       Map<dynamic, dynamic> map = dataSnapshot.value;
@@ -188,7 +186,7 @@ class Auth with ChangeNotifier {
 
   Future<void> updateCurrUserPassword(String newPassword) async {
     try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      User user = FirebaseAuth.instance.currentUser;
       user.updatePassword(newPassword);
     } catch (error) {
       throw error;
@@ -197,7 +195,7 @@ class Auth with ChangeNotifier {
 
   Future<void> updateCurrUserData(dynamic userNewData) async {
     try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      User user = FirebaseAuth.instance.currentUser;
       String type;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
@@ -229,7 +227,8 @@ class Auth with ChangeNotifier {
       }
 
       await dbRef.child('Users').child(type).child(user.uid).remove();
-      FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+      User firebaseUser = FirebaseAuth.instance.currentUser;
+
       firebaseUser.delete();
     } on Exception {
       throw ErrorHint;

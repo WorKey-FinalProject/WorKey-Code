@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/models/shift_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -56,9 +55,15 @@ class CompanyGroups with ChangeNotifier {
     return _employeeList.firstWhere((employee) => employee.id == id);
   }
 
+  Future<void> setHourlyWage(ShiftModel shiftModel) async {
+    shiftModel.hourlyWage = double.parse(_employeeList
+        .firstWhere((employee) => employee.id == shiftModel.id)
+        .salary);
+  }
+
   Future<void> getUserId() async {
     try {
-      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      User user = FirebaseAuth.instance.currentUser;
       _userId = user.uid;
     } on Exception {
       throw ErrorHint;
@@ -72,15 +77,15 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> fetchAndSetToLists() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    User user = await FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
-    await _fatchAndSetToListHandler('feedList');
-    await _fatchAndSetToListHandler('empolyeeList');
-    await _fatchAndSetToListHandler('workGroupsList');
+    await _fetchAndSetToListHandler('feedList');
+    await _fetchAndSetToListHandler('empolyeeList');
+    await _fetchAndSetToListHandler('workGroupsList');
   }
 
-  Future<void> _fatchAndSetToListHandler(String name) async {
+  Future<void> _fetchAndSetToListHandler(String name) async {
     try {
       await _dbRef
           .child('Company Groups')
