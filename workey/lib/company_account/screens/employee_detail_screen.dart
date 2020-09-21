@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/widgets/employee_sliver.dart';
 
 import '../widgets/group_screen_widgets/opaque_image.dart';
 import '../widgets/employees_shifts_view.dart';
@@ -10,17 +11,10 @@ class EmployeeDetailScreen extends StatefulWidget {
 }
 
 class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
-  Color color = Colors.white;
   final List _tabs = [
     EmployeesInfoView(),
     EmployeesShiftsView(),
   ];
-
-  Future<void> changeColor() {
-    setState(() {
-      color = Colors.black;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +29,10 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: SliverAppBar(
                   pinned: true,
-                  expandedHeight: 220.0,
-                  stretch: false,
-                  onStretchTrigger: changeColor,
+                  floating: false,
+                  expandedHeight: 200,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
-                    title: Text(
-                      'Employees Name',
-                      style:
-                          TextStyle(color: color, fontWeight: FontWeight.bold),
-                    ),
-                    titlePadding: EdgeInsets.only(bottom: 55),
                     background: OpaqueImage(
                       imageUrl:
                           'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
