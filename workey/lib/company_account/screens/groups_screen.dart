@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:workey/company_account/widgets/groups_screen_bottom_pages/employees_list.dart';
 import 'package:workey/company_account/widgets/groups_screen_bottom_pages/settings_view.dart';
@@ -11,6 +13,8 @@ class GroupsScreen extends StatefulWidget {
 }
 
 class _GroupsScreenState extends State<GroupsScreen> {
+  File _pickedImage;
+
   ScrollController _scrollController;
   bool lastStatus = true;
   double height;
@@ -26,6 +30,10 @@ class _GroupsScreenState extends State<GroupsScreen> {
   bool get _isShrink {
     return _scrollController.hasClients &&
         _scrollController.offset > (height - kToolbarHeight - 150);
+  }
+
+  void _selectImage(File pickedImage) {
+    _pickedImage = pickedImage;
   }
 
   @override
@@ -71,8 +79,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                               children: [
                                 Container(
                                   child: ProfilePicture(
-                                    imageUrl:
-                                        'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
+                                    onSelectImage: _selectImage,
                                     size: MediaQuery.of(context).size.height *
                                         0.14,
                                     isEditable: false,
@@ -96,8 +103,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                     bottom: 45,
                                   ),
                                   child: ProfilePicture(
-                                    imageUrl:
-                                        'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
+                                    onSelectImage: _selectImage,
                                     size: MediaQuery.of(context).size.height *
                                         0.14,
                                     isEditable: false,
