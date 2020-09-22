@@ -10,6 +10,10 @@ class PaymentInfoScreen extends StatefulWidget {
 }
 
 class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  final cardNumberController = TextEditingController();
+
   String cardNumber = "";
   String cardHolderName = "";
   String expiryDate = "";
@@ -17,6 +21,14 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   bool showBack = false;
 
   FocusNode _focusNode;
+
+  void _trySubmit() {
+    final isValid = _formKey.currentState.validate();
+
+    if (isValid) {
+      _formKey.currentState.save();
+    }
+  }
 
   @override
   void initState() {
@@ -60,66 +72,81 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
           SizedBox(
             height: 40,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 20,
+          Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please Enter card number';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(hintText: "Card Number"),
+                    maxLength: 19,
+                    onChanged: (value) {
+                      setState(() {
+                        cardNumber = value;
+                      });
+                    },
+                  ),
                 ),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: "Card Number"),
-                  maxLength: 19,
-                  onChanged: (value) {
-                    setState(() {
-                      cardNumber = value;
-                    });
-                  },
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: TextFormField(
+                    decoration: InputDecoration(hintText: "Card Expiry"),
+                    maxLength: 5,
+                    onChanged: (value) {
+                      setState(() {
+                        expiryDate = value;
+                      });
+                    },
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 20,
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 20,
+                  ),
+                  child: TextFormField(
+                    decoration: InputDecoration(hintText: "Card Holder Name"),
+                    onChanged: (value) {
+                      setState(() {
+                        cardHolderName = value;
+                      });
+                    },
+                  ),
                 ),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: "Card Expiry"),
-                  maxLength: 5,
-                  onChanged: (value) {
-                    setState(() {
-                      expiryDate = value;
-                    });
-                  },
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                  child: TextFormField(
+                    decoration: InputDecoration(hintText: "CVV"),
+                    maxLength: 3,
+                    onChanged: (value) {
+                      setState(() {
+                        cvv = value;
+                      });
+                    },
+                    focusNode: _focusNode,
+                  ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: "Card Holder Name"),
-                  onChanged: (value) {
-                    setState(() {
-                      cardHolderName = value;
-                    });
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                child: TextFormField(
-                  decoration: InputDecoration(hintText: "CVV"),
-                  maxLength: 3,
-                  onChanged: (value) {
-                    setState(() {
-                      cvv = value;
-                    });
-                  },
-                  focusNode: _focusNode,
-                ),
-              ),
-            ],
-          )
+              ],
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {
+              _trySubmit();
+            },
+            child: Text('save'),
+          ),
         ],
       ),
     );
