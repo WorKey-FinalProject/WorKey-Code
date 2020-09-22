@@ -4,7 +4,12 @@ import '../../widgets/payment_screen_widgets/credit_card.dart';
 import '../../widgets/payment_screen_widgets/credit_card_type.dart';
 import '../../widgets/payment_screen_widgets/credit_card_background.dart';
 
-class PaymentInfoScreen extends StatelessWidget {
+class PaymentInfoScreen extends StatefulWidget {
+  @override
+  _PaymentInfoScreenState createState() => _PaymentInfoScreenState();
+}
+
+class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
