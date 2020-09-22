@@ -91,26 +91,28 @@ class Auth with ChangeNotifier {
         password: password,
       );
       user = userCredential.user;
+      if (companyLogo != null) {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child('company_account_logo')
+            .child(user.uid + '.jpg');
 
-      final ref = FirebaseStorage.instance
-          .ref()
-          .child('company_account_logo')
-          .child(user.uid + '.jpg');
+        await ref.putFile(File(companyLogo)).onComplete;
 
-      await ref.putFile(File(companyLogo)).onComplete;
-
-      final url = await ref.getDownloadURL();
-      companyLogo = url;
+        final url = await ref.getDownloadURL();
+        companyLogo = url;
+      }
 
       companyAccountModel = CompanyAccountModel(
-          id: userCredential.user.uid,
-          companyEmail: companyEmail,
-          companyName: companyName,
-          owenrFirstName: owenrFirstName,
-          owenrLastName: owenrLastName,
-          dateOfCreation: DateTime.now().toString(),
-          companyLogo: companyLogo.toString(),
-          location: location);
+        id: userCredential.user.uid,
+        companyEmail: companyEmail,
+        companyName: companyName,
+        owenrFirstName: owenrFirstName,
+        owenrLastName: owenrLastName,
+        dateOfCreation: DateTime.now().toString(),
+        companyLogo: companyLogo.toString(),
+        location: location,
+      );
 
       WorkGroupModel workGroupModel = WorkGroupModel(
         workGroupName: 'Root',
@@ -204,10 +206,11 @@ class Auth with ChangeNotifier {
   Future<void> updateCurrUserPassword(String newPassword) async {
     try {
       User user = FirebaseAuth.instance.currentUser;
-      user.updatePassword(newPassword);
+      await user.updatePassword(newPassword);
     } catch (error) {
       throw error;
     }
+    print('Password updated Successfully');
   }
 
   Future<void> updateCurrUserData(dynamic userNewData) async {
@@ -216,19 +219,20 @@ class Auth with ChangeNotifier {
       String type;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
-        if (userNewData.companyLogo != null) {
-          final ref = FirebaseStorage.instance
-              .ref()
-              .child('company_account_logo')
-              .child(user.uid + '.jpg');
 
-          await ref.putFile(File(userNewData.companyLogo)).onComplete;
+        // if (userNewData.companyLogo != null) {
+        //   final ref = FirebaseStorage.instance
+        //       .ref()
+        //       .child('company_account_logo')
+        //       .child(user.uid + '.jpg');
+        //   await ref.putFile(File(userNewData.companyLogo)).onComplete;
+        //   print('File Uploaded');
 
-          final url = await ref.getDownloadURL();
-          userNewData.companyLogo = url;
-        }
+        //   final url = await ref.getDownloadURL();
+        //   userNewData.companyLogo = url;
+        // }
 
-        user.updateEmail(userNewData.companyEmail);
+        await user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {
         type = 'Personal Accounts';
         user.updateEmail(userNewData.email);

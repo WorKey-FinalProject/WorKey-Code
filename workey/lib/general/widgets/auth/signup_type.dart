@@ -15,7 +15,7 @@ enum AccountTypeChosen {
 }
 
 class SignUpType extends StatefulWidget {
-  final void Function(
+  final void Function({
     String email,
     String password,
     String firstName,
@@ -23,7 +23,7 @@ class SignUpType extends StatefulWidget {
     String companyName,
     String companyLogo,
     BuildContext ctx,
-  ) submitFnCompany;
+  }) submitFnCompany;
 
   final void Function(
     String email,

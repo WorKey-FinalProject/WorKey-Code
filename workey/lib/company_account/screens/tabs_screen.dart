@@ -78,6 +78,7 @@ class _TabsScreenState extends State<TabsScreen> {
     Provider.of<GlobalSizes>(context).setAppBarHeight(appBar.preferredSize);
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: appBar,
       body: _pages[_selectedPageIndex]['page'],
       bottomNavigationBar: BottomNavigationBar(

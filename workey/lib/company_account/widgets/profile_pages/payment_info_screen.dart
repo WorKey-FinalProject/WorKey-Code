@@ -14,10 +14,10 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
 
   final cardNumberController = TextEditingController();
 
-  String cardNumber = "";
-  String cardHolderName = "";
-  String expiryDate = "";
-  String cvv = "";
+  //String cardNumber = '';
+  String cardHolderName = '';
+  String expiryDate = '';
+  String cvv = '';
   bool showBack = false;
 
   FocusNode _focusNode;
@@ -43,6 +43,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
 
   @override
   void dispose() {
+    cardNumberController.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -58,12 +59,12 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
             height: 40,
           ),
           CreditCard(
-            cardNumber: cardNumber,
+            cardNumber: cardNumberController.text,
             cardExpiry: expiryDate,
             cardHolderName: cardHolderName,
             cardType: CardType.visa,
             cvv: cvv,
-            bankName: "Axis Bank",
+            bankName: 'Axis Bank',
             showBackSide: showBack,
             frontBackground: CreditCardBackground.black,
             backBackground: CreditCardBackground.white,
@@ -83,17 +84,18 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                     horizontal: 20,
                   ),
                   child: TextFormField(
+                    controller: cardNumberController,
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'Please Enter card number';
                       }
                       return null;
                     },
-                    decoration: InputDecoration(hintText: "Card Number"),
+                    decoration: InputDecoration(hintText: 'Card Number'),
                     maxLength: 19,
                     onChanged: (value) {
                       setState(() {
-                        cardNumber = value;
+                        cardNumberController.text = value;
                       });
                     },
                   ),
@@ -103,7 +105,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                     horizontal: 20,
                   ),
                   child: TextFormField(
-                    decoration: InputDecoration(hintText: "Card Expiry"),
+                    decoration: InputDecoration(hintText: 'Card Expiry'),
                     maxLength: 5,
                     onChanged: (value) {
                       setState(() {
@@ -117,7 +119,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                     horizontal: 20,
                   ),
                   child: TextFormField(
-                    decoration: InputDecoration(hintText: "Card Holder Name"),
+                    decoration: InputDecoration(hintText: 'Card Holder Name'),
                     onChanged: (value) {
                       setState(() {
                         cardHolderName = value;
@@ -128,7 +130,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
                   child: TextFormField(
-                    decoration: InputDecoration(hintText: "CVV"),
+                    decoration: InputDecoration(hintText: 'CVV'),
                     maxLength: 3,
                     onChanged: (value) {
                       setState(() {

@@ -238,103 +238,104 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
       textTextController.text = '';
     }
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            content: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: TextFormField(
-                        controller: titleTextController,
-                        decoration: InputDecoration(
-                          labelText: 'Title',
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                          border: const OutlineInputBorder(),
-                        ),
-                        textInputAction: TextInputAction.next,
-                        onSaved: (value) {
-                          titleTextController.text = value;
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please provide a value.';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  ),
-                  Flexible(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 20),
                     child: TextFormField(
-                      controller: textTextController,
+                      controller: titleTextController,
                       decoration: InputDecoration(
-                        labelText: 'Text',
+                        labelText: 'Title',
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         border: const OutlineInputBorder(),
                       ),
-                      maxLines: 10,
-                      keyboardType: TextInputType.multiline,
+                      textInputAction: TextInputAction.next,
                       onSaved: (value) {
-                        textTextController.text = value;
+                        titleTextController.text = value;
                       },
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Please enter a description.';
-                        }
-                        if (value.length < 5) {
-                          return 'Should be at least 10 characters long.';
+                          return 'Please provide a value.';
                         }
                         return null;
                       },
                     ),
                   ),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: RaisedButton(
-                        onPressed: () {
-                          final isValid = _formKey.currentState.validate();
-                          if (isValid) {
-                            Navigator.pop(context);
-                            _formKey.currentState.save();
-
-                            isNewItem
-                                ? _addNewFeed(
-                                    FeedModel(
-                                      title: titleTextController.text,
-                                      text: textTextController.text,
-                                    ),
-                                  )
-                                : _editFeed(
-                                    FeedModel(
-                                      title: titleTextController.text,
-                                      text: textTextController.text,
-                                    ),
-                                  );
-                          }
-                        },
-                        padding: EdgeInsets.symmetric(horizontal: 50),
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text("Done"),
-                      ),
+                ),
+                Flexible(
+                  child: TextFormField(
+                    controller: textTextController,
+                    decoration: InputDecoration(
+                      labelText: 'Text',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      border: const OutlineInputBorder(),
                     ),
-                  )
-                ],
-              ),
+                    maxLines: 10,
+                    keyboardType: TextInputType.multiline,
+                    onSaved: (value) {
+                      textTextController.text = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter a description.';
+                      }
+                      if (value.length < 5) {
+                        return 'Should be at least 10 characters long.';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                      onPressed: () {
+                        final isValid = _formKey.currentState.validate();
+                        if (isValid) {
+                          Navigator.pop(context);
+                          _formKey.currentState.save();
+
+                          isNewItem
+                              ? _addNewFeed(
+                                  FeedModel(
+                                    title: titleTextController.text,
+                                    text: textTextController.text,
+                                  ),
+                                )
+                              : _editFeed(
+                                  FeedModel(
+                                    title: titleTextController.text,
+                                    text: textTextController.text,
+                                  ),
+                                );
+                        }
+                      },
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text("Done"),
+                    ),
+                  ),
+                )
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }

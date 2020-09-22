@@ -38,22 +38,10 @@ class _ProfilePictureState extends State<ProfilePicture> {
     setState(() {
       _pickedImage = pickedImageFile;
     });
-    widget.onSelectImage(_pickedImage);
-
-    // final imageFile = await ImagePicker.pickImage(
-    //   source: _imageSource,
-    //   maxHeight: 600,
-    // );
-    // if (imageFile == null) {
-    //   return;
-    // }
     // setState(() {
-    //   _storedImage = File(imageFile.path);
+    //   widget.imageUrl = pickedImageFile;
     // });
-    // final appDir = await syspaths.getApplicationDocumentsDirectory();
-    // final fileName = path.basename(imageFile.path);
-    // final savedImage = await imageFile.copy('${appDir.path}/$fileName');
-    // widget.onSelectImage(savedImage);
+    widget.onSelectImage(_pickedImage);
   }
 
   @override
@@ -94,7 +82,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 //     : Image.network(
                 //         widget.imageUrl,
                 //       ),
-                child: widget.imageUrl == null
+                child: widget.imageUrl != ''
                     ? _pickedImage != null
                         ? Image.file(
                             _pickedImage,
