@@ -335,6 +335,33 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
       padding: const EdgeInsets.all(15.0),
       child: TextFormField(
         controller: textEditingController,
+        onChanged: textFieldType == TextFieldType.cardNumber
+            ? (value) {
+                setState(() {
+                  cardNumberController.text = value;
+                });
+              }
+            : textFieldType == TextFieldType.expiryDate
+                ? (value) {
+                    setState(() {
+                      expiryDateController.text = value;
+                    });
+                  }
+                : textFieldType == TextFieldType.cardHolderName
+                    ? (value) {
+                        setState(() {
+                          cardHolderNameController.text = value;
+                        });
+                      }
+                    : textFieldType == TextFieldType.cvv
+                        ? (value) {
+                            setState(() {
+                              cvvController.text = value;
+                            });
+                          }
+                        : null,
+        focusNode: textFieldType == TextFieldType.cvv ? _focusNode : null,
+        maxLength: textFieldType == TextFieldType.cvv ? 3 : null,
         onSaved: textFieldType == TextFieldType.cardNumber
             ? (value) {
                 cardNumberController.text = value;
