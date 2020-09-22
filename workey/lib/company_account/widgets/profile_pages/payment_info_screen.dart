@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/widgets/payment_screen_widgets/credit_card_handler.dart';
 
 import '../../widgets/payment_screen_widgets/credit_card.dart';
 import '../../widgets/payment_screen_widgets/credit_card_type.dart';
@@ -24,10 +25,10 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
 
   var _isLodding = false;
 
-  String cardNumber = "";
-  String cardHolderName = "";
-  String expiryDate = "";
-  String cvv = "";
+  // String cardNumber = "";
+  // String cardHolderName = "";
+  // String expiryDate = "";
+  // String cvv = "";
   bool showBack = false;
 
   var showCvv = true;
@@ -118,9 +119,9 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                   cardNumber: cardNumberController.text,
                   cardExpiry: expiryDateController.text,
                   cardHolderName: cardHolderNameController.text,
-                  cardType: CardType.visa,
+                  cardType: getCardType(cardNumberController.text),
                   cvv: cvvController.text,
-                  bankName: "Axis Bank",
+                  bankName: 'Axis Bank',
                   showBackSide: showBack,
                   frontBackground: CreditCardBackground.black,
                   backBackground: CreditCardBackground.white,
