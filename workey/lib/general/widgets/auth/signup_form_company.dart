@@ -6,7 +6,7 @@ import 'package:workey/company_account/widgets/profile_picture.dart';
 import '../previous_next_button.dart';
 
 class SignUpFormCompany extends StatefulWidget {
-  final void Function(
+  final void Function({
     String email,
     String password,
     String firstName,
@@ -14,7 +14,7 @@ class SignUpFormCompany extends StatefulWidget {
     String companyName,
     String companyLogo,
     BuildContext ctx,
-  ) submitFn;
+  }) submitFn;
 
   SignUpFormCompany(this.submitFn);
 
@@ -37,12 +37,6 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
 
   final _formKey = GlobalKey<FormState>();
 
-  var _userEmail = '';
-  var _userPassword = '';
-  var _userFirstName = '';
-  var _userLastName = '';
-  var _companyName = '';
-
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
@@ -50,13 +44,13 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
     if (isValid) {
       _formKey.currentState.save();
       widget.submitFn(
-        _userEmail.trim(),
-        _userPassword.trim(),
-        _userFirstName.trim(),
-        _userLastName.trim(),
-        _companyName.trim(),
-        _userImageFile.toString(),
-        context,
+        email: emailTextController.text.trim(),
+        password: passwordTextController.text.trim(),
+        firstName: firstNameTextController.text.trim(),
+        lastName: lastNameTextController.text.trim(),
+        companyName: companyNameTextController.text.trim(),
+        companyLogo: _userImageFile == null ? null : _userImageFile.toString(),
+        ctx: context,
       );
       print(_userImageFile.toString());
     }
@@ -176,7 +170,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                           return null;
                         },
                         onSaved: (value) {
-                          _userEmail = value;
+                          emailTextController.text = value;
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -199,7 +193,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                           return null;
                         },
                         onSaved: (value) {
-                          _userFirstName = value;
+                          firstNameTextController.text = value;
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -222,7 +216,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                           return null;
                         },
                         onSaved: (value) {
-                          _userLastName = value;
+                          lastNameTextController.text = value;
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -245,7 +239,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                           return null;
                         },
                         onSaved: (value) {
-                          _userPassword = value;
+                          passwordTextController.text = value;
                         },
                         obscureText: true,
                         decoration: InputDecoration(
