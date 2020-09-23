@@ -27,11 +27,6 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
 
   var _isLodding = false;
 
-  // String cardNumber = "";
-  // String cardHolderName = "";
-  // String expiryDate = "";
-  // String cvv = "";
-
   bool showBack = false;
 
   var showCvv = true;
@@ -169,80 +164,6 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                                 'CVV', TextFieldType.cvv, cvvController),
                           ),
                         )
-                        // buildTextField(
-                        //   'E-mail',
-                        //   TextFieldType.email,
-                        //   emailTextController,
-                        // ),
-                        // Container(
-                        //   alignment: Alignment.bottomLeft,
-                        //   margin: EdgeInsets.all(10),
-                        //   child: FlatButton(
-                        //     onPressed: () {
-                        //       showModalBottomSheet(
-                        //         elevation: 5,
-                        //         context: context,
-                        //         builder: (_) {
-                        //           return GestureDetector(
-                        //             onTap: () {},
-                        //             child: SingleChildScrollView(
-                        //               child: Container(
-                        //                 padding: EdgeInsets.all(10),
-                        //                 height:
-                        //                     MediaQuery.of(context).size.height *
-                        //                         0.75,
-                        //                 child: Form(
-                        //                   key: _formKeyForCvv,
-                        //                   child: Column(
-                        //                     children: [
-                        //                       Flexible(
-                        //                         child: buildTextField(
-                        //                           'CVV',
-                        //                           TextFieldType.cvv,
-                        //                           cvvController,
-                        //                         ),
-                        //                       ),
-
-                        //                       // Flexible(
-                        //                       //   child: Container(
-                        //                       //     alignment:
-                        //                       //         Alignment.bottomRight,
-                        //                       //     padding: EdgeInsets.all(20),
-                        //                       //     child: RaisedButton(
-                        //                       //       onPressed: () {
-                        //                       //         _tryChangePassword();
-                        //                       //       },
-                        //                       //       shape:
-                        //                       //           RoundedRectangleBorder(
-                        //                       //         borderRadius:
-                        //                       //             BorderRadius
-                        //                       //                 .circular(10),
-                        //                       //       ),
-                        //                       //       child: Text(
-                        //                       //         'Confirm Change',
-                        //                       //         style: TextStyle(
-                        //                       //             fontSize: 16),
-                        //                       //       ),
-                        //                       //     ),
-                        //                       //   ),
-                        //                       // ),
-                        //                     ],
-                        //                   ),
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //             behavior: HitTestBehavior.opaque,
-                        //           );
-                        //         },
-                        //       );
-                        //     },
-                        //     color: Colors.grey,
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(10),
-                        //     ),
-                        //     child: Text('Change password'),
-                        //   ),
-                        // )
                       ],
                     ),
                   ),
