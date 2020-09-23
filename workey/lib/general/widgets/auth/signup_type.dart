@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:workey/general/models/company_account_model.dart';
@@ -21,7 +23,7 @@ class SignUpType extends StatefulWidget {
     String firstName,
     String lastName,
     String companyName,
-    String companyLogo,
+    File imageFile,
     BuildContext ctx,
   }) submitFnCompany;
 

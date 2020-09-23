@@ -49,18 +49,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
     if (isValid) {
       _formKey.currentState.save();
-      // CompanyAccountModel userAccount = CompanyAccountModel(
-      //   companyEmail: emailTextController.text.trim(),
-      //   companyName: companyNameTextController.text.trim(),
-      //   owenrFirstName: firstNameTextController.text.trim(),
-      //   owenrLastName: lastNameTextController.text.trim(),
-      //   companyLogo: _userImageFile.toString(),
-      // );
       userAccount.companyEmail = emailTextController.text.trim();
       userAccount.companyName = companyNameTextController.text.trim();
       userAccount.owenrFirstName = firstNameTextController.text.trim();
       userAccount.owenrLastName = lastNameTextController.text.trim();
-      userAccount.companyLogo = _userImageFile.toString();
+      userAccount.setImageFile(_userImageFile);
       try {
         await widget.auth.updateCurrUserData(userAccount);
       } on PlatformException catch (err) {

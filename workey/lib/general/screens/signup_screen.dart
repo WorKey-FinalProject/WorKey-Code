@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -21,7 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       String firstName,
       String lastName,
       String companyName,
-      String companyLogo,
+      File imageFile,
       BuildContext ctx,
     }) async {
       try {
@@ -31,7 +33,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           owenrFirstName: firstName,
           owenrLastName: lastName,
           companyName: companyName,
-          companyLogo: companyLogo,
+          companyLogo: '',
           location: '',
         );
       } on PlatformException catch (err) {

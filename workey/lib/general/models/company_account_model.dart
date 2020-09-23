@@ -12,6 +12,8 @@ class CompanyAccountModel {
   String owenrLastName;
   String dateOfCreation;
 
+  File imageFile;
+
   CompanyAccountModel({
     this.id,
     @required this.companyEmail,
@@ -23,12 +25,20 @@ class CompanyAccountModel {
     @required this.dateOfCreation,
   });
 
+  void setImageFile(File file) {
+    imageFile = file;
+  }
+
+  File get getImageFile {
+    return imageFile;
+  }
+
   Map<String, Object> toJson() {
     return {
       'companyEmail': this.companyEmail,
       'companyName': this.companyName,
       'location': this.location,
-      'companyLogo': this.companyLogo.toString(),
+      'companyLogo': this.companyLogo,
       'owenrFirstName': this.owenrFirstName,
       'owenrLastName': this.owenrLastName,
       'dateOfCreation': this.dateOfCreation,
