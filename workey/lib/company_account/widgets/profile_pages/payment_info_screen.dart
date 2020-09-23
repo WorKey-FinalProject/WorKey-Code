@@ -11,7 +11,6 @@ class PaymentInfoScreen extends StatefulWidget {
 
 class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   final _formKey = GlobalKey<FormState>();
-
   final cardNumberController = TextEditingController();
 
   //String cardNumber = '';
