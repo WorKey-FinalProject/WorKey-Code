@@ -219,18 +219,16 @@ class Auth with ChangeNotifier {
       String type;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
-
-        // if (userNewData.companyLogo != null) {
-        //   final ref = FirebaseStorage.instance
-        //       .ref()
-        //       .child('company_account_logo')
-        //       .child(user.uid + '.jpg');
-        //   await ref.putFile(File(userNewData.companyLogo)).onComplete;
-        //   print('File Uploaded');
-
-        //   final url = await ref.getDownloadURL();
-        //   userNewData.companyLogo = url;
-        // }
+        if (userNewData.companyLogo != null) {
+          final ref = FirebaseStorage.instance
+              .ref()
+              .child('company_account_logo')
+              .child(user.uid + '.jpg');
+          await ref.putFile(File(userNewData.companyLogo)).onComplete;
+          print('File Uploaded');
+          final url = await ref.getDownloadURL();
+          userNewData.companyLogo = url;
+        }
 
         await user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {

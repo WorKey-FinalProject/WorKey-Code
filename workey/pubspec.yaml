@@ -43,6 +43,7 @@ dependencies:
   material_design_icons_flutter: ^4.0.5555
   google_fonts: ^1.1.0
   provider: ^4.3.2+1
+  in_app_purchase: ^0.3.4+9
 
 
 
