@@ -39,7 +39,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final verifyPasswordTextController = TextEditingController();
   String _userImage;
 
-  bool showPassword = true;
+  var showPassword = true;
   final _formKey = GlobalKey<FormState>();
   final _formKeyForPassword = GlobalKey<FormState>();
 
