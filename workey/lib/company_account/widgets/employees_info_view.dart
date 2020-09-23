@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EmployeesInfoView extends StatefulWidget {
-  final String name = 'Info';
+  String name = 'Info';
 
   String get getName {
     return this.name;
@@ -12,13 +12,15 @@ class EmployeesInfoView extends StatefulWidget {
 }
 
 class _EmployeesInfoViewState extends State<EmployeesInfoView> {
+  //TODO:get employees data.
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         child: Column(
           children: [
-            Text('Employees Name:'),
+            Text('Name: '),
           ],
         ),
       ),
