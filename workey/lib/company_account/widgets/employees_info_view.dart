@@ -12,7 +12,7 @@ class EmployeesInfoView extends StatelessWidget {
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text('Info'),
+          child: Text(getName),
         ),
       ),
     );
