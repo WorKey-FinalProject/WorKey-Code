@@ -9,7 +9,7 @@ class ProfilePicture extends StatefulWidget {
   final Function onSelectImage;
   final double size;
   final bool isEditable;
-  final String imageUrl;
+  String imageUrl;
 
   ProfilePicture({
     this.onSelectImage,
@@ -37,16 +37,14 @@ class _ProfilePictureState extends State<ProfilePicture> {
     final pickedImageFile = File(pickedImage.path);
     setState(() {
       _pickedImage = pickedImageFile;
+      widget.imageUrl = '';
     });
-    // setState(() {
-    //   widget.imageUrl = pickedImageFile;
-    // });
+
     widget.onSelectImage(_pickedImage);
   }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.imageUrl);
     return Container(
       alignment: Alignment.center,
       padding: widget.isEditable ? const EdgeInsets.all(16) : null,
@@ -82,7 +80,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 //     : Image.network(
                 //         widget.imageUrl,
                 //       ),
-                child: widget.imageUrl != ''
+                child: widget.imageUrl == ''
                     ? _pickedImage != null
                         ? Image.file(
                             _pickedImage,
@@ -144,27 +142,45 @@ class _ProfilePictureState extends State<ProfilePicture> {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              IconButton(
-                icon: Icon(
-                  Icons.add_a_photo,
-                  color: Theme.of(context).accentColor,
-                ),
-                onPressed: () {
-                  _imageSource = ImageSource.camera;
-                  _takePicture();
-                  Navigator.of(context).pop();
-                },
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.add_a_photo,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onPressed: () {
+                      _imageSource = ImageSource.camera;
+                      _takePicture();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  Text(
+                    'Camera',
+                    style: TextStyle(color: Theme.of(context).accentColor),
+                  ),
+                ],
               ),
-              IconButton(
-                icon: Icon(
-                  Icons.wallpaper,
-                  color: Theme.of(context).accentColor,
-                ),
-                onPressed: () {
-                  _imageSource = ImageSource.gallery;
-                  _takePicture();
-                  Navigator.of(context).pop();
-                },
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.wallpaper,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onPressed: () {
+                      _imageSource = ImageSource.gallery;
+                      _takePicture();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  Text(
+                    'Gallery',
+                    style: TextStyle(color: Theme.of(context).accentColor),
+                  ),
+                ],
               ),
             ],
           ),

@@ -18,6 +18,9 @@ class Auth with ChangeNotifier {
   AccountTypeChosen accountType;
   User user;
 
+  String companyAccountImagePath = 'company_account_logo';
+  String personalAccountImagePath = 'personal_account_pic';
+
   CompanyAccountModel companyAccountModel = CompanyAccountModel(
     companyEmail: null,
     companyName: null,
@@ -83,6 +86,7 @@ class Auth with ChangeNotifier {
     String companyLogo,
     String owenrFirstName,
     String owenrLastName,
+    File imageFile,
   }) async {
     try {
       UserCredential userCredential =
@@ -91,18 +95,23 @@ class Auth with ChangeNotifier {
         password: password,
       );
       user = userCredential.user;
-      if (companyLogo != null) {
+
+      ///Profile Pic Upload
+      if (imageFile != null) {
         final ref = FirebaseStorage.instance
             .ref()
-            .child('company_account_logo')
+            .child(companyAccountImagePath)
             .child(user.uid + '.jpg');
-
-        await ref.putFile(File(companyLogo)).onComplete;
+        await ref
+            .putFile(
+              imageFile,
+            )
+            .onComplete;
+        print('File Uploaded');
 
         final url = await ref.getDownloadURL();
         companyLogo = url;
       }
-
       companyAccountModel = CompanyAccountModel(
         id: userCredential.user.uid,
         companyEmail: companyEmail,
@@ -110,7 +119,7 @@ class Auth with ChangeNotifier {
         owenrFirstName: owenrFirstName,
         owenrLastName: owenrLastName,
         dateOfCreation: DateTime.now().toString(),
-        companyLogo: companyLogo.toString(),
+        companyLogo: companyLogo,
         location: location,
       );
 
@@ -217,27 +226,38 @@ class Auth with ChangeNotifier {
     try {
       User user = FirebaseAuth.instance.currentUser;
       String type;
+      String imagePathFolder;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
-        if (userNewData.companyLogo != null) {
-          final ref = FirebaseStorage.instance
-              .ref()
-              .child('company_account_logo')
-              .child(user.uid + '.jpg');
-          await ref.putFile(File(userNewData.companyLogo)).onComplete;
-          print('File Uploaded');
-          final url = await ref.getDownloadURL();
-          userNewData.companyLogo = url;
-        }
 
+        imagePathFolder = companyAccountImagePath;
         await user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {
         type = 'Personal Accounts';
+        imagePathFolder = personalAccountImagePath;
         user.updateEmail(userNewData.email);
       } else {
         print("problem with updateCurrUserData");
         return null;
       }
+
+      ///Profile Pic Upload
+      if (userNewData.getImageFile != null) {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child(imagePathFolder)
+            .child(user.uid + '.jpg');
+        await ref
+            .putFile(
+              userNewData.imageFile,
+            )
+            .onComplete;
+        print('File Uploaded');
+
+        final url = await ref.getDownloadURL();
+        userNewData.companyLogo = url;
+      }
+
       await dbRef
           .child('Users')
           .child(type)
@@ -246,6 +266,7 @@ class Auth with ChangeNotifier {
     } on Exception catch (error) {
       throw error;
     }
+    notifyListeners();
   }
 
   Future<void> deleteCurrUserData() async {
