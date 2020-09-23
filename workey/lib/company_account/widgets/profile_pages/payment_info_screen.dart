@@ -18,6 +18,7 @@ class PaymentInfoScreen extends StatefulWidget {
 }
 
 class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
+
   final cardNumberController = TextEditingController();
   final expiryDateController = TextEditingController();
   final cardHolderNameController = TextEditingController();
@@ -29,6 +30,9 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   // String cardHolderName = "";
   // String expiryDate = "";
   // String cvv = "";
+
+  final _formKey = GlobalKey<FormState>();
+
   bool showBack = false;
 
   var showCvv = true;
@@ -36,6 +40,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   final _formKeyForCvv = GlobalKey<FormState>();
 
   FocusNode _focusNode;
+
 
   //  Future<void> _trySubmit() async {
   //   final isValid = _formKey.currentState.validate();
@@ -80,6 +85,15 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   //   }
   // }
 
+  void _trySubmit() {
+    final isValid = _formKey.currentState.validate();
+
+    if (isValid) {
+      _formKey.currentState.save();
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -94,24 +108,32 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   @override
   void dispose() {
     cardNumberController.dispose();
+
     expiryDateController.dispose();
     cardHolderNameController.dispose();
     cvvController.dispose();
+
     _focusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
     return _isLodding
         ? Center(
             child: CircularProgressIndicator(),
           )
         : SingleChildScrollView(
+
+          Form(
+            key: _formKey,
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+
                 SizedBox(
                   height: 40,
                 ),
@@ -425,6 +447,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
             color: Colors.black,
           ),
         ),
+
       ),
     );
   }

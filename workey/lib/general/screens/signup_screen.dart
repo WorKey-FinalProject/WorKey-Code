@@ -15,7 +15,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
-    void _submitAuthFormCompany(
+    void _submitAuthFormCompany({
       String email,
       String password,
       String firstName,
@@ -23,7 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       String companyName,
       String companyLogo,
       BuildContext ctx,
-    ) async {
+    }) async {
       try {
         await Provider.of<Auth>(context, listen: false).signUpCompanyAccount(
           companyEmail: email,
