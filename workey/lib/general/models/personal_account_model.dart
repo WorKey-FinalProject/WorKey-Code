@@ -9,7 +9,7 @@ class PersonalAccountModel {
   String phoneNumber;
   String dateOfBirth;
   String address;
-  String occupation;
+
   String faceRecognitionPicture;
   String fingerPrint;
   String profilePicture;
@@ -23,7 +23,6 @@ class PersonalAccountModel {
     this.phoneNumber,
     this.dateOfBirth,
     this.address,
-    this.occupation,
     this.faceRecognitionPicture,
     this.fingerPrint,
     this.profilePicture,
@@ -42,7 +41,6 @@ class PersonalAccountModel {
       'phoneNumber': this.phoneNumber,
       'dateOfBirth': this.dateOfBirth,
       'address': this.address,
-      'occupation': this.occupation,
       'faceRecognitionPicture': this.faceRecognitionPicture,
       'fingerPrint': this.fingerPrint,
       'profilePicture': this.profilePicture,
@@ -58,7 +56,6 @@ class PersonalAccountModel {
     address = snapshot['address'] ?? '';
     dateOfBirth = snapshot['dateOfBirth'] ?? '';
     faceRecognitionPicture = snapshot['faceRecognitionPicture'] ?? '';
-    occupation = snapshot['occupation'] ?? '';
     phoneNumber = snapshot['phoneNumber'] ?? '';
     profilePicture = snapshot['profilePicture'] ?? '';
     fingerPrint = snapshot['fingerPrint'] ?? '';
@@ -73,7 +70,6 @@ class PersonalAccountModel {
     this.fingerPrint = personalUserModel.fingerPrint;
     this.firstName = personalUserModel.firstName;
     this.lastName = personalUserModel.lastName;
-    this.occupation = personalUserModel.occupation;
     this.phoneNumber = personalUserModel.phoneNumber;
     this.profilePicture = personalUserModel.profilePicture;
   }

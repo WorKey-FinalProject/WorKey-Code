@@ -36,6 +36,7 @@ class Auth with ChangeNotifier {
     lastName: null,
   );
 
+  /// signUpPersonalAccount
   Future<void> signUpPersonalAccount({
     String email,
     String password,
@@ -44,25 +45,43 @@ class Auth with ChangeNotifier {
     String phoneNumber,
     String dateOfBirth,
     String address,
-    String occupation,
     String faceRecognitionPicture,
     String fingerPrint,
     String profilePicture,
+    File imageFile,
   }) async {
     try {
-      UserCredential authResult = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      ///Profile Pic Upload
+      if (imageFile != null) {
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child(companyAccountImagePath)
+            .child(userCredential.user.uid + '.jpg');
+        await ref
+            .putFile(
+              imageFile,
+            )
+            .onComplete;
+        print('File Uploaded');
+
+        final url = await ref.getDownloadURL();
+        profilePicture = url;
+      }
+
       personalAccountModel = PersonalAccountModel(
-        id: authResult.user.uid,
+        id: userCredential.user.uid,
         email: email,
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
         dateOfBirth: dateOfBirth,
         address: address,
-        occupation: occupation,
         faceRecognitionPicture: faceRecognitionPicture,
         profilePicture: profilePicture,
         fingerPrint: fingerPrint,
@@ -71,13 +90,14 @@ class Auth with ChangeNotifier {
       await dbRef
           .child('Users')
           .child('Personal Accounts')
-          .child(authResult.user.uid)
+          .child(userCredential.user.uid)
           .set(personalAccountModel.toJson());
     } on Exception catch (error) {
       print(error);
     }
   }
 
+  /// signUpCompanyAccount
   Future<void> signUpCompanyAccount({
     String companyEmail,
     String password,
@@ -94,14 +114,13 @@ class Auth with ChangeNotifier {
         email: companyEmail,
         password: password,
       );
-      user = userCredential.user;
 
       ///Profile Pic Upload
       if (imageFile != null) {
         final ref = FirebaseStorage.instance
             .ref()
             .child(companyAccountImagePath)
-            .child(user.uid + '.jpg');
+            .child(userCredential.user.uid + '.jpg');
         await ref
             .putFile(
               imageFile,
@@ -112,6 +131,7 @@ class Auth with ChangeNotifier {
         final url = await ref.getDownloadURL();
         companyLogo = url;
       }
+
       companyAccountModel = CompanyAccountModel(
         id: userCredential.user.uid,
         companyEmail: companyEmail,
@@ -157,6 +177,7 @@ class Auth with ChangeNotifier {
     );
   }
 
+  /// findCurrAccountType
   Future<AccountTypeChosen> findCurrAccountType(User user) async {
     this.user = user;
     await dbRef.child('Users').once().then((DataSnapshot dataSnapshot) {
@@ -178,6 +199,7 @@ class Auth with ChangeNotifier {
     return accountType;
   }
 
+  /// getCurrUserData
   Future<dynamic> getCurrUserData() async {
     dynamic dynamicUser;
     try {
@@ -212,6 +234,7 @@ class Auth with ChangeNotifier {
     return dynamicUser;
   }
 
+  /// updateCurrUserPassword
   Future<void> updateCurrUserPassword(String newPassword) async {
     try {
       User user = FirebaseAuth.instance.currentUser;
@@ -268,6 +291,7 @@ class Auth with ChangeNotifier {
     notifyListeners();
   }
 
+  /// deleteCurrUserData
   Future<void> deleteCurrUserData() async {
     try {
       String type;

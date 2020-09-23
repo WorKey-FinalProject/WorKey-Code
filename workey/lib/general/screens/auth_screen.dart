@@ -53,7 +53,10 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: AuthForm(_submitAuthForm),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+        child: AuthForm(_submitAuthForm),
+      ),
     );
   }
 }
