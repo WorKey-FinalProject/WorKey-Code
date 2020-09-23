@@ -10,12 +10,14 @@ class ProfilePicture extends StatefulWidget {
   final double size;
   final bool isEditable;
   String imageUrl;
+  File keepImageFile;
 
   ProfilePicture({
-    this.onSelectImage,
-    this.size,
-    this.isEditable,
-    this.imageUrl,
+    @required this.onSelectImage,
+    @required this.size,
+    @required this.isEditable,
+    @required this.imageUrl,
+    this.keepImageFile,
   });
 
   @override
@@ -34,6 +36,9 @@ class _ProfilePictureState extends State<ProfilePicture> {
       imageQuality: 50,
       maxWidth: 150,
     );
+    if (pickedImage == null) {
+      return;
+    }
     final pickedImageFile = File(pickedImage.path);
     setState(() {
       _pickedImage = pickedImageFile;
@@ -45,6 +50,9 @@ class _ProfilePictureState extends State<ProfilePicture> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.keepImageFile != null) {
+      _pickedImage = widget.keepImageFile;
+    }
     return Container(
       alignment: Alignment.center,
       padding: widget.isEditable ? const EdgeInsets.all(16) : null,
@@ -75,11 +83,6 @@ class _ProfilePictureState extends State<ProfilePicture> {
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(96.0),
-                // child: widget.imageUrl == ''
-                //     ? Text('Add Image')
-                //     : Image.network(
-                //         widget.imageUrl,
-                //       ),
                 child: widget.imageUrl == ''
                     ? _pickedImage != null
                         ? Image.file(

@@ -1,15 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/widgets/profile_picture.dart';
 
 import '../previous_next_button.dart';
 
 class SignUpFormPersonal extends StatefulWidget {
-  final void Function(
+  final void Function({
     String email,
     String password,
     String firstName,
     String lastName,
+    String phoneNumber,
+    String dateOfBirth,
+    String address,
+    File imageFile,
     BuildContext ctx,
-  ) submitFn;
+  }) submitFn;
 
   SignUpFormPersonal(this.submitFn);
 
@@ -18,19 +25,21 @@ class SignUpFormPersonal extends StatefulWidget {
 }
 
 class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
+  File _userImageFile;
+
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+  final verifyPasswordTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final dateOfBirthController = TextEditingController();
+  final addressController = TextEditingController();
 
   var step = 0;
-  var maxStep = 0;
+  var maxStep = 1;
 
   final _formKey = GlobalKey<FormState>();
-  var _userEmail = '';
-  var _userPassword = '';
-  var _userFirstName = '';
-  var _userLastName = '';
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
@@ -39,13 +48,21 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
     if (isValid) {
       _formKey.currentState.save();
       widget.submitFn(
-        _userEmail.trim(),
-        _userPassword.trim(),
-        _userFirstName.trim(),
-        _userLastName.trim(),
-        context,
+        email: emailTextController.text.trim(),
+        password: passwordTextController.text.trim(),
+        firstName: firstNameTextController.text.trim(),
+        lastName: lastNameTextController.text.trim(),
+        phoneNumber: phoneNumberController.text.trim(),
+        dateOfBirth: dateOfBirthController.text.trim(),
+        address: addressController.text.trim(),
+        imageFile: _userImageFile,
+        ctx: context,
       );
     }
+  }
+
+  void _selectImage(File pickedImage) {
+    _userImageFile = pickedImage;
   }
 
   void _changeStep(int step) {
@@ -77,6 +94,7 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      /// email Address
                       TextFormField(
                         controller: emailTextController,
                         validator: (value) {
@@ -86,11 +104,11 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
                           return null;
                         },
                         onSaved: (value) {
-                          _userEmail = value;
+                          emailTextController.text = value;
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'Email',
+                          labelText: 'Email',
                           icon: Icon(
                             Icons.mail,
                             color: Colors.black,
@@ -100,6 +118,105 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
                       SizedBox(
                         height: 30,
                       ),
+
+                      /// password
+                      TextFormField(
+                        controller: passwordTextController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a Password.';
+                          }
+                          if (value.length < 7) {
+                            return 'Please enter at least 7 characters.';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          passwordTextController.text = value;
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.lock,
+                            color: Colors.black,
+                          ),
+                          labelText: 'Passsword',
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+
+                      /// verify Password
+                      TextFormField(
+                        controller: verifyPasswordTextController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a password.';
+                          }
+                          if (value.length < 7) {
+                            return 'Please enter at least 7 characters.';
+                          }
+                          if (passwordTextController.text != value) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          verifyPasswordTextController.text = value;
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.lock_outline,
+                            color: Colors.black,
+                          ),
+                          labelText: 'Verify Password',
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      ProfilePicture(
+                        onSelectImage: _selectImage,
+                        size: 150,
+                        isEditable: true,
+                        imageUrl: '',
+                        keepImageFile: _userImageFile,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          PreviousNextButton(
+            changeStep: _changeStep,
+            currStep: step,
+            maxStep: maxStep,
+            formKey: _formKey,
+          ),
+        ],
+      ),
+    );
+
+    var card2 = Card(
+      margin: EdgeInsets.all(20),
+      elevation: 5,
+      child: Column(
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Container(
+                  margin: EdgeInsets.only(left: 4, right: 20),
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      /// first Name
                       TextFormField(
                         controller: firstNameTextController,
                         validator: (value) {
@@ -109,11 +226,10 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
                           return null;
                         },
                         onSaved: (value) {
-                          _userFirstName = value;
+                          firstNameTextController.text = value;
                         },
-                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'First name',
+                          labelText: 'First name',
                           icon: Icon(
                             Icons.person,
                             color: Colors.black,
@@ -121,8 +237,10 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
+
+                      /// last Name
                       TextFormField(
                         controller: lastNameTextController,
                         validator: (value) {
@@ -132,38 +250,77 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
                           return null;
                         },
                         onSaved: (value) {
-                          _userLastName = value;
+                          lastNameTextController.text = value;
                         },
-                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'Last name',
+                          labelText: 'Last name',
                           icon: Icon(
-                            Icons.person,
+                            Icons.person_outline,
                             color: Colors.black,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
+
+                      /// Phone Number
                       TextFormField(
-                        controller: passwordTextController,
-                        validator: (value) {
-                          if (value.isEmpty || value.length < 6) {
-                            return 'Please enter a valid Password.';
-                          }
-                          return null;
-                        },
+                        controller: phoneNumberController,
                         onSaved: (value) {
-                          _userPassword = value;
+                          phoneNumberController.text = value;
                         },
-                        obscureText: true,
+                        keyboardType: TextInputType.phone,
                         decoration: InputDecoration(
+                          labelText: 'Phone number',
+                          counterText: 'Optional',
+                          counterStyle: TextStyle(color: Colors.orange),
                           icon: Icon(
-                            Icons.lock,
+                            Icons.phone,
                             color: Colors.black,
                           ),
-                          hintText: 'Passsword',
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      /// Date of birth
+                      TextFormField(
+                        controller: dateOfBirthController,
+                        onSaved: (value) {
+                          dateOfBirthController.text = value;
+                        },
+                        keyboardType: TextInputType.datetime,
+                        decoration: InputDecoration(
+                          labelText: 'Date of birth',
+                          counterText: 'Optional',
+                          counterStyle: TextStyle(color: Colors.orange),
+                          icon: Icon(
+                            Icons.date_range,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      /// address
+                      TextFormField(
+                        controller: addressController,
+                        onSaved: (value) {
+                          addressController.text = value;
+                        },
+                        keyboardType: TextInputType.streetAddress,
+                        decoration: InputDecoration(
+                          labelText: 'Address',
+                          counterText: 'Optional',
+                          counterStyle: TextStyle(color: Colors.orange),
+                          icon: Icon(
+                            Icons.house_outlined,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ],
@@ -182,6 +339,6 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
       ),
     );
 
-    return card1;
+    return step == 0 ? card1 : step == 1 ? card2 : card2;
   }
 }

@@ -30,7 +30,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
   final passwordTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
-  String _userImage;
+  final verifyPasswordTextController = TextEditingController();
 
   var step = 0;
   var maxStep = 1;
@@ -42,6 +42,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
     FocusScope.of(context).unfocus();
 
     if (isValid) {
+      print('$_userImageFile --------- trySubmit :: _userImageFile');
       _formKey.currentState.save();
       widget.submitFn(
         email: emailTextController.text.trim(),
@@ -89,15 +90,6 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
         children: [
           Flexible(
             fit: FlexFit.tight,
-            child: ProfilePicture(
-              onSelectImage: _selectImage,
-              size: 150,
-              isEditable: true,
-              imageUrl: '',
-            ),
-          ),
-          Flexible(
-            fit: FlexFit.tight,
             child: Form(
               key: _formKey,
               child: SingleChildScrollView(
@@ -108,6 +100,19 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      /// Logo picture
+                      ProfilePicture(
+                        onSelectImage: _selectImage,
+                        size: 150,
+                        isEditable: true,
+                        imageUrl: '',
+                        keepImageFile: _userImageFile,
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+
+                      /// Company name
                       TextFormField(
                         controller: companyNameTextController,
                         validator: (value) {
@@ -121,7 +126,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'Enter the company name',
+                          labelText: 'Company name',
                           icon: Icon(
                             Icons.business,
                             color: Colors.black,
@@ -160,6 +165,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      /// Email
                       TextFormField(
                         controller: emailTextController,
                         validator: (value) {
@@ -173,7 +179,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'Email',
+                          labelText: 'Email',
                           icon: Icon(
                             Icons.mail,
                             color: Colors.black,
@@ -181,8 +187,10 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
+
+                      /// First name
                       TextFormField(
                         controller: firstNameTextController,
                         validator: (value) {
@@ -196,7 +204,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'First name',
+                          labelText: 'First name',
                           icon: Icon(
                             Icons.person,
                             color: Colors.black,
@@ -204,8 +212,10 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
+
+                      /// Last name
                       TextFormField(
                         controller: lastNameTextController,
                         validator: (value) {
@@ -219,21 +229,26 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                         },
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'Last name',
+                          labelText: 'Last name',
                           icon: Icon(
-                            Icons.person,
+                            Icons.person_outline,
                             color: Colors.black,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 30,
+                        height: 20,
                       ),
+
+                      /// password
                       TextFormField(
                         controller: passwordTextController,
                         validator: (value) {
-                          if (value.isEmpty || value.length < 6) {
-                            return 'Please enter a valid Password.';
+                          if (value.isEmpty) {
+                            return 'Please enter a password.';
+                          }
+                          if (value.length < 7) {
+                            return 'Please enter at least 7 characters.';
                           }
                           return null;
                         },
@@ -246,7 +261,38 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
                             Icons.lock,
                             color: Colors.black,
                           ),
-                          hintText: 'Passsword',
+                          labelText: 'Passsword',
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+
+                      /// verify Password
+                      TextFormField(
+                        controller: verifyPasswordTextController,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Please enter a Password.';
+                          }
+                          if (value.length < 7) {
+                            return 'Please enter at least 7 characters.';
+                          }
+                          if (passwordTextController.text != value) {
+                            return 'Passwords do not match';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          verifyPasswordTextController.text = value;
+                        },
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.lock_outline,
+                            color: Colors.black,
+                          ),
+                          labelText: 'Verify Password',
                         ),
                       ),
                     ],
