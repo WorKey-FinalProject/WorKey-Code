@@ -108,6 +108,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                     size: MediaQuery.of(context).size.height *
                                         0.14,
                                     isEditable: false,
+                                    imageUrl: '',
                                   ),
                                 ),
                                 Padding(

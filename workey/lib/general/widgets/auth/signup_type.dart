@@ -27,13 +27,17 @@ class SignUpType extends StatefulWidget {
     BuildContext ctx,
   }) submitFnCompany;
 
-  final void Function(
+  final void Function({
     String email,
     String password,
     String firstName,
     String lastName,
+    String phoneNumber,
+    String dateOfBirth,
+    String address,
+    File imageFile,
     BuildContext ctx,
-  ) submitFnPersonal;
+  }) submitFnPersonal;
 
   SignUpType(this.submitFnCompany, this.submitFnPersonal);
 

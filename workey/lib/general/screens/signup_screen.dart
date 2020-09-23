@@ -35,6 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           companyName: companyName,
           companyLogo: '',
           location: '',
+          imageFile: imageFile,
         );
       } on PlatformException catch (err) {
         var message = 'An error occurred, please check your credentials!';
@@ -55,13 +56,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Navigator.of(context).pop();
     }
 
-    void _submitAuthFormPersonal(
+    void _submitAuthFormPersonal({
       String email,
       String password,
       String firstName,
       String lastName,
+      String phoneNumber = '',
+      String dateOfBirth = '',
+      String address = '',
+      File imageFile,
       BuildContext ctx,
-    ) async {
+    }) async {
       try {
         await Provider.of<Auth>(context, listen: false).signUpPersonalAccount(
           email: email,
@@ -69,12 +74,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           firstName: firstName,
           lastName: lastName,
           profilePicture: '',
-          phoneNumber: '',
-          occupation: '',
-          dateOfBirth: '',
-          address: '',
+          phoneNumber: phoneNumber,
+          dateOfBirth: dateOfBirth,
+          address: address,
           faceRecognitionPicture: '',
           fingerPrint: '',
+          imageFile: imageFile,
         );
       } on PlatformException catch (err) {
         var message = 'An error occurred, please check your credentials!';
@@ -97,7 +102,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SignUpType(_submitAuthFormCompany, _submitAuthFormPersonal),
+      body: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+          child: SignUpType(_submitAuthFormCompany, _submitAuthFormPersonal)),
     );
   }
 }
