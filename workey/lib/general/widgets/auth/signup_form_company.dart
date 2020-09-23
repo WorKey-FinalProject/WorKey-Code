@@ -12,7 +12,7 @@ class SignUpFormCompany extends StatefulWidget {
     String firstName,
     String lastName,
     String companyName,
-    String companyLogo,
+    File imageFile,
     BuildContext ctx,
   }) submitFn;
 
@@ -49,10 +49,9 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
         firstName: firstNameTextController.text.trim(),
         lastName: lastNameTextController.text.trim(),
         companyName: companyNameTextController.text.trim(),
-        companyLogo: _userImageFile == null ? null : _userImageFile.toString(),
+        imageFile: _userImageFile,
         ctx: context,
       );
-      print(_userImageFile.toString());
     }
   }
 
@@ -94,7 +93,7 @@ class _SignUpFormCompanyState extends State<SignUpFormCompany> {
               onSelectImage: _selectImage,
               size: 150,
               isEditable: true,
-              imageUrl: _userImage,
+              imageUrl: '',
             ),
           ),
           Flexible(
