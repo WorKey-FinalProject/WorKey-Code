@@ -13,7 +13,7 @@ class ProfilePicture extends StatefulWidget {
   File keepImageFile;
 
   ProfilePicture({
-    @required this.onSelectImage,
+    this.onSelectImage,
     @required this.size,
     @required this.isEditable,
     @required this.imageUrl,
