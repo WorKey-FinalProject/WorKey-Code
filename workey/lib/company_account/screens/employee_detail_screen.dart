@@ -81,14 +81,23 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                                   context),
                         ),
                         SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          sliver: SliverFixedExtentList(
-                            itemExtent: 48.0,
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return tab;
-                              },
-                              childCount: 1,
+                          padding: const EdgeInsets.only(top: 8.0),
+                          // sliver: SliverFixedExtentList(
+                          //   itemExtent: 48.0,
+                          //   delegate: SliverChildBuilderDelegate(
+                          //     (BuildContext context, int index) {
+                          //       return Container(
+                          //         height: 1800,
+                          //         child: tab,
+                          //       );
+                          //     },
+                          //     childCount: 1,
+                          //   ),
+                          // ),
+                          sliver: SliverToBoxAdapter(
+                            child: Container(
+                              height: 500,
+                              child: tab,
                             ),
                           ),
                         ),

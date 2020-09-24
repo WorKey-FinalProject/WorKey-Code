@@ -6,49 +6,49 @@ Widget getCardTypeIcon({CardType cardType, String cardNumber}) {
   switch (cardType == null ? getCardType(cardNumber) : cardType) {
     case CardType.americanExpress:
       return Image.asset(
-        "assets/images/american_express.png",
+        'assets/images/american_express.png',
         width: 55,
         height: 40,
       );
     case CardType.dinersClub:
       return Image.asset(
-        "assets/images/diners_club.png",
+        'assets/images/diners_club.png',
         width: 40,
         height: 40,
       );
     case CardType.discover:
       return Image.asset(
-        "assets/images/discover.png",
+        'assets/images/discover.png',
         width: 70,
         height: 50,
       );
     case CardType.jcb:
       return Image.asset(
-        "assets/images/jcb.png",
+        'assets/images/jcb.png',
         width: 40,
         height: 40,
       );
     case CardType.masterCard:
       return Image.asset(
-        "assets/images/master_card.png",
+        'assets/images/master_card.png',
         width: 55,
         height: 40,
       );
     case CardType.maestro:
       return Image.asset(
-        "assets/images/maestro.png",
+        'assets/images/maestro.png',
         width: 55,
         height: 40,
       );
     case CardType.rupay:
       return Image.asset(
-        "assets/images/rupay.png",
+        'assets/images/rupay.png',
         width: 80,
         height: 50,
       );
     case CardType.visa:
       return Image.asset(
-        "assets/images/visa.png",
+        'assets/images/visa.png',
         width: 55,
         height: 40,
       );

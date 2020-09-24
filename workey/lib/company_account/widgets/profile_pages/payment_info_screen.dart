@@ -27,11 +27,6 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
 
   var _isLodding = false;
 
-  // String cardNumber = "";
-  // String cardHolderName = "";
-  // String expiryDate = "";
-  // String cvv = "";
-
   bool showBack = false;
 
   var showCvv = true;
@@ -169,171 +164,33 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                                 'CVV', TextFieldType.cvv, cvvController),
                           ),
                         )
-                        // buildTextField(
-                        //   'E-mail',
-                        //   TextFieldType.email,
-                        //   emailTextController,
-                        // ),
-                        // Container(
-                        //   alignment: Alignment.bottomLeft,
-                        //   margin: EdgeInsets.all(10),
-                        //   child: FlatButton(
-                        //     onPressed: () {
-                        //       showModalBottomSheet(
-                        //         elevation: 5,
-                        //         context: context,
-                        //         builder: (_) {
-                        //           return GestureDetector(
-                        //             onTap: () {},
-                        //             child: SingleChildScrollView(
-                        //               child: Container(
-                        //                 padding: EdgeInsets.all(10),
-                        //                 height:
-                        //                     MediaQuery.of(context).size.height *
-                        //                         0.75,
-                        //                 child: Form(
-                        //                   key: _formKeyForCvv,
-                        //                   child: Column(
-                        //                     children: [
-                        //                       Flexible(
-                        //                         child: buildTextField(
-                        //                           'CVV',
-                        //                           TextFieldType.cvv,
-                        //                           cvvController,
-                        //                         ),
-                        //                       ),
-
-                        //                       // Flexible(
-                        //                       //   child: Container(
-                        //                       //     alignment:
-                        //                       //         Alignment.bottomRight,
-                        //                       //     padding: EdgeInsets.all(20),
-                        //                       //     child: RaisedButton(
-                        //                       //       onPressed: () {
-                        //                       //         _tryChangePassword();
-                        //                       //       },
-                        //                       //       shape:
-                        //                       //           RoundedRectangleBorder(
-                        //                       //         borderRadius:
-                        //                       //             BorderRadius
-                        //                       //                 .circular(10),
-                        //                       //       ),
-                        //                       //       child: Text(
-                        //                       //         'Confirm Change',
-                        //                       //         style: TextStyle(
-                        //                       //             fontSize: 16),
-                        //                       //       ),
-                        //                       //     ),
-                        //                       //   ),
-                        //                       // ),
-                        //                     ],
-                        //                   ),
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //             behavior: HitTestBehavior.opaque,
-                        //           );
-                        //         },
-                        //       );
-                        //     },
-                        //     color: Colors.grey,
-                        //     shape: RoundedRectangleBorder(
-                        //       borderRadius: BorderRadius.circular(10),
-                        //     ),
-                        //     child: Text('Change password'),
-                        //   ),
-                        // )
                       ],
                     ),
                   ),
                 ),
                 Container(
+                  alignment: Alignment.center,
                   margin: EdgeInsets.all(10),
-                  // child: RaisedButton(
-                  //   onPressed: () {
-                  //     LoadingOnScreenIndicator(context);
-                  //     _trySubmit();
-                  //   },
-                  //   padding: EdgeInsets.symmetric(horizontal: 50),
-                  //   elevation: 2,
-                  //   shape: RoundedRectangleBorder(
-                  //     borderRadius: BorderRadius.circular(20),
-                  //   ),
-                  child: Text(
-                    'SAVE',
-                    style: TextStyle(
-                      fontSize: 14,
-                      letterSpacing: 2.2,
-                      color: Colors.white,
+                  child: RaisedButton(
+                    onPressed: () {
+                      loadingOnScreenIndicator(context);
+                      _trySubmit();
+                    },
+                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'SAVE',
+                      style: TextStyle(
+                        fontSize: 14,
+                        letterSpacing: 2.2,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-
-                // SizedBox(
-                //   height: 40,
-                // ),
-                // Column(
-                //   mainAxisAlignment: MainAxisAlignment.start,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: <Widget>[
-                //     Container(
-                //       margin: EdgeInsets.symmetric(
-                //         horizontal: 20,
-                //       ),
-                //       child: TextFormField(
-                //         decoration: InputDecoration(hintText: "Card Number"),
-                //         maxLength: 19,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             cardNumber = value;
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.symmetric(
-                //         horizontal: 20,
-                //       ),
-                //       child: TextFormField(
-                //         decoration: InputDecoration(hintText: "Card Expiry"),
-                //         maxLength: 5,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             expiryDate = value;
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //     Container(
-                //       margin: EdgeInsets.symmetric(
-                //         horizontal: 20,
-                //       ),
-                //       child: TextFormField(
-                //         decoration:
-                //             InputDecoration(hintText: "Card Holder Name"),
-                //         onChanged: (value) {
-                //           setState(() {
-                //             cardHolderName = value;
-                //           });
-                //         },
-                //       ),
-                //     ),
-                //     Container(
-                //       margin:
-                //           EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                //       child: TextFormField(
-                //         decoration: InputDecoration(hintText: "CVV"),
-                //         maxLength: 3,
-                //         onChanged: (value) {
-                //           setState(() {
-                //             cvv = value;
-                //           });
-                //         },
-                //         focusNode: _focusNode,
-                //       ),
-                //     ),
-                //   ],
-                // )
               ],
             ),
           );
@@ -374,7 +231,9 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                           }
                         : null,
         focusNode: textFieldType == TextFieldType.cvv ? _focusNode : null,
-        maxLength: textFieldType == TextFieldType.cvv ? 3 : null,
+        maxLength: textFieldType == TextFieldType.cvv
+            ? 3
+            : textFieldType == TextFieldType.expiryDate ? 5 : null,
         onSaved: textFieldType == TextFieldType.cardNumber
             ? (value) {
                 cardNumberController.text = value;
@@ -438,6 +297,18 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  loadingOnScreenIndicator(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 }
