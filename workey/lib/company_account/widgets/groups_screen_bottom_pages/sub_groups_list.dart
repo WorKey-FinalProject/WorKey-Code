@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/screens/add_workgroup_screen.dart';
 import 'package:workey/company_account/widgets/profile_picture.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
@@ -25,7 +26,14 @@ class _SubGroupsListState extends State<SubGroupsList> {
       alignment:
           subGroupsList.isEmpty ? Alignment.center : Alignment.bottomRight,
       child: RawMaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddWorkGroupScreen(),
+            ),
+          );
+        },
         elevation: 2.0,
         fillColor: Theme.of(context).accentColor,
         child: Icon(
