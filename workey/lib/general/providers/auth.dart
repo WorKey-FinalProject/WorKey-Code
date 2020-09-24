@@ -252,6 +252,7 @@ class Auth with ChangeNotifier {
       String imagePathFolder;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
+
         imagePathFolder = companyAccountImagePath;
         await user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {

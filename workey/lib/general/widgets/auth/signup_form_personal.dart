@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:workey/company_account/widgets/profile_picture.dart';
-
 import '../previous_next_button.dart';
 
 class SignUpFormPersonal extends StatefulWidget {

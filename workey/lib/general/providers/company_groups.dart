@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/services.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/shift_model.dart';
@@ -53,6 +54,16 @@ class CompanyGroups with ChangeNotifier {
 
   GroupEmployeeModel findEmployeeById(String id) {
     return _employeeList.firstWhere((employee) => employee.id == id);
+  }
+
+  List<GroupEmployeeModel> getWorkGroupEmployeeListById(String workGroupId) {
+    List<GroupEmployeeModel> list = [];
+    _employeeList.forEach((employee) {
+      if (employee.workGroupId == workGroupId) {
+        list.add(employee);
+      }
+    });
+    return list;
   }
 
   Future<void> setHourlyWage(ShiftModel shiftModel) async {
@@ -226,7 +237,6 @@ class CompanyGroups with ChangeNotifier {
       throw ErrorHint;
     }
   }
-
   /*
   Future<void> fatchAndSetFeedInList() async {
     try {
@@ -400,6 +410,24 @@ class CompanyGroups with ChangeNotifier {
       workGroupsList[workGroupsList.indexWhere(
           (workGroup) => workGroup.id == workGroupModel.id)] = workGroupModel;
       notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+  */
+  /*
+  Future<List<GroupEmployeeModel>> getListOfGroupEmployeesByGroupId(
+      String groupId) async {
+    try {
+      await _dbRef
+          .child('Company Groups')
+          .child(_userId)
+          .child('empolyeeList')
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+            Map<dynamic, dynamic> map = dataSnapshot.value;
+
+          });
     } on Exception {
       throw ErrorHint;
     }
