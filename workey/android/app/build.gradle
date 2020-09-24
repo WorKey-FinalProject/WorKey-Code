@@ -54,6 +54,9 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    dependencies {
+        api 'com.google.firebase:firebase-ml-vision-face-model:17.0.2'
+    }
 }
 
 flutter {
@@ -63,6 +66,4 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
-    api "androidx.core:core:1.1.0-alpha03"
-    
 }
