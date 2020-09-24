@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/widgets/profile_picture.dart';
+import 'package:workey/general/models/work_group_model.dart';
 
 class SubGroupsList extends StatefulWidget {
   final isShrink;
@@ -11,38 +13,7 @@ class SubGroupsList extends StatefulWidget {
 
 class _SubGroupsListState extends State<SubGroupsList> {
   double heightForMargin = 0;
-  List<String> subGroupsList = [
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third'
-  ];
+  List<WorkGroupModel> subGroupsList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +108,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                         flex: 1,
                                         fit: FlexFit.tight,
                                         child: Text(
-                                          subGroupsList[index],
+                                          subGroupsList[index].workGroupName,
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
@@ -156,11 +127,11 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                           backgroundColor: Colors.grey,
                                           child: Align(
                                             alignment: Alignment.center,
-                                            child: Text(
-                                              'LOGO',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              ),
+                                            child: ProfilePicture(
+                                              imageUrl: subGroupsList[index]
+                                                  .workGroupLogo,
+                                              size: 150,
+                                              isEditable: false,
                                             ),
                                           ),
                                         ),
@@ -169,7 +140,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                         flex: 1,
                                         fit: FlexFit.tight,
                                         child: Text(
-                                          subGroupsList[index],
+                                          subGroupsList[index].toString(),
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
