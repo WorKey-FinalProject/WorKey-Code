@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart'; //tomer
 import '../previous_next_button.dart';
 
 class SignUpFormPersonal extends StatefulWidget {
@@ -18,6 +19,12 @@ class SignUpFormPersonal extends StatefulWidget {
 }
 
 class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
+  final LocalAuthentication _localAuthentication =
+      LocalAuthentication(); //tomer
+  bool _canCheckBiometric = false; // tomer
+  String _authorizedOrNot = "Not Authorized"; // tomer
+  List<BiometricType> _availableBiometricTypes = List<BiometricType>(); //tomer
+
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
@@ -56,6 +63,59 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
     _formKey.currentState.save();
     setState(() {
       this.step = step;
+    });
+  }
+
+  Future<void> _checkBiometric() async {
+    bool canCheckBiometric = false;
+    try {
+      canCheckBiometric = await _localAuthentication.canCheckBiometrics;
+    } on PlatformException catch (error) {
+      print(error);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _canCheckBiometric = canCheckBiometric;
+    });
+  }
+
+  Future<void> _getListOfBiometricTypes() async {
+    List<BiometricType> listOfBiometrics;
+    try {
+      listOfBiometrics = await _localAuthentication.getAvailableBiometrics();
+    } on PlatformException catch (error) {
+      print(error);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _availableBiometricTypes = listOfBiometrics;
+    });
+  }
+
+  Future<void> _authorizedNow() async {
+    bool isAuthrized = false;
+    try {
+      isAuthrized = await _localAuthentication.authenticateWithBiometrics(
+        localizedReason: "Please authenticate to complete your transaction",
+        useErrorDialogs: true,
+        stickyAuth: true,
+      );
+    } on PlatformException catch (error) {
+      print(error);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      if (isAuthrized) {
+        _authorizedOrNot = 'Authrized';
+      } else {
+        _authorizedOrNot = "Not Authorized";
+      }
     });
   }
 

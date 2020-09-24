@@ -63,5 +63,6 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
+    api "androidx.core:core:1.1.0-alpha03"
     
 }
