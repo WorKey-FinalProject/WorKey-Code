@@ -18,8 +18,8 @@ class WorkGroupModel {
   WorkGroupModel({
     this.id,
     @required this.workGroupName,
-    @required this.managerId,
-    @required this.parentWorkGroupId,
+    this.managerId,
+    this.parentWorkGroupId,
     @required this.dateOfCreation,
     @required this.workGroupLogo,
     this.employeeList,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workey/company_account/screens/add_workgroup_screen.dart';
 import 'package:workey/company_account/widgets/profile_picture.dart';
 import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
 
 class SubGroupsList extends StatefulWidget {
   final isShrink;
@@ -13,11 +15,20 @@ class SubGroupsList extends StatefulWidget {
 }
 
 class _SubGroupsListState extends State<SubGroupsList> {
+  var _fetchListOnce = false;
   double heightForMargin = 0;
   List<WorkGroupModel> subGroupsList = [];
 
   @override
   Widget build(BuildContext context) {
+    final subWorkGroupsProvider =
+        Provider.of<CompanyGroups>(context, listen: false);
+
+    if (!_fetchListOnce) {
+      subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
+      _fetchListOnce = true;
+    }
+
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,
