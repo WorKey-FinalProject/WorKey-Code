@@ -230,6 +230,11 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                             });
                           }
                         : null,
+        keyboardType: textFieldType == TextFieldType.cardHolderName
+            ? TextInputType.text
+            : textFieldType == TextFieldType.expiryDate
+                ? TextInputType.text
+                : TextInputType.number,
         focusNode: textFieldType == TextFieldType.cvv ? _focusNode : null,
         maxLength: textFieldType == TextFieldType.cvv
             ? 3
