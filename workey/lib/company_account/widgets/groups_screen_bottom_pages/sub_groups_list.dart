@@ -28,6 +28,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
       subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
       _fetchListOnce = true;
     }
+    print(subGroupsList.length);
 
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
