@@ -157,7 +157,8 @@ class CompanyGroups with ChangeNotifier {
           }
         });
       } else {
-        throw 'the list is empty';
+        newFeedList = [];
+        //throw 'the list is empty';
       }
       _feedList = newFeedList;
       notifyListeners();
@@ -170,9 +171,9 @@ class CompanyGroups with ChangeNotifier {
     try {
       var db = _dbRef.child('Company Groups').child(_userId);
       if (model is WorkGroupModel) {
-        db.child('workGroupsList');
+        // db.child('workGroupsList');
         String newKey = db.push().key;
-        await db.child(newKey).set(model.toJson());
+        await db.child('workGroupsList').child(newKey).set(model.toJson());
         model.id = newKey;
         _workGroupsList.add(model);
       } else if (model is GroupEmployeeModel) {
@@ -181,10 +182,10 @@ class CompanyGroups with ChangeNotifier {
       } else {
         throw 'Error in addToFirebaseAndList function';
       }
-      notifyListeners();
     } on Exception {
       throw ErrorHint;
     }
+    notifyListeners();
   }
 
   Future<void> updateInFirebaseAndList(dynamic model) async {
