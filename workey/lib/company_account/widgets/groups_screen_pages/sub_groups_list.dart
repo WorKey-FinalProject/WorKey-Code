@@ -2,32 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/company_account/screens/add_workgroup_screen.dart';
 import 'package:workey/company_account/widgets/profile_picture.dart';
+import 'package:workey/general/models/snackbar_result.dart';
 import 'package:workey/general/models/work_group_model.dart';
 import 'package:workey/general/providers/company_groups.dart';
 
 class SubGroupsList extends StatefulWidget {
   final isShrink;
 
-  SubGroupsList(this.isShrink);
+  SubGroupsList(
+    this.isShrink,
+  );
 
   @override
   _SubGroupsListState createState() => _SubGroupsListState();
 }
 
 class _SubGroupsListState extends State<SubGroupsList> {
-  var _fetchListOnce = false;
   double heightForMargin = 0;
   List<WorkGroupModel> subGroupsList = [];
 
   @override
   Widget build(BuildContext context) {
-    final subWorkGroupsProvider =
-        Provider.of<CompanyGroups>(context, listen: false);
-
-    if (!_fetchListOnce) {
-      subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
-      _fetchListOnce = true;
-    }
+    final subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
+    subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
 
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
@@ -37,14 +34,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
       alignment:
           subGroupsList.isEmpty ? Alignment.center : Alignment.bottomRight,
       child: RawMaterialButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddWorkGroupScreen(),
-            ),
-          );
-        },
+        onPressed: () => _showSnackBarResult(context),
         elevation: 2.0,
         fillColor: Theme.of(context).accentColor,
         child: Icon(
@@ -109,17 +99,14 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                       Flexible(
                                         flex: 2,
                                         fit: FlexFit.tight,
-                                        child: CircleAvatar(
-                                          radius: 50,
-                                          backgroundColor: Colors.grey,
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              'LOGO',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              ),
-                                            ),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.all(10),
+                                          child: ProfilePicture(
+                                            imageUrl: subGroupsList[index]
+                                                .workGroupLogo,
+                                            size: 150,
+                                            isEditable: false,
                                           ),
                                         ),
                                       ),
@@ -141,17 +128,14 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                       Flexible(
                                         flex: 2,
                                         fit: FlexFit.tight,
-                                        child: CircleAvatar(
-                                          radius: 50,
-                                          backgroundColor: Colors.grey,
-                                          child: Align(
-                                            alignment: Alignment.center,
-                                            child: ProfilePicture(
-                                              imageUrl: subGroupsList[index]
-                                                  .workGroupLogo,
-                                              size: 150,
-                                              isEditable: false,
-                                            ),
+                                        child: Container(
+                                          alignment: Alignment.center,
+                                          padding: EdgeInsets.all(10),
+                                          child: ProfilePicture(
+                                            imageUrl: subGroupsList[index]
+                                                .workGroupLogo,
+                                            size: 150,
+                                            isEditable: false,
                                           ),
                                         ),
                                       ),
@@ -159,7 +143,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                         flex: 1,
                                         fit: FlexFit.tight,
                                         child: Text(
-                                          subGroupsList[index].toString(),
+                                          subGroupsList[index].workGroupName,
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
@@ -178,5 +162,29 @@ class _SubGroupsListState extends State<SubGroupsList> {
               );
             },
           );
+  }
+
+  _showSnackBarResult(BuildContext context) async {
+    final SnackBarResult snackBarResult = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddWorkGroupScreen(),
+      ),
+    );
+
+    if (snackBarResult?.message != null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text(
+            snackBarResult.message,
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: snackBarResult.isError
+              ? Theme.of(context).errorColor
+              : Colors.blue,
+        ),
+      );
+    }
   }
 }
