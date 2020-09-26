@@ -1,0 +1,179 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/models/snackbar_result.dart';
+import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
+
+class AddWorkGroupForm extends StatefulWidget {
+  @override
+  _AddWorkGroupFormState createState() => _AddWorkGroupFormState();
+}
+
+class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
+  // final workGroupLocationController = GoogleMapController;
+
+  final _workGroupNameController = TextEditingController();
+  final _workGroupLogoController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  Future<void> _addNewWorkGroup() async {
+    final workGroupProvider =
+        Provider.of<CompanyGroups>(context, listen: false);
+
+    final isValid = _formKey.currentState.validate();
+
+    if (isValid) {
+      _formKey.currentState.save();
+
+      WorkGroupModel newWorkGroup = WorkGroupModel(
+        dateOfCreation: DateTime.now().toString(),
+        workGroupName: _workGroupNameController.text,
+        workGroupLogo: _workGroupLogoController.text,
+      );
+
+      var isError = false;
+      String message;
+      try {
+        await workGroupProvider.addToFirebaseAndList(newWorkGroup);
+      } on PlatformException catch (err) {
+        message = 'An error occurred';
+        isError = true;
+
+        if (err.message != null) {
+          message = err.message;
+        }
+
+        // Scaffold.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text(message),
+        //     backgroundColor: Theme.of(context).errorColor,
+        //   ),
+        // );
+      } catch (err) {
+        isError = true;
+        print(err);
+      }
+      // Scaffold.of(context).showSnackBar(
+      //   SnackBar(
+      //     duration: Duration(seconds: 2),
+      //     content: Text(
+      //       'Changes saved successfully',
+      //       textAlign: TextAlign.center,
+      //     ),
+      //     backgroundColor: Colors.blue,
+      //   ),
+      // );
+      if (isError == false) {
+        message = 'Changes saved successfully';
+      }
+
+      Navigator.pop(
+        context,
+        SnackBarResult(
+          message: message,
+          isError: isError,
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _workGroupNameController.dispose();
+    _workGroupLogoController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+      child: Container(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
+                child: TextFormField(
+                  controller: _workGroupNameController,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Please enter a name for the workgroup';
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(labelText: 'Work Group Name'),
+                  onSaved: (value) {
+                    _workGroupNameController.text = value;
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      margin: EdgeInsets.only(top: 8.0, right: 10.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 1, color: Theme.of(context).primaryColor),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30),
+                        ),
+                      ),
+                      child: _workGroupLogoController.text.isEmpty
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Text('Enter a URL'))
+                          : FittedBox(
+                              child:
+                                  Image.network(_workGroupLogoController.text),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _workGroupLogoController,
+                        keyboardType: TextInputType.url,
+                        decoration: InputDecoration(labelText: 'Image URL'),
+                        onSaved: (value) {
+                          _workGroupLogoController.text = value;
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RaisedButton(
+                    onPressed: () async {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                      await _addNewWorkGroup();
+                    },
+                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text("Done"),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

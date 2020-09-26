@@ -25,6 +25,9 @@ class _FeedState extends State<Feed> {
   @override
   Widget build(BuildContext context) {
     final feedList = Provider.of<CompanyGroups>(context).getFeedList;
+
+    print('${feedList.length} -- FeedList.length');
+
     return LayoutBuilder(
       builder: (context, constraints) {
         return feedList.isEmpty
@@ -52,79 +55,88 @@ class _FeedState extends State<Feed> {
                   ),
                 ],
               )
-            : Container(
-                height: constraints.maxHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Container(
-                      height: constraints.maxHeight * 0.9,
-                      child: CarouselSlider(
-                        options: CarouselOptions(
-                          enlargeCenterPage: true,
-                          autoPlay: true,
-                          reverse: false,
-                          autoPlayInterval: Duration(seconds: 5),
-                          autoPlayAnimationDuration:
-                              Duration(milliseconds: 2000),
-                          pauseAutoPlayOnTouch: true,
-                          scrollDirection: Axis.horizontal,
-                          height: MediaQuery.of(context).size.height * 0.6,
-                          initialPage: 0,
-                          onPageChanged: (index, _) {
-                            setState(() {
-                              _current = index;
-                            });
-                          },
+            : feedList.length == 1
+                ? Container(
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.symmetric(horizontal: 40.0),
+                    child: FeedItem(
+                      title: feedList[0].title,
+                      text: feedList[0].text,
+                    ),
+                  )
+                : Container(
+                    height: constraints.maxHeight,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Container(
+                          height: constraints.maxHeight * 0.9,
+                          child: CarouselSlider(
+                            options: CarouselOptions(
+                              enlargeCenterPage: true,
+                              autoPlay: true,
+                              reverse: false,
+                              autoPlayInterval: Duration(seconds: 5),
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 2000),
+                              pauseAutoPlayOnTouch: true,
+                              scrollDirection: Axis.horizontal,
+                              height: MediaQuery.of(context).size.height * 0.6,
+                              initialPage: 0,
+                              onPageChanged: (index, _) {
+                                setState(() {
+                                  _current = index;
+                                });
+                              },
+                            ),
+                            items: feedList.map(
+                              (feed) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: FeedItem(
+                                        title: feed.title,
+                                        text: feed.text,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                            ).toList(),
+                          ),
                         ),
-                        items: feedList.map(
-                          (feed) {
-                            return Builder(
-                              builder: (BuildContext context) {
+                        SizedBox(
+                          height: constraints.maxHeight * 0.01,
+                        ),
+                        Container(
+                          height: constraints.maxHeight * 0.09,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: map<Widget>(
+                              feedList,
+                              (index, _) {
                                 return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 10.0),
-                                  child: FeedItem(
-                                    title: feed.title,
-                                    text: feed.text,
+                                  width: _current == index ? 13 : 10,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 2),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _current == index
+                                        ? Colors.green
+                                        : Colors.grey,
                                   ),
                                 );
                               },
-                            );
-                          },
-                        ).toList(),
-                      ),
-                    ),
-                    SizedBox(
-                      height: constraints.maxHeight * 0.01,
-                    ),
-                    Container(
-                      height: constraints.maxHeight * 0.09,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: map<Widget>(
-                          feedList,
-                          (index, _) {
-                            return Container(
-                              width: _current == index ? 13 : 10,
-                              margin: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 2),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: _current == index
-                                    ? Colors.green
-                                    : Colors.grey,
-                              ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              );
+                  );
       },
     );
   }
