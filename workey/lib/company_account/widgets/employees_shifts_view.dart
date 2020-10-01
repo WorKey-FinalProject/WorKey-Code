@@ -10,9 +10,8 @@ class EmployeesShiftsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Shifts'),
-      ),
-    );
+        body: DataTable(
+      columns: [],
+    ));
   }
 }
