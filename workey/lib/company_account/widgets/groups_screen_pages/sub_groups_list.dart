@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/company_account/screens/add_workgroup_screen.dart';
-import 'package:workey/company_account/widgets/profile_picture.dart';
+import 'package:workey/general/widgets/profile_picture.dart';
 import 'package:workey/general/models/snackbar_result.dart';
 import 'package:workey/general/models/work_group_model.dart';
 import 'package:workey/general/providers/company_groups.dart';

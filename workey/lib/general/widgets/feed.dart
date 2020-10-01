@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
+
+import '../../general/providers/auth.dart';
+import '../../general/providers/company_groups.dart';
 
 import 'feed_item.dart';
 
@@ -24,6 +28,7 @@ class _FeedState extends State<Feed> {
 
   @override
   Widget build(BuildContext context) {
+    final accountType = Provider.of<Auth>(context).accountType;
     final feedList = Provider.of<CompanyGroups>(context).getFeedList;
 
     print('${feedList.length} -- FeedList.length');
@@ -31,30 +36,15 @@ class _FeedState extends State<Feed> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return feedList.isEmpty
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      'There are no feeds yet',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Text(
+            ? accountType == AccountTypeChosen.company
+                ? emptyListText(
+                    'There are no feeds yet',
                     'To create a new feed click on \'Edit Feeds\' button',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              )
+                  )
+                : emptyListText(
+                    'There are no feeds yet',
+                    'The feeds will appear according to the company manager',
+                  )
             : feedList.length == 1
                 ? Container(
                     width: MediaQuery.of(context).size.width,
@@ -138,6 +128,33 @@ class _FeedState extends State<Feed> {
                     ),
                   );
       },
+    );
+  }
+
+  Column emptyListText(String title, String subTitle) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 5),
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Text(
+          subTitle,
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }

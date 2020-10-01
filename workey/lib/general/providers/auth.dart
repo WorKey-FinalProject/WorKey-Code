@@ -278,7 +278,11 @@ class Auth with ChangeNotifier {
         print('File Uploaded');
 
         final url = await ref.getDownloadURL();
-        userNewData.companyLogo = url;
+        if (accountType == AccountTypeChosen.company) {
+          userNewData.companyLogo = url;
+        } else {
+          userNewData.profilePicture = url;
+        }
       }
 
       await dbRef

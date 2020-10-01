@@ -2,41 +2,47 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:workey/general/models/company_account_model.dart';
-import 'package:workey/general/providers/auth.dart';
+import 'package:workey/general/widgets/date_picker.dart';
 
-import '../../../general/widgets/profile_picture.dart';
+import '../../general/models/personal_account_model.dart';
+import '../../general/providers/auth.dart';
+import '../../general/widgets/profile_picture.dart';
 
 enum TextFieldType {
-  companyName,
   email,
   password,
   verifyPassword,
   firstName,
   lastName,
+  phoneNumber,
+  dateOfBirth,
+  address,
 }
 
-class PersonalInfoScreen extends StatefulWidget {
+class ProfileForm extends StatefulWidget {
   final Auth auth;
 
-  PersonalInfoScreen(this.auth);
+  ProfileForm(this.auth);
 
   @override
-  _PersonalInfoScreenState createState() => _PersonalInfoScreenState();
+  _ProfileFormState createState() => _ProfileFormState();
 }
 
-class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
-  CompanyAccountModel userAccount;
+class _ProfileFormState extends State<ProfileForm> {
+  PersonalAccountModel userAccount;
   var _isLoading = false;
 
   File _userImageFile;
 
-  final companyNameTextController = TextEditingController();
+  final emailTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
-  final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final verifyPasswordTextController = TextEditingController();
+  final phoneNumberTextController = TextEditingController();
+  final dateOfBirthTextController = TextEditingController();
+  final addressTextController = TextEditingController();
+
   String _userImage;
 
   var showPassword = true;
@@ -49,10 +55,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
     if (isValid) {
       _formKey.currentState.save();
-      userAccount.companyEmail = emailTextController.text.trim();
-      userAccount.companyName = companyNameTextController.text.trim();
-      userAccount.owenrFirstName = firstNameTextController.text.trim();
-      userAccount.owenrLastName = lastNameTextController.text.trim();
+      userAccount.email = emailTextController.text.trim();
+      userAccount.firstName = firstNameTextController.text.trim();
+      userAccount.lastName = lastNameTextController.text.trim();
+      userAccount.phoneNumber = phoneNumberTextController.text.trim();
+      userAccount.address = addressTextController.text.trim();
+      userAccount.dateOfBirth = dateOfBirthTextController.text.trim();
       userAccount.setImageFile(_userImageFile);
       try {
         await widget.auth.updateCurrUserData(userAccount);
@@ -129,13 +137,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     setState(() {
       _isLoading = true;
     });
-    userAccount = await widget.auth.getCurrUserData() as CompanyAccountModel;
-    companyNameTextController.text = userAccount.companyName;
-    firstNameTextController.text = userAccount.owenrFirstName;
-    lastNameTextController.text = userAccount.owenrLastName;
-    emailTextController.text = userAccount.companyEmail;
+    userAccount = await widget.auth.getCurrUserData() as PersonalAccountModel;
+    emailTextController.text = userAccount.email;
+    firstNameTextController.text = userAccount.firstName;
+    lastNameTextController.text = userAccount.lastName;
     passwordTextController.text = '';
-    _userImage = userAccount.companyLogo;
+    phoneNumberTextController.text = userAccount.phoneNumber;
+    dateOfBirthTextController.text = userAccount.dateOfBirth;
+    addressTextController.text = userAccount.address;
+    _userImage = userAccount.profilePicture;
 
     setState(() {
       _isLoading = false;
@@ -148,12 +158,14 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
 
   @override
   void dispose() {
-    companyNameTextController.dispose();
+    emailTextController.dispose();
     firstNameTextController.dispose();
     lastNameTextController.dispose();
-    emailTextController.dispose();
     passwordTextController.dispose();
     verifyPasswordTextController.dispose();
+    phoneNumberTextController.dispose();
+    dateOfBirthTextController.dispose();
+    addressTextController.dispose();
     super.dispose();
   }
 
@@ -192,11 +204,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         child: Column(
                           children: [
                             buildTextField(
-                              'Company Name',
-                              TextFieldType.companyName,
-                              companyNameTextController,
-                            ),
-                            buildTextField(
                               'First Name',
                               TextFieldType.firstName,
                               firstNameTextController,
@@ -210,6 +217,29 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                               'E-mail',
                               TextFieldType.email,
                               emailTextController,
+                            ),
+                            buildTextField(
+                              'Phone Number',
+                              TextFieldType.phoneNumber,
+                              phoneNumberTextController,
+                            ),
+
+                            // buildTextField(
+                            //   'Date Of Birth',
+                            //   TextFieldType.dateOfBirth,
+                            //   dateOfBirthTextController,
+                            // ),
+                            buildTextField(
+                              'Address',
+                              TextFieldType.address,
+                              addressTextController,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: DatePicker(
+                                dateOfBirthTextController,
+                                'Date of Birth',
+                              ),
                             ),
                             Container(
                               alignment: Alignment.bottomLeft,
@@ -351,7 +381,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             ? (value) {
                                 lastNameTextController.text = value;
                               }
-                            : null,
+                            : textFieldType == TextFieldType.phoneNumber
+                                ? (value) {
+                                    phoneNumberTextController.text = value;
+                                  }
+                                : textFieldType == TextFieldType.dateOfBirth
+                                    ? (value) {
+                                        dateOfBirthTextController.text = value;
+                                      }
+                                    : textFieldType == TextFieldType.address
+                                        ? (value) {
+                                            addressTextController.text = value;
+                                          }
+                                        : null,
         validator: textFieldType == TextFieldType.email
             ? (value) {
                 if (value.isEmpty || !value.contains('@')) {
@@ -405,7 +447,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         ? TextInputType.name
                         : textFieldType == TextFieldType.lastName
                             ? TextInputType.name
-                            : null,
+                            : textFieldType == TextFieldType.phoneNumber
+                                ? TextInputType.phone
+                                : textFieldType == TextFieldType.dateOfBirth
+                                    ? TextInputType.datetime
+                                    : textFieldType == TextFieldType.address
+                                        ? TextInputType.streetAddress
+                                        : null,
         decoration: InputDecoration(
           suffixIcon: (textFieldType == TextFieldType.password ||
                   textFieldType == TextFieldType.verifyPassword)
