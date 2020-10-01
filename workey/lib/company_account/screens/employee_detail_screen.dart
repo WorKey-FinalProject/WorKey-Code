@@ -96,7 +96,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                           // ),
                           sliver: SliverToBoxAdapter(
                             child: Container(
-                              height: 500,
+                              height: 600,
                               child: tab,
                             ),
                           ),
