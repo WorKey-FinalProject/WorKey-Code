@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../company_account/screens/edit_feeds_screen.dart';
 
 class Logo extends StatelessWidget {
-  double constraintsMaxHeight;
+  final double constraintsMaxHeight;
 
   Logo(this.constraintsMaxHeight);
 
@@ -26,6 +26,13 @@ class Logo extends StatelessWidget {
                 bottomLeft: Radius.circular(36),
                 bottomRight: Radius.circular(36),
               ),
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(0, 10),
+                  blurRadius: 50,
+                  color: Theme.of(context).primaryColor.withOpacity(0.23),
+                ),
+              ],
             ),
             child: Center(
               child: Text(
@@ -37,29 +44,74 @@ class Logo extends StatelessWidget {
               ),
             ),
           ),
+          // Positioned(
+          //   bottom: 0,
+          //   left: 0,
+          //   right: 0,
+          //   child: Container(
+          //     alignment: Alignment.center,
+          //     margin: EdgeInsets.symmetric(horizontal: 20),
+          //     height: 54,
+          //     decoration: BoxDecoration(
+          //       color: Colors.white,
+          //       borderRadius: BorderRadius.circular(20),
+          //       boxShadow: [
+          //         BoxShadow(
+          //           offset: Offset(0, 10),
+          //           blurRadius: 50,
+          //           color: Theme.of(context).primaryColor.withOpacity(0.23),
+          //         ),
+          //       ],
+          //     ),
+          //     child: Container(
+          //       height: double.infinity,
+          //       width: double.infinity,
+          //       child: RaisedButton(
+          //         onPressed: () {
+          //   Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => EditFeedsScreen(),
+          //     ),
+          //   );
+          // },
+          //         elevation: 2,
+          //         color: Colors.white,
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(20),
+          //         ),
+          //         child: Row(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
+          //             Padding(
+          //               padding: EdgeInsets.only(right: 5),
+          //               child: Icon(
+          //                 Icons.edit,
+          //                 color: Colors.blue,
+          //                 //size: 35,
+          //               ),
+          //             ),
+          //             Padding(
+          //               padding: EdgeInsets.only(left: 5),
+          //               child: Text('Edit Feeds'),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
           Positioned(
-            bottom: 0,
+            bottom: -20,
             left: 0,
             right: 0,
-            child: Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 54,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    offset: Offset(0, 10),
-                    blurRadius: 50,
-                    color: Theme.of(context).primaryColor.withOpacity(0.23),
-                  ),
-                ],
-              ),
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                child: RaisedButton(
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor,
+              maxRadius: 55,
+              child: CircleAvatar(
+                backgroundColor: Colors.white,
+                maxRadius: 45,
+                child: IconButton(
+                  icon: Icon(Icons.edit),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -68,28 +120,7 @@ class Logo extends StatelessWidget {
                       ),
                     );
                   },
-                  elevation: 2,
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.blue,
-                          //size: 35,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5),
-                        child: Text('Edit Feeds'),
-                      ),
-                    ],
-                  ),
+                  iconSize: 40,
                 ),
               ),
             ),
