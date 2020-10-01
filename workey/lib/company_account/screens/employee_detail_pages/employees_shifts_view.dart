@@ -15,13 +15,22 @@ class EmployeesShiftsView extends StatelessWidget {
       child: DataTable(
         columns: [
           DataColumn(
-            label: Text('Date'),
+            label: Text(
+              'Date',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           DataColumn(
-            label: Text('Hours'),
+            label: Text(
+              'Hours',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
           DataColumn(
-            label: Text('Salary'),
+            label: Text(
+              'Salary',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
         rows: [
@@ -41,7 +50,9 @@ class EmployeesShiftsView extends StatelessWidget {
           DataRow(
             cells: [
               DataCell(
-                Text('data'),
+                Text(
+                  'data',
+                ),
               ),
               DataCell(
                 Text('data'),
