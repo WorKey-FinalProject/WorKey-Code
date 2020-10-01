@@ -5,7 +5,7 @@ import 'package:workey/company_account/widgets/groups_screen_pages/employees_lis
 import 'package:workey/company_account/widgets/groups_screen_pages/settings_view.dart';
 import 'package:workey/company_account/widgets/groups_screen_pages/sub_groups_list.dart';
 
-import 'package:workey/company_account/widgets/profile_picture.dart';
+import 'package:workey/general/widgets/profile_picture.dart';
 
 class GroupsScreen extends StatefulWidget {
   @override

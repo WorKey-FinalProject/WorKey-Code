@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 class PersonalAccountModel {
@@ -13,6 +15,8 @@ class PersonalAccountModel {
   String faceRecognitionPicture;
   String fingerPrint;
   String profilePicture;
+
+  File imageFile;
 
   PersonalAccountModel({
     this.id,
@@ -30,6 +34,14 @@ class PersonalAccountModel {
 
   void addId(String id) {
     this.id = id;
+  }
+
+  void setImageFile(File file) {
+    imageFile = file;
+  }
+
+  File get getImageFile {
+    return imageFile;
   }
 
   Map<String, Object> toJson() {
