@@ -10,8 +10,62 @@ class EmployeesShiftsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: DataTable(
-      columns: [],
+        body: Container(
+      width: double.maxFinite,
+      child: DataTable(
+        columns: [
+          DataColumn(
+            label: Text('Date'),
+          ),
+          DataColumn(
+            label: Text('Hours'),
+          ),
+          DataColumn(
+            label: Text('Salary'),
+          ),
+        ],
+        rows: [
+          DataRow(
+            cells: [
+              DataCell(
+                Text('data'),
+              ),
+              DataCell(
+                Text('data'),
+              ),
+              DataCell(
+                Text('data'),
+              ),
+            ],
+          ),
+          DataRow(
+            cells: [
+              DataCell(
+                Text('data'),
+              ),
+              DataCell(
+                Text('data'),
+              ),
+              DataCell(
+                Text('data'),
+              ),
+            ],
+          ),
+          DataRow(
+            cells: [
+              DataCell(
+                Text('data'),
+              ),
+              DataCell(
+                Text('data'),
+              ),
+              DataCell(
+                Text('data'),
+              ),
+            ],
+          ),
+        ],
+      ),
     ));
   }
 }
