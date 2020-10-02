@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/company_account/screens/add_workgroup_screen.dart';
 import 'package:workey/general/widgets/profile_picture.dart';
@@ -20,6 +21,8 @@ class SubGroupsList extends StatefulWidget {
 class _SubGroupsListState extends State<SubGroupsList> {
   double heightForMargin = 0;
   List<WorkGroupModel> subGroupsList = [];
+
+  var isShrinkLocal = false;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,16 @@ class _SubGroupsListState extends State<SubGroupsList> {
         shape: CircleBorder(),
       ),
     );
-
+    if (widget.isShrink == true) {
+      setState(() {
+        isShrinkLocal = true;
+      });
+    } else {
+      setState(() {
+        isShrinkLocal = false;
+      });
+    }
+    print(isShrinkLocal);
     return subGroupsList.isEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -76,92 +88,112 @@ class _SubGroupsListState extends State<SubGroupsList> {
             builder: (context, constraints) {
               return Stack(
                 children: <Widget>[
-                  ListView.builder(
-                    scrollDirection:
-                        widget.isShrink ? Axis.vertical : Axis.horizontal,
-                    itemCount: subGroupsList.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 200,
-                        height: 200,
-                        child: Card(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 25, horizontal: 20),
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          elevation: 5,
-                          child: Container(
-                            child: widget.isShrink
-                                ? Row(
-                                    children: [
-                                      Flexible(
-                                        flex: 2,
-                                        fit: FlexFit.tight,
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          padding: EdgeInsets.all(10),
-                                          child: ProfilePicture(
-                                            imageUrl: subGroupsList[index]
-                                                .workGroupLogo,
-                                            size: 150,
-                                            isEditable: false,
-                                          ),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          subGroupsList[index].workGroupName,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      Flexible(
-                                        flex: 2,
-                                        fit: FlexFit.tight,
-                                        child: Container(
-                                          alignment: Alignment.center,
-                                          padding: EdgeInsets.all(10),
-                                          child: ProfilePicture(
-                                            imageUrl: subGroupsList[index]
-                                                .workGroupLogo,
-                                            size: 150,
-                                            isEditable: false,
-                                          ),
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          subGroupsList[index].workGroupName,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                  AnimationLimiter(
+                    child: ListView.builder(
+                      scrollDirection:
+                          widget.isShrink ? Axis.vertical : Axis.horizontal,
+                      itemCount: subGroupsList.length,
+                      itemBuilder: (context, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 375),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: Container(
+                                width: 200,
+                                height: 200,
+                                child: Card(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 25, horizontal: 20),
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
+                                  elevation: 5,
+                                  child: AnimatedSwitcher(
+                                    switchInCurve: Curves.easeInSine,
+                                    switchOutCurve: Curves.easeInSine,
+                                    duration: Duration(milliseconds: 200),
+                                    child: isShrinkLocal
+                                        ? groupsRowView(index)
+                                        : groupsColumnView(index),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                   addEmployeeButton,
                 ],
               );
             },
           );
+  }
+
+  Widget groupsColumnView(int index) {
+    return Column(
+      children: [
+        Flexible(
+          flex: 2,
+          fit: FlexFit.tight,
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(10),
+            child: ProfilePicture(
+              imageUrl: subGroupsList[index].workGroupLogo,
+              size: 150,
+              isEditable: false,
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Text(
+            subGroupsList[index].workGroupName,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget groupsRowView(int index) {
+    return Row(
+      children: [
+        Flexible(
+          flex: 2,
+          fit: FlexFit.tight,
+          child: Container(
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(10),
+            child: ProfilePicture(
+              imageUrl: subGroupsList[index].workGroupLogo,
+              size: 150,
+              isEditable: false,
+            ),
+          ),
+        ),
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Text(
+            subGroupsList[index].workGroupName,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   _showSnackBarResult(BuildContext context) async {

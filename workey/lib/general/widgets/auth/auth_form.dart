@@ -60,8 +60,8 @@ class _AuthFormState extends State<AuthForm> {
               child: Container(
                 child: Image.asset(
                   'assets/images/login_pic.jpg',
+                  fit: BoxFit.cover,
                 ),
-                //  fit: BoxFit.cover,
               ),
             ),
             SizedBox(
