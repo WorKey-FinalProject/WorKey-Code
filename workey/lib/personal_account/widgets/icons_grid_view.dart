@@ -3,6 +3,9 @@ import 'package:workey/personal_account/widgets/grid_view_icon_button.dart';
 
 enum ButtonType {
   weeklyShifts,
+  groupMembers,
+  mailBox,
+  location,
   codes,
 }
 
@@ -12,6 +15,21 @@ class IconsGridView extends StatelessWidget {
       Icons.calendar_today_outlined,
       'Weekly Shifts',
       ButtonType.weeklyShifts,
+    ),
+    GridViewIconButton(
+      Icons.group,
+      'Members',
+      ButtonType.groupMembers,
+    ),
+    GridViewIconButton(
+      Icons.mail,
+      'Mail Box',
+      ButtonType.mailBox,
+    ),
+    GridViewIconButton(
+      Icons.location_on,
+      'Location',
+      ButtonType.location,
     ),
     GridViewIconButton(
       Icons.storage,
