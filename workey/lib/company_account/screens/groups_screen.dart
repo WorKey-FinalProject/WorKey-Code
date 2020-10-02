@@ -52,8 +52,11 @@ class _GroupsScreenState extends State<GroupsScreen> {
     });
     _companyAccount =
         await widget.auth.getCurrUserData() as CompanyAccountModel;
-    _currentWorkGroup.workGroupLogo = _companyAccount.companyLogo;
-    _currentWorkGroup.workGroupName = _companyAccount.companyName;
+    _currentWorkGroup = WorkGroupModel(
+      workGroupName: _companyAccount.companyName,
+      dateOfCreation: _companyAccount.dateOfCreation,
+      workGroupLogo: _companyAccount.companyLogo,
+    );
 
     setState(() {
       _isLoading = false;
@@ -63,8 +66,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
   @override
   void initState() {
     getUserData();
-    super.initState();
     _scrollController = ScrollController()..addListener(_scrollListener);
+    super.initState();
   }
 
   @override
@@ -76,100 +79,111 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('$_currentWorkGroup.workGroupLogo');
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        body: NestedScrollView(
-          controller: _scrollController,
-          headerSliverBuilder: (ctx, innerBoxIsScrolled) {
-            height = MediaQuery.of(ctx).size.height * 0.35;
+    return _isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              body: NestedScrollView(
+                controller: _scrollController,
+                headerSliverBuilder: (ctx, innerBoxIsScrolled) {
+                  height = MediaQuery.of(ctx).size.height * 0.35;
 
-            return <Widget>[
-              SliverAppBar(
-                expandedHeight: height,
-                toolbarHeight: MediaQuery.of(context).size.height * 0.16,
-                pinned: true,
-                floating: false,
-                flexibleSpace: FlexibleSpaceBar(
-                  centerTitle: true,
-                  title: SingleChildScrollView(
-                    child: AnimatedSwitcher(
-                      switchInCurve: Curves.easeInSine,
-                      switchOutCurve: Curves.easeInSine,
-                      duration: Duration(milliseconds: 200),
-                      child: !_isShrink
-                          ? Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  child: ProfilePicture(
-                                    onSelectImage: _selectImage,
-                                    size: MediaQuery.of(context).size.height *
-                                        0.14,
-                                    isEditable: false,
-                                    imageUrl: '',
+                  return <Widget>[
+                    SliverAppBar(
+                      expandedHeight: height,
+                      toolbarHeight: MediaQuery.of(context).size.height * 0.16,
+                      pinned: true,
+                      floating: false,
+                      flexibleSpace: FlexibleSpaceBar(
+                        centerTitle: true,
+                        title: SingleChildScrollView(
+                          child: AnimatedSwitcher(
+                            switchInCurve: Curves.easeInSine,
+                            switchOutCurve: Curves.easeInSine,
+                            duration: Duration(milliseconds: 200),
+                            child: !_isShrink
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        child: ProfilePicture(
+                                          // onSelectImage: _selectImage,
+                                          size: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.14,
+                                          isEditable: false,
+                                          imageUrl:
+                                              _currentWorkGroup.workGroupLogo,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 22,
+                                        ),
+                                        child: Text(
+                                            '${_currentWorkGroup.workGroupName}'),
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                          right: 10,
+                                          left: 10,
+                                          bottom: 45,
+                                        ),
+                                        child: ProfilePicture(
+                                          //onSelectImage: _selectImage,
+                                          size: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.14,
+                                          isEditable: false,
+                                          imageUrl: '',
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                          bottom: 40,
+                                        ),
+                                        child: Text('text'),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: 22,
-                                  ),
-                                  child: Text('text'),
-                                ),
-                              ],
-                            )
-                          : Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                    right: 10,
-                                    left: 10,
-                                    bottom: 45,
-                                  ),
-                                  child: ProfilePicture(
-                                    onSelectImage: _selectImage,
-                                    size: MediaQuery.of(context).size.height *
-                                        0.14,
-                                    isEditable: false,
-                                    imageUrl: '',
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: 40,
-                                  ),
-                                  child: Text('text'),
-                                ),
-                              ],
-                            ),
+                          ),
+                        ),
+                      ),
+                      bottom: TabBar(
+                        unselectedLabelColor: Colors.white,
+                        labelColor: Theme.of(context).accentColor,
+                        indicatorColor: Theme.of(context).accentColor,
+                        tabs: [
+                          Tab(icon: Icon(Icons.group_work)),
+                          Tab(icon: Icon(Icons.people)),
+                          Tab(icon: Icon(Icons.settings)),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                bottom: TabBar(
-                  unselectedLabelColor: Colors.white,
-                  labelColor: Theme.of(context).accentColor,
-                  indicatorColor: Theme.of(context).accentColor,
-                  tabs: [
-                    Tab(icon: Icon(Icons.group_work)),
-                    Tab(icon: Icon(Icons.people)),
-                    Tab(icon: Icon(Icons.settings)),
+                  ];
+                },
+                body: TabBarView(
+                  children: [
+                    SubGroupsList(_isShrink),
+                    EmployeesList(),
+                    SettingsView(),
                   ],
                 ),
               ),
-            ];
-          },
-          body: TabBarView(
-            children: [
-              SubGroupsList(_isShrink),
-              EmployeesList(),
-              SettingsView(),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
