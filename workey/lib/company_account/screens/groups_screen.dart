@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+
 import 'package:workey/company_account/widgets/groups_screen_pages/employees_list.dart';
 import 'package:workey/company_account/widgets/groups_screen_pages/settings_view.dart';
 import 'package:workey/company_account/widgets/groups_screen_pages/sub_groups_list.dart';
@@ -112,7 +113,6 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                     children: [
                                       Container(
                                         child: ProfilePicture(
-                                          // onSelectImage: _selectImage,
                                           size: MediaQuery.of(context)
                                                   .size
                                                   .height *
@@ -127,7 +127,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                           bottom: 22,
                                         ),
                                         child: Text(
-                                            '${_currentWorkGroup.workGroupName}'),
+                                          '${_currentWorkGroup.workGroupName}',
+                                        ),
                                       ),
                                     ],
                                   )
@@ -142,20 +143,22 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                           bottom: 45,
                                         ),
                                         child: ProfilePicture(
-                                          //onSelectImage: _selectImage,
                                           size: MediaQuery.of(context)
                                                   .size
                                                   .height *
                                               0.14,
                                           isEditable: false,
-                                          imageUrl: '',
+                                          imageUrl:
+                                              _currentWorkGroup.workGroupLogo,
                                         ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
                                           bottom: 40,
                                         ),
-                                        child: Text('text'),
+                                        child: Text(
+                                          '${_currentWorkGroup.workGroupName}',
+                                        ),
                                       ),
                                     ],
                                   ),

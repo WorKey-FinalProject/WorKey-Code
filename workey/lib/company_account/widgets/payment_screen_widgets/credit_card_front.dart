@@ -50,12 +50,11 @@ class CreditCardFront {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Image.asset(
-                    'assets/images/contactless_icon.png',
+                    'assets/images/card_types/contactless_icon.png',
                     fit: BoxFit.fitHeight,
                     width: 30.0,
                     height: 30.0,
                     color: textColor,
-                    //package: 'awesome_card',
                   ),
                 ),
               ),
@@ -124,7 +123,6 @@ class CreditCardFront {
                               ? 'Card Holder'
                               : cardHolderName,
                           style: TextStyle(
-                              //package: 'awesome_card',
                               color: textColor,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'MavenPro',
