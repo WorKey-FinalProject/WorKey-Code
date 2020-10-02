@@ -160,7 +160,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   @override
   void initState() {
     getUserData();
-
     super.initState();
   }
 
