@@ -4,15 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:workey/company_account/widgets/groups_screen_pages/employees_list.dart';
 import 'package:workey/company_account/widgets/groups_screen_pages/settings_view.dart';
 import 'package:workey/company_account/widgets/groups_screen_pages/sub_groups_list.dart';
+import '../../general/providers/auth.dart';
+import '../../general/models/company_account_model.dart';
+import '../../general/models/work_group_model.dart';
 
 import 'package:workey/general/widgets/profile_picture.dart';
 
 class GroupsScreen extends StatefulWidget {
+  final Auth auth;
+
+  GroupsScreen(this.auth);
+
   @override
   _GroupsScreenState createState() => _GroupsScreenState();
 }
 
 class _GroupsScreenState extends State<GroupsScreen> {
+  CompanyAccountModel _companyAccount;
+  var _isLoading = false;
+  WorkGroupModel _currentWorkGroup;
   File _pickedImage;
 
   ScrollController _scrollController;
@@ -36,8 +46,23 @@ class _GroupsScreenState extends State<GroupsScreen> {
     _pickedImage = pickedImage;
   }
 
+  void getUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    _companyAccount =
+        await widget.auth.getCurrUserData() as CompanyAccountModel;
+    _currentWorkGroup.workGroupLogo = _companyAccount.companyLogo;
+    _currentWorkGroup.workGroupName = _companyAccount.companyName;
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   void initState() {
+    getUserData();
     super.initState();
     _scrollController = ScrollController()..addListener(_scrollListener);
   }
@@ -51,6 +76,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('$_currentWorkGroup.workGroupLogo');
     return DefaultTabController(
       length: 3,
       child: Scaffold(

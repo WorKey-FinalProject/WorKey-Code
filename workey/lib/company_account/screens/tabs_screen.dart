@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/company_account/screens/groups_screen.dart';
+import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/global_sizes.dart';
 
 import './home_screen.dart';
@@ -15,21 +16,6 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final List<Map<String, Object>> _pages = [
-    {
-      'page': HomeScreen(),
-      'title': 'Home',
-    },
-    {
-      'page': GroupsScreen(),
-      'title': 'Groups',
-    },
-    {
-      'page': ProfileScreen(),
-      'title': 'Profile',
-    },
-  ];
-
   var _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -40,6 +26,22 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _auth = Provider.of<Auth>(context, listen: false);
+
+    final List<Map<String, Object>> _pages = [
+      {
+        'page': HomeScreen(),
+        'title': 'Home',
+      },
+      {
+        'page': GroupsScreen(_auth),
+        'title': 'Groups',
+      },
+      {
+        'page': ProfileScreen(_auth),
+        'title': 'Profile',
+      },
+    ];
     final appBar = AppBar(
       elevation: 0,
       actions: [
