@@ -14,10 +14,20 @@ class GridViewIconButton extends StatelessWidget {
   );
 
   void _onSelected() {
+    if (buttonType == ButtonType.weeklyShifts) {
+      print('Selected weeklyShifts button');
+    }
+    if (buttonType == ButtonType.groupMembers) {
+      print('Selected groupMembers button');
+    }
+    if (buttonType == ButtonType.mailBox) {
+      print('Selected mailBox button');
+    }
+    if (buttonType == ButtonType.location) {
+      print('Selected location button');
+    }
     if (buttonType == ButtonType.codes) {
-      print('Selected Codes button');
-
-      // Do somthing
+      print('Selected codes button');
     }
   }
 
