@@ -204,6 +204,11 @@ class _ProfileFormState extends State<ProfileForm> {
                         child: Column(
                           children: [
                             buildTextField(
+                              'E-mail',
+                              TextFieldType.email,
+                              emailTextController,
+                            ),
+                            buildTextField(
                               'First Name',
                               TextFieldType.firstName,
                               firstNameTextController,
@@ -213,11 +218,7 @@ class _ProfileFormState extends State<ProfileForm> {
                               TextFieldType.lastName,
                               lastNameTextController,
                             ),
-                            buildTextField(
-                              'E-mail',
-                              TextFieldType.email,
-                              emailTextController,
-                            ),
+
                             buildTextField(
                               'Phone Number',
                               TextFieldType.phoneNumber,

@@ -257,8 +257,9 @@ class Auth with ChangeNotifier {
         await user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {
         type = 'Personal Accounts';
+
         imagePathFolder = personalAccountImagePath;
-        user.updateEmail(userNewData.email);
+        await user.updateEmail(userNewData.email);
       } else {
         print("problem with updateCurrUserData");
         return null;

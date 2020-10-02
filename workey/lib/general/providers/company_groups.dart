@@ -158,7 +158,6 @@ class CompanyGroups with ChangeNotifier {
         });
       } else {
         newFeedList = [];
-        //throw 'the list is empty';
       }
       _feedList = newFeedList;
       notifyListeners();

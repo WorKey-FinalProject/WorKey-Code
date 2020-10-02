@@ -6,7 +6,6 @@ import '../../../general/providers/company_groups.dart';
 import '../../../general/screens/auth_screen.dart';
 import '../../../general/widgets/auth/waiting_screen.dart';
 import '../../../company_account/screens/tabs_screen.dart';
-import '../../../general/screens/splash_screen.dart';
 import '../../../general/widgets/auth/signup_type.dart';
 import '../../../personal_account/screens/personal_tabs_screen.dart';
 import '../../providers/auth.dart';
