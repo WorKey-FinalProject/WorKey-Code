@@ -6,7 +6,6 @@ class WorkGroupModel {
   String id;
   String workGroupName;
   String managerId;
-  String parentWorkGroupId;
   String dateOfCreation;
   String workGroupLocation;
   String workGroupLogo;
@@ -18,8 +17,7 @@ class WorkGroupModel {
   WorkGroupModel({
     this.id,
     @required this.workGroupName,
-    @required this.managerId,
-    @required this.parentWorkGroupId,
+    this.managerId,
     @required this.dateOfCreation,
     @required this.workGroupLogo,
     this.employeeList,
@@ -30,7 +28,6 @@ class WorkGroupModel {
     return {
       'workGroupName': this.workGroupName,
       'managerId': this.managerId,
-      'parentWorkGroupId': this.parentWorkGroupId,
       'dateOfCreation': this.dateOfCreation,
       'workGroupLogo': this.workGroupLogo,
       'workGroupLocation': this.workGroupLocation,
@@ -42,7 +39,6 @@ class WorkGroupModel {
     id = uid;
     workGroupName = snapshot['workGroupName'];
     managerId = snapshot['managerId'];
-    parentWorkGroupId = snapshot['parentWorkGroupId'];
     workGroupLogo = snapshot['workGroupLogo'];
     dateOfCreation = snapshot['dateOfCreation'];
     employeeList = snapshot['employeeList'] ?? null;

@@ -2,13 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:workey/general/models/company_account_model.dart';
-import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/widgets/auth/signup_form_company.dart';
 import 'package:workey/general/widgets/auth/signup_form_personal.dart';
 
 import '../back_button_widget.dart';
-import '../previous_next_button.dart';
 
 enum AccountTypeChosen {
   nothing,

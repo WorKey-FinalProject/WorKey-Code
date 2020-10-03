@@ -146,7 +146,6 @@ class Auth with ChangeNotifier {
       WorkGroupModel workGroupModel = WorkGroupModel(
         workGroupName: 'Root',
         managerId: null,
-        parentWorkGroupId: null,
         dateOfCreation: null,
         workGroupLogo: null,
       );
@@ -301,10 +300,8 @@ class Auth with ChangeNotifier {
       } else {
         type = 'Personal Accounts';
       }
-
       await dbRef.child('Users').child(type).child(user.uid).remove();
       User firebaseUser = FirebaseAuth.instance.currentUser;
-
       firebaseUser.delete();
     } on Exception {
       throw ErrorHint;
