@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
-import 'package:workey/general/models/shift_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -54,12 +53,6 @@ class CompanyGroups with ChangeNotifier {
     return _employeeList.firstWhere((employee) => employee.id == id);
   }
 
-  Future<void> setHourlyWage(ShiftModel shiftModel) async {
-    shiftModel.hourlyWage = double.parse(_employeeList
-        .firstWhere((employee) => employee.id == shiftModel.id)
-        .salary);
-  }
-
   Future<void> getUserId() async {
     try {
       User user = FirebaseAuth.instance.currentUser;
@@ -93,35 +86,37 @@ class CompanyGroups with ChangeNotifier {
           .orderByKey()
           .once()
           .then((DataSnapshot dataSnapshot) {
-        Map<dynamic, dynamic> list = dataSnapshot.value;
-        if (list != null) {
-          if (name == 'feedList') {
-            list.forEach((key, value) {
-              FeedModel feed = FeedModel(title: null);
-              feed.fromJsonToObject(value, key);
-              _feedList.add(feed);
-            });
-          } else if (name == 'empolyeeList') {
-            list.forEach((key, value) {
-              GroupEmployeeModel emp =
-                  GroupEmployeeModel(id: null, workGroupId: null);
-              emp.fromJsonToObject(value, key);
-              _employeeList.add(emp);
-            });
-          } else if (name == 'workGroupsList') {
-            list.forEach((key, value) {
-              WorkGroupModel wg = WorkGroupModel(
-                  workGroupName: null,
-                  managerId: null,
-                  dateOfCreation: null,
-                  workGroupLogo: null);
-              wg.fromJson(value, key);
-              _workGroupsList.add(wg);
-            });
-          } else {
-            throw 'Error in fatchAndSetToListHandler function';
+        if (dataSnapshot.value != '') {
+          Map<dynamic, dynamic> list = dataSnapshot.value;
+          if (list != null) {
+            if (name == 'feedList') {
+              list.forEach((key, value) {
+                FeedModel feed = FeedModel(title: null);
+                feed.fromJsonToObject(value, key);
+                _feedList.add(feed);
+              });
+            } else if (name == 'empolyeeList') {
+              list.forEach((key, value) {
+                GroupEmployeeModel emp =
+                    GroupEmployeeModel(id: null, workGroupId: null);
+                emp.fromJsonToObject(value, key);
+                _employeeList.add(emp);
+              });
+            } else if (name == 'workGroupsList') {
+              list.forEach((key, value) {
+                WorkGroupModel wg = WorkGroupModel(
+                    workGroupName: null,
+                    managerId: null,
+                    dateOfCreation: null,
+                    workGroupLogo: null);
+                wg.fromJson(value, key);
+                _workGroupsList.add(wg);
+              });
+            } else {
+              throw 'Error in fatchAndSetToListHandler function';
+            }
+            notifyListeners();
           }
-          notifyListeners();
         }
       });
     } on Exception {
@@ -146,7 +141,7 @@ class CompanyGroups with ChangeNotifier {
       } else {
         newFeedList = [];
       }
-      _feedList = newFeedList;
+      //_feedList = newFeedList;
       notifyListeners();
     } on Exception {
       throw ErrorHint;
@@ -159,10 +154,9 @@ class CompanyGroups with ChangeNotifier {
         var db = _dbRef
             .child('Company Groups')
             .child(_userId)
-            .child('workGroupsList');
-
+            .child('workGroupList');
         String newKey = db.push().key;
-        await db.child('workGroupsList').child(newKey).set(model.toJson());
+        await db.child('workGroupList').child(newKey).set(model.toJson());
         model.id = newKey;
         _workGroupsList.add(model);
       } else if (model is GroupEmployeeModel) {
