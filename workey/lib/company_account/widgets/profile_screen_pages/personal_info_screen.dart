@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
 
-import '../../widgets/profile_picture.dart';
+import '../../../general/widgets/profile_picture.dart';
 
 enum TextFieldType {
   companyName,
@@ -160,7 +160,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   @override
   void initState() {
     getUserData();
-
     super.initState();
   }
 
@@ -395,6 +394,17 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 textFieldType == TextFieldType.verifyPassword)
             ? showPassword
             : false,
+        keyboardType: textFieldType == TextFieldType.email
+            ? TextInputType.emailAddress
+            : textFieldType == TextFieldType.password
+                ? TextInputType.visiblePassword
+                : textFieldType == TextFieldType.verifyPassword
+                    ? TextInputType.visiblePassword
+                    : textFieldType == TextFieldType.firstName
+                        ? TextInputType.name
+                        : textFieldType == TextFieldType.lastName
+                            ? TextInputType.name
+                            : null,
         decoration: InputDecoration(
           suffixIcon: (textFieldType == TextFieldType.password ||
                   textFieldType == TextFieldType.verifyPassword)

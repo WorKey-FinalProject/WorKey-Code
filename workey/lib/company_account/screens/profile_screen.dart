@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/profile_pages/general_settings_screen.dart';
-import '../widgets/profile_pages/payment_info_screen.dart';
-import '../widgets/profile_pages/personal_info_screen.dart';
+import '../widgets/profile_screen_pages/general_settings_screen.dart';
+import '../widgets/profile_screen_pages/payment_info_screen.dart';
+import '../widgets/profile_screen_pages/personal_info_screen.dart';
 import '../../general/models/company_account_model.dart';
 import '../../general/providers/auth.dart';
 
 class ProfileScreen extends StatefulWidget {
+  final Auth _auth;
+
+  ProfileScreen(this._auth);
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -17,7 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<Auth>(context, listen: false);
+    //final _auth = Provider.of<Auth>(context, listen: false);
 
     return DefaultTabController(
       length: 3,
@@ -40,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         body: TabBarView(
           children: [
-            PersonalInfoScreen(_auth),
+            PersonalInfoScreen(widget._auth),
             PaymentInfoScreen(),
             GeneralSettingsScreen(),
           ],

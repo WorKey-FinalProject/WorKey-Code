@@ -256,8 +256,9 @@ class Auth with ChangeNotifier {
         await user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {
         type = 'Personal Accounts';
+
         imagePathFolder = personalAccountImagePath;
-        user.updateEmail(userNewData.email);
+        await user.updateEmail(userNewData.email);
       } else {
         print("problem with updateCurrUserData");
         return null;
@@ -277,7 +278,11 @@ class Auth with ChangeNotifier {
         print('File Uploaded');
 
         final url = await ref.getDownloadURL();
-        userNewData.companyLogo = url;
+        if (accountType == AccountTypeChosen.company) {
+          userNewData.companyLogo = url;
+        } else {
+          userNewData.profilePicture = url;
+        }
       }
 
       await dbRef

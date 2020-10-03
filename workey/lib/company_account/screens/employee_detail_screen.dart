@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:workey/company_account/widgets/employee_sliver.dart';
 
 import '../widgets/group_screen_widgets/opaque_image.dart';
-import '../widgets/employees_shifts_view.dart';
-import '../widgets/employees_info_view.dart';
+import 'employee_detail_pages/employees_shifts_view.dart';
+import 'employee_detail_pages/employees_info_view.dart';
 
 class EmployeeDetailScreen extends StatefulWidget {
   @override
@@ -19,7 +19,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: _tabs.length,
+      length: 2,
       child: Scaffold(
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
@@ -66,14 +66,14 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
             ];
           },
           body: TabBarView(
-            children: _tabs.map((tab) {
-              return SafeArea(
+            children: [
+              SafeArea(
                 top: false,
                 bottom: false,
                 child: Builder(
                   builder: (BuildContext context) {
                     return CustomScrollView(
-                      key: PageStorageKey<String>(tab.getName),
+                      key: PageStorageKey<String>(EmployeesInfoView().getName),
                       slivers: <Widget>[
                         SliverOverlapInjector(
                           handle:
@@ -81,14 +81,11 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                                   context),
                         ),
                         SliverPadding(
-                          padding: const EdgeInsets.all(8.0),
-                          sliver: SliverFixedExtentList(
-                            itemExtent: 48.0,
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                return tab;
-                              },
-                              childCount: 1,
+                          padding: const EdgeInsets.only(top: 8.0),
+                          sliver: SliverToBoxAdapter(
+                            child: Container(
+                              height: 600,
+                              child: EmployeesInfoView(),
                             ),
                           ),
                         ),
@@ -96,8 +93,12 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                     );
                   },
                 ),
-              );
-            }).toList(),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 130.0),
+                child: EmployeesShiftsView(),
+              ),
+            ],
           ),
         ),
       ),

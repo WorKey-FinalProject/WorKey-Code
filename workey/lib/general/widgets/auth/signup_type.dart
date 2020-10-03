@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:workey/general/widgets/auth/signup_form_company.dart';
-import 'package:workey/general/widgets/auth/signup_form_personal.dart';
+
+import '../../../general/widgets/auth/signup_form_company.dart';
+import '../../../general/widgets/auth/signup_form_personal.dart';
 
 import '../back_button_widget.dart';
 
@@ -45,16 +46,18 @@ class SignUpType extends StatefulWidget {
 class _SignUpTypeState extends State<SignUpType> {
   AccountTypeChosen accountTypeChosen = AccountTypeChosen.nothing;
 
+  String onImageText = 'Create New Account';
+
   @override
   Widget build(BuildContext context) {
     var accountTypeSelection = Column(
       children: [
-        Flexible(
-          fit: FlexFit.tight,
+        Expanded(
           child: InkWell(
             onTap: () {
               setState(() {
                 accountTypeChosen = AccountTypeChosen.company;
+                onImageText = 'Company Account';
               });
             },
             child: AccountSelection(
@@ -64,12 +67,12 @@ class _SignUpTypeState extends State<SignUpType> {
             ),
           ),
         ),
-        Flexible(
-          fit: FlexFit.tight,
+        Expanded(
           child: InkWell(
             onTap: () {
               setState(() {
                 accountTypeChosen = AccountTypeChosen.personal;
+                onImageText = 'Personal Account';
               });
             },
             child: AccountSelection(
@@ -86,10 +89,12 @@ class _SignUpTypeState extends State<SignUpType> {
       children: <Widget>[
         Flexible(
           flex: 1,
-          child: BackButtonWidget(),
+          fit: FlexFit.tight,
+          child: BackButtonWidget(text: onImageText),
         ),
         Flexible(
           flex: 2,
+          fit: FlexFit.tight,
           child: accountTypeChosen == AccountTypeChosen.nothing
               ? accountTypeSelection
               : accountTypeChosen == AccountTypeChosen.company

@@ -57,13 +57,9 @@ class _AuthFormState extends State<AuthForm> {
               flex: 3,
               fit: FlexFit.tight,
               child: Container(
-                decoration: const BoxDecoration(
-                  image: const DecorationImage(
-                    image: const NetworkImage(
-                      'https://i1.pickpik.com/photos/648/390/362/business-desk-diary-iphone-preview.jpg',
-                    ),
-                    fit: BoxFit.cover,
-                  ),
+                child: Image.asset(
+                  'assets/images/login_pic.jpg',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

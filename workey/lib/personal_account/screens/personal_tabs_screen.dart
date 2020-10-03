@@ -22,7 +22,7 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
     },
     {
       'page': GroupScreen(),
-      'title': 'Groups',
+      'title': 'My WorkGroup',
     },
     {
       'page': ShiftsScreen(),
@@ -91,7 +91,7 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.group),
-            title: Text('Groups'),
+            title: Text('WorkGroup'),
           ),
           BottomNavigationBarItem(
             icon: Icon(MdiIcons.table),

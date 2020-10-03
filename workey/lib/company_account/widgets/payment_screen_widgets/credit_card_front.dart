@@ -11,10 +11,10 @@ class CreditCardFront {
   Color textColor;
 
   CreditCardFront(
-      {this.bankName = "",
-      this.cardNumber = "",
-      this.cardExpiry = "",
-      this.cardHolderName = "",
+      {this.bankName = '',
+      this.cardNumber = '',
+      this.cardExpiry = '',
+      this.cardHolderName = '',
       this.cardTypeIcon,
       this.cardWidth = 0,
       this.cardHeight = 0,
@@ -50,12 +50,11 @@ class CreditCardFront {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Image.asset(
-                    'assets/images/contactless_icon.png',
+                    'assets/images/card_types/contactless_icon.png',
                     fit: BoxFit.fitHeight,
                     width: 30.0,
                     height: 30.0,
                     color: textColor,
-                    //package: 'awesome_card',
                   ),
                 ),
               ),
@@ -82,7 +81,7 @@ class CreditCardFront {
                               package: 'awesome_card',
                               color: textColor,
                               fontWeight: FontWeight.w500,
-                              fontFamily: "MavenPro",
+                              fontFamily: 'MavenPro',
                               fontSize: 22),
                         ),
                         SizedBox(
@@ -97,7 +96,7 @@ class CreditCardFront {
                               style: TextStyle(
                                   package: 'awesome_card',
                                   color: textColor,
-                                  fontFamily: "MavenPro",
+                                  fontFamily: 'MavenPro',
                                   fontSize: 15),
                             ),
                             SizedBox(
@@ -105,13 +104,13 @@ class CreditCardFront {
                             ),
                             Text(
                               cardExpiry == null || cardExpiry.isEmpty
-                                  ? "MM/YY"
+                                  ? 'MM/YY'
                                   : cardExpiry,
                               style: TextStyle(
                                   package: 'awesome_card',
                                   color: textColor,
                                   fontWeight: FontWeight.w500,
-                                  fontFamily: "MavenPro",
+                                  fontFamily: 'MavenPro',
                                   fontSize: 16),
                             ),
                           ],
@@ -121,13 +120,12 @@ class CreditCardFront {
                         ),
                         Text(
                           cardHolderName == null || cardHolderName.isEmpty
-                              ? "Card Holder"
+                              ? 'Card Holder'
                               : cardHolderName,
                           style: TextStyle(
-                              package: 'awesome_card',
                               color: textColor,
                               fontWeight: FontWeight.w500,
-                              fontFamily: "MavenPro",
+                              fontFamily: 'MavenPro',
                               fontSize: 17),
                         ),
                       ],

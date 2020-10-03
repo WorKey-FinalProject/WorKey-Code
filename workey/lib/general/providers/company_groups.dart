@@ -144,7 +144,7 @@ class CompanyGroups with ChangeNotifier {
           }
         });
       } else {
-        throw 'the list is empty';
+        newFeedList = [];
       }
       _feedList = newFeedList;
       notifyListeners();
@@ -155,24 +155,53 @@ class CompanyGroups with ChangeNotifier {
 
   Future<void> addToFirebaseAndList(dynamic model) async {
     try {
-      var db = _dbRef.child('Company Groups').child(_userId);
       if (model is WorkGroupModel) {
-        db.child('workGroupsList');
+        var db = _dbRef
+            .child('Company Groups')
+            .child(_userId)
+            .child('workGroupsList');
+
         String newKey = db.push().key;
-        await db.child(newKey).set(model.toJson());
+        await db.child('workGroupsList').child(newKey).set(model.toJson());
         model.id = newKey;
         _workGroupsList.add(model);
       } else if (model is GroupEmployeeModel) {
-        db.child('empolyeeList').child(model.id).set(model.toJson());
+        await _dbRef
+            .child('Company Groups')
+            .child(_userId)
+            .child('empolyeeList')
+            .child(model.id)
+            .set(model.toJson());
         _employeeList.add(model);
       } else {
         throw 'Error in addToFirebaseAndList function';
       }
-      notifyListeners();
     } on Exception {
       throw ErrorHint;
     }
+    notifyListeners();
   }
+
+  // Future<void> addToFirebaseAndList(dynamic model) async {
+  //   try {
+  //     var db = _dbRef.child('Company Groups').child(_userId);
+  //     if (model is WorkGroupModel) {
+  //       db.child('workGroupsList');
+  //       String newKey = db.push().key;
+  //       await db.child(newKey).set(model.toJson());
+  //       model.id = newKey;
+  //       _workGroupsList.add(model);
+  //     } else if (model is GroupEmployeeModel) {
+  //       db.child('empolyeeList').child(model.id).set(model.toJson());
+  //       _employeeList.add(model);
+  //     } else {
+  //       throw 'Error in addToFirebaseAndList function';
+  //     }
+  //     notifyListeners();
+  //   } on Exception {
+  //     throw ErrorHint;
+  //   }
+  // }
 
   Future<void> updateInFirebaseAndList(dynamic model) async {
     try {
