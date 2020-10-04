@@ -18,12 +18,11 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
   // final workGroupLocationController = GoogleMapController;
 
   final _workGroupNameController = TextEditingController();
-  final _workGroupLogoController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   File _userImageFile;
-  String _userImage;
+  // String _userImage;
 
   Future<void> _addNewWorkGroup() async {
     final workGroupProvider =
@@ -37,8 +36,9 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
       WorkGroupModel newWorkGroup = WorkGroupModel(
         dateOfCreation: DateTime.now().toString(),
         workGroupName: _workGroupNameController.text,
-        workGroupLogo: _workGroupLogoController.text,
+        workGroupLogo: '',
       );
+      newWorkGroup.setImageFile(_userImageFile);
 
       var isError = false;
       String message;
@@ -77,7 +77,6 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
   @override
   void dispose() {
     _workGroupNameController.dispose();
-    _workGroupLogoController.dispose();
     super.dispose();
   }
 
