@@ -181,7 +181,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 body: TabBarView(
                   children: [
                     SubGroupsList(_isShrink),
-                    EmployeesList(),
+                    EmployeesList(_currentWorkGroup.id),
                     SettingsView(),
                   ],
                 ),
