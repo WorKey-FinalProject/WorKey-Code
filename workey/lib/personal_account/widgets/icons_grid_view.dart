@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:workey/personal_account/widgets/grid_view_icon_button.dart';
 
 enum ButtonType {
@@ -6,40 +7,52 @@ enum ButtonType {
   groupMembers,
   mailBox,
   location,
-  codes,
+  notes,
+  whatsApp,
 }
 
 class IconsGridView extends StatelessWidget {
-  final List<Widget> iconsList = [
-    GridViewIconButton(
-      Icons.calendar_today_outlined,
-      'Weekly Shifts',
-      ButtonType.weeklyShifts,
-    ),
-    GridViewIconButton(
-      Icons.group,
-      'Members',
-      ButtonType.groupMembers,
-    ),
-    GridViewIconButton(
-      Icons.mail,
-      'Mail Box',
-      ButtonType.mailBox,
-    ),
-    GridViewIconButton(
-      Icons.location_on,
-      'Location',
-      ButtonType.location,
-    ),
-    GridViewIconButton(
-      Icons.storage,
-      'Codes',
-      ButtonType.codes,
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> iconsList = [
+      GridViewIconButton(
+        Icons.calendar_today_outlined,
+        'Weekly Shifts',
+        ButtonType.weeklyShifts,
+        context,
+      ),
+      GridViewIconButton(
+        Icons.group,
+        'Members',
+        ButtonType.groupMembers,
+        context,
+      ),
+      GridViewIconButton(
+        Icons.mail,
+        'Mail Box',
+        ButtonType.mailBox,
+        context,
+      ),
+      GridViewIconButton(
+        Icons.location_on,
+        'Location',
+        ButtonType.location,
+        context,
+      ),
+      GridViewIconButton(
+        Icons.notes,
+        'Notes',
+        ButtonType.notes,
+        context,
+      ),
+      GridViewIconButton(
+        MdiIcons.whatsapp,
+        'WhatsApp',
+        ButtonType.whatsApp,
+        context,
+      ),
+    ];
+
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
