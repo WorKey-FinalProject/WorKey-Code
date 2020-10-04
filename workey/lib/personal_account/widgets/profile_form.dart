@@ -218,18 +218,11 @@ class _ProfileFormState extends State<ProfileForm> {
                               TextFieldType.lastName,
                               lastNameTextController,
                             ),
-
                             buildTextField(
                               'Phone Number',
                               TextFieldType.phoneNumber,
                               phoneNumberTextController,
                             ),
-
-                            // buildTextField(
-                            //   'Date Of Birth',
-                            //   TextFieldType.dateOfBirth,
-                            //   dateOfBirthTextController,
-                            // ),
                             buildTextField(
                               'Address',
                               TextFieldType.address,
