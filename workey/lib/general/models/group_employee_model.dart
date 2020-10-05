@@ -3,14 +3,12 @@ import 'package:flutter/foundation.dart';
 class GroupEmployeeModel {
   String id;
   String workGroupId;
-  bool monthSalary;
   String salary;
   String role;
 
   GroupEmployeeModel({
     @required this.id,
     @required this.workGroupId,
-    this.monthSalary,
     this.salary,
     this.role,
   });

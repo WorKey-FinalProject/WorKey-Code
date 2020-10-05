@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
-import 'package:workey/general/models/shift_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -25,7 +24,6 @@ class CompanyGroups with ChangeNotifier {
   WorkGroupModel workGroupModel = WorkGroupModel(
       workGroupName: null,
       managerId: null,
-      parentWorkGroupId: null,
       dateOfCreation: null,
       workGroupLogo: null);
 
@@ -56,22 +54,6 @@ class CompanyGroups with ChangeNotifier {
 
   GroupEmployeeModel findEmployeeById(String id) {
     return _employeeList.firstWhere((employee) => employee.id == id);
-  }
-
-  List<GroupEmployeeModel> _getWorkGroupEmployeeListById(String workGroupId) {
-    List<GroupEmployeeModel> list = [];
-    _employeeList.forEach((employee) {
-      if (employee.workGroupId == workGroupId) {
-        list.add(employee);
-      }
-    });
-    return list;
-  }
-
-  Future<void> setHourlyWage(ShiftModel shiftModel) async {
-    shiftModel.hourlyWage = double.parse(_employeeList
-        .firstWhere((employee) => employee.id == shiftModel.id)
-        .salary);
   }
 
   Future<void> getUserId() async {
@@ -107,37 +89,37 @@ class CompanyGroups with ChangeNotifier {
           .orderByKey()
           .once()
           .then((DataSnapshot dataSnapshot) {
-        Map<dynamic, dynamic> list = dataSnapshot.value;
-        if (list != null) {
-          if (name == 'feedList') {
-            list.forEach((key, value) {
-              FeedModel feed = FeedModel(title: null);
-              feed.fromJsonToObject(value, key);
-              _feedList.add(feed);
-            });
-          } else if (name == 'empolyeeList') {
-            list.forEach((key, value) {
-              GroupEmployeeModel emp =
-                  GroupEmployeeModel(id: null, workGroupId: null);
-              emp.fromJsonToObject(value, key);
-              _employeeList.add(emp);
-            });
-          } else if (name == 'workGroupsList') {
-            list.forEach((key, value) {
-              WorkGroupModel wg = WorkGroupModel(
-                  workGroupName: null,
-                  managerId: null,
-                  parentWorkGroupId: null,
-                  dateOfCreation: null,
-                  workGroupLogo: null);
-              wg.fromJson(value, key);
-              wg.employeeList = _getWorkGroupEmployeeListById(wg.id);
-              _workGroupsList.add(wg);
-            });
-          } else {
-            throw 'Error in fatchAndSetToListHandler function';
+        if (dataSnapshot.value != '') {
+          Map<dynamic, dynamic> list = dataSnapshot.value;
+          if (list != null) {
+            if (name == 'feedList') {
+              list.forEach((key, value) {
+                FeedModel feed = FeedModel(title: null);
+                feed.fromJsonToObject(value, key);
+                _feedList.add(feed);
+              });
+            } else if (name == 'empolyeeList') {
+              list.forEach((key, value) {
+                GroupEmployeeModel emp =
+                    GroupEmployeeModel(id: null, workGroupId: null);
+                emp.fromJsonToObject(value, key);
+                _employeeList.add(emp);
+              });
+            } else if (name == 'workGroupsList') {
+              list.forEach((key, value) {
+                WorkGroupModel wg = WorkGroupModel(
+                    workGroupName: null,
+                    managerId: null,
+                    dateOfCreation: null,
+                    workGroupLogo: null);
+                wg.fromJson(value, key);
+                _workGroupsList.add(wg);
+              });
+            } else {
+              throw 'Error in fatchAndSetToListHandler function';
+            }
+            notifyListeners();
           }
-          notifyListeners();
         }
       });
     } on Exception {
@@ -162,7 +144,7 @@ class CompanyGroups with ChangeNotifier {
       } else {
         newFeedList = [];
       }
-      _feedList = newFeedList;
+      //_feedList = newFeedList;
       notifyListeners();
     } on Exception {
       throw ErrorHint;
@@ -178,8 +160,10 @@ class CompanyGroups with ChangeNotifier {
         var db = _dbRef
             .child('Company Groups')
             .child(_userId)
+
             .child('workGroupsList');
         String newKey = db.push().key;
+
         model.id = newKey;
 
         /// Add workgroup logo to firebase-storage
@@ -293,6 +277,117 @@ class CompanyGroups with ChangeNotifier {
       throw ErrorHint;
     }
   }
+
+  /*
+  Future<void> fatchAndSetFeedInList() async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('feedList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> list = dataSnapshot.value;
+        list.forEach((key, value) {
+          feedModel.fromJsonToObject(value, key);
+          feedList.add(feedModel);
+        });
+        notifyListeners();
+      });
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> fatchAndSetEmployeesInList() async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('empolyeeList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> list = dataSnapshot.value;
+        list.forEach((key, value) {
+          groupEmployeeModel.fromJsonToObject(value, key);
+          employeeList.add(groupEmployeeModel);
+        });
+        notifyListeners();
+      });
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> fatchAndSetWorkGroupsInList() async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('workGroupsList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> list = dataSnapshot.value;
+        list.forEach((key, value) {
+          workGroupModel.fromJson(value, key);
+          workGroupsList.add(workGroupModel);
+        });
+        notifyListeners();
+      });
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+  */
+
+  /*
+  Future<void> addFeedToFirebaseAndList(FeedModel feedModel) async {
+    var db = dbRef.child('Company Groups').child(userId).child('feedList');
+    try {
+      String newKey = db.push().key;
+      await db.child(newKey).set(feedModel.toJson());
+      feedModel.id = newKey;
+      feedList.add(feedModel);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> updateFeed(FeedModel feedModel) {
+    try {
+      dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('feedList')
+          .child(feedModel.id)
+          .update(feedModel.toJson());
+      feedList[feedList.indexWhere((feed) => feed.id == feedModel.id)] =
+          feedModel;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+
+  Future<void> deleteFeedById(String feedId) async {
+    try {
+      await dbRef
+          .child('Company Groups')
+          .child(userId)
+          .child('feedList')
+          .child(feedId)
+          .remove();
+      feedList.removeWhere((feed) => feed.id == feedId);
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
+    */
 
   /*
   Future<void> addEmployeeToFirebaseAndList(

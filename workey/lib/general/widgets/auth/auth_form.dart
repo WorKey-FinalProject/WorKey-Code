@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:workey/general/screens/signup_screen.dart';
 
 class AuthForm extends StatefulWidget {

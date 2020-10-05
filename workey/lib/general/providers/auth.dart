@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:workey/general/models/company_group_model.dart';
 
 import '../../general/models/work_group_model.dart';
 import '../../general/widgets/auth/signup_type.dart';
@@ -143,12 +144,11 @@ class Auth with ChangeNotifier {
         location: location,
       );
 
-      WorkGroupModel workGroupModel = WorkGroupModel(
-        workGroupName: 'Root',
-        managerId: null,
-        parentWorkGroupId: null,
-        dateOfCreation: null,
-        workGroupLogo: null,
+      CompanyGroupModel companyGroupModel = CompanyGroupModel(
+        id: userCredential.user.uid,
+        employeeList: '',
+        feedList: '',
+        workGroupList: '',
       );
       await dbRef
           .child('Users')
@@ -158,7 +158,7 @@ class Auth with ChangeNotifier {
       await dbRef
           .child('Company Groups')
           .child(userCredential.user.uid)
-          .set(workGroupModel.toJson());
+          .set(companyGroupModel.toJson());
     } on Exception catch (error) {
       print(error);
     }
@@ -306,10 +306,8 @@ class Auth with ChangeNotifier {
       } else {
         type = 'Personal Accounts';
       }
-
       await dbRef.child('Users').child(type).child(user.uid).remove();
       User firebaseUser = FirebaseAuth.instance.currentUser;
-
       firebaseUser.delete();
     } on Exception {
       throw ErrorHint;
