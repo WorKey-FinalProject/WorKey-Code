@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../personal_account/widgets/time_table.dart';
+
 class WeeklyShiftsScreen extends StatefulWidget {
   @override
   _WeeklyShiftsScreenState createState() => _WeeklyShiftsScreenState();
@@ -12,9 +14,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
       appBar: AppBar(
         title: Text('Weekly Shifts'),
       ),
-      body: Center(
-        child: Text(''),
-      ),
+      body: TimeTable(),
     );
   }
 }
