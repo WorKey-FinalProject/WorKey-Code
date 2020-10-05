@@ -47,14 +47,6 @@ class CompanyGroups with ChangeNotifier {
     try {
       User user = FirebaseAuth.instance.currentUser;
       _userId = user.uid;
-      GroupEmployeeModel groupEmployeeModel = GroupEmployeeModel(
-          id: '8X5JitmE2sTx7WJZGIPLosCCOxM2',
-          workGroupId: '-MItWGniLPJo7ikJzGfV',
-          role: 'actor',
-          salary: '500');
-      //addToFirebaseAndList(groupEmployeeModel);
-      deleteEmployeeById(
-          'ZkI5O2XfLpR1ji17WHn0HxKP7Ww2', '-MItWGniLPJo7ikJzGfV');
     } on Exception {
       throw ErrorHint;
     }
