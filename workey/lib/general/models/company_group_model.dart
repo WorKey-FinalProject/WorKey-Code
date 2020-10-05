@@ -1,7 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:workey/general/models/feed_model.dart';
-import 'package:workey/general/models/group_employee_model.dart';
-import 'package:workey/general/models/work_group_model.dart';
 
 class CompanyGroupModel {
   String id;

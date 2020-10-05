@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
@@ -22,18 +21,14 @@ class CompanyGroups with ChangeNotifier {
     return [..._workGroupsList];
   }
 
-  List<GroupEmployeeModel> getCurrentWorkGroupEmployeeList() {
-    List<GroupEmployeeModel> list = [];
+  List<GroupEmployeeModel> get getCompanyEmployeeList {
     if (_currentWorkGroup != null) {
-      _employeeList.forEach((employee) {
-        if (employee.workGroupId == _currentWorkGroup.id) {
-          list.add(employee);
-        }
-      });
-    } else {
-      throw 'getCurrentWorkGroupEmployeeListById Error -> currentWorkGroup == null';
+      return [
+        ..._employeeList
+            .where((employee) => employee.workGroupId == _currentWorkGroup.id)
+      ].toList();
     }
-    return list;
+    return [..._employeeList];
   }
 
   WorkGroupModel get getCurrentWorkGroup {
@@ -60,6 +55,28 @@ class CompanyGroups with ChangeNotifier {
   Future<void> setCurrentWorkGroup(WorkGroupModel workGroupModel) async {
     _currentWorkGroup = workGroupModel;
     notifyListeners();
+  }
+
+  Future<String> getPersonalIdIfExistsByEmail(String email) async {
+    String ans = 'null';
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> map = dataSnapshot.value;
+        map.forEach((key, value) {
+          if (value['email'] == email) {
+            ans = key;
+          }
+        });
+      });
+    } on Exception {
+      throw ErrorHint;
+    }
+    return ans;
   }
 
   Future<void> clearLists() async {

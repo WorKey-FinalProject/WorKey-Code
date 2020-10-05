@@ -26,7 +26,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
   CompanyAccountModel _companyAccount;
   var _isLoading = false;
   WorkGroupModel _currentWorkGroup;
-  File _pickedImage;
+  //File _pickedImage;
 
   ScrollController _scrollController;
   bool lastStatus = true;
@@ -45,9 +45,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
         _scrollController.offset > (height - kToolbarHeight - 150);
   }
 
-  void _selectImage(File pickedImage) {
-    _pickedImage = pickedImage;
-  }
+  // void _selectImage(File pickedImage) {
+  //   _pickedImage = pickedImage;
+  // }
 
   void getUserData() async {
     setState(() {
@@ -196,7 +196,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 body: TabBarView(
                   children: [
                     SubGroupsList(_isShrink),
-                    EmployeesList(_currentWorkGroup.id),
+                    EmployeesList(),
                     SettingsView(),
                   ],
                 ),
