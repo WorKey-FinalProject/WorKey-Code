@@ -8,14 +8,6 @@ class GeneralSettingsScreen extends StatefulWidget {
 }
 
 class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
-  var switchHandler = false;
-
-  void _toggle() {
-    setState(() {
-      switchHandler = !switchHandler;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -45,11 +37,73 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
           ),
           _rowBuild('Feed'),
           _rowBuild('Mail'),
-          _rowBuild('Employye Enter'),
+          _rowBuild('Employee Enter'),
           _rowBuild('Employee Exit'),
         ],
       ),
     );
+  }
+
+  var switchHandler;
+  var switchHandlerFeed = false;
+  var switchHandlerMail = false;
+  var switchHandlerEmployeeEnter = false;
+  var switchHandlerEmployeeExit = false;
+
+  _toggleFeed() {
+    setState(() {
+      switchHandlerFeed = !switchHandlerFeed;
+    });
+  }
+
+  _toggleMail() {
+    setState(() {
+      switchHandlerMail = !switchHandlerMail;
+    });
+  }
+
+  _toggleEmployeeEnter() {
+    setState(() {
+      switchHandlerEmployeeEnter = !switchHandlerEmployeeEnter;
+    });
+  }
+
+  _toggleEmployeeExit() {
+    setState(() {
+      switchHandlerEmployeeExit = !switchHandlerEmployeeExit;
+    });
+  }
+
+  Function _toggleSelector(String selector) {
+    if (selector == "Feed") {
+      return _toggleFeed;
+    } else if (selector == "Mail") {
+      return _toggleMail;
+    } else if (selector == "Employee Enter") {
+      return _toggleEmployeeEnter;
+    } else if (selector == "Employee Exit") {
+      return _toggleEmployeeExit;
+    } else {
+      return null;
+    }
+  }
+
+  bool _checkedSelector(String selector) {
+    if (selector == "Feed") {
+      switchHandler = switchHandlerFeed;
+      return switchHandler;
+    } else if (selector == "Mail") {
+      switchHandler = switchHandlerMail;
+      return switchHandler;
+    } else if (selector == "Employee Enter") {
+      switchHandler = switchHandlerEmployeeEnter;
+      return switchHandler;
+    } else if (selector == "Employee Exit") {
+      switchHandler = switchHandlerEmployeeExit;
+      return switchHandler;
+    } else {
+      return null;
+    }
   }
 
   Widget _rowBuild(
@@ -63,10 +117,10 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
         children: <Widget>[
           Text('$title'),
           GestureDetector(
-            onTap: _toggle,
+            onTap: _toggleSelector(title),
             behavior: HitTestBehavior.translucent,
             child: SwitchItem(
-              checked: switchHandler,
+              checked: _checkedSelector(title),
             ),
           ),
         ],
