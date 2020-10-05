@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:workey/general/models/group_employee_model.dart';
-import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -60,6 +58,7 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<String> getPersonalIdIfExistsByEmail(String email) async {
+    String ans = 'null';
     try {
       await _dbRef
           .child('Users')
@@ -70,14 +69,14 @@ class CompanyGroups with ChangeNotifier {
         Map<dynamic, dynamic> map = dataSnapshot.value;
         map.forEach((key, value) {
           if (value['email'] == email) {
-            return key;
+            ans = key;
           }
         });
       });
     } on Exception {
       throw ErrorHint;
     }
-    return null;
+    return ans;
   }
 
   Future<void> clearLists() async {
