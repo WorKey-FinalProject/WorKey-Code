@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/providers/feed_list.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
 
 import '../../general/providers/auth.dart';
@@ -29,7 +30,7 @@ class _FeedState extends State<Feed> {
   @override
   Widget build(BuildContext context) {
     final accountType = Provider.of<Auth>(context).accountType;
-    final feedList = Provider.of<CompanyGroups>(context).getFeedList;
+    final feedList = Provider.of<FeedList>(context).getFeedList;
 
     return LayoutBuilder(
       builder: (context, constraints) {
