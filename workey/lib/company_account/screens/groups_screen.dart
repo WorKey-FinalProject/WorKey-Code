@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:workey/company_account/widgets/groups_screen_pages/employees_list.dart';
-import 'package:workey/company_account/widgets/groups_screen_pages/settings_view.dart';
-import 'package:workey/company_account/widgets/groups_screen_pages/sub_groups_list.dart';
-import 'package:workey/general/providers/company_groups.dart';
+import 'groups_screen_pages/employees_list.dart';
+import 'groups_screen_pages/settings_view.dart';
+import 'groups_screen_pages/sub_groups_list.dart';
+import '../../general/providers/company_groups.dart';
 import '../../general/providers/auth.dart';
 import '../../general/models/company_account_model.dart';
 import '../../general/models/work_group_model.dart';
