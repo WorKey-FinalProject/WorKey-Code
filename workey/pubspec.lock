@@ -22,7 +22,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.5.0-nullsafety.1"
-
   black_hole_flutter:
     dependency: transitive
     description:
@@ -30,7 +29,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.14"
-
   boolean_selector:
     dependency: transitive
     description:
