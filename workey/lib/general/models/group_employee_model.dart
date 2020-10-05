@@ -5,12 +5,24 @@ class GroupEmployeeModel {
   String workGroupId;
   String salary;
   String role;
+  String firstName;
+  String lastName;
+  String entryDate;
+  String phoneNumber;
+  String address;
+  String picture;
 
   GroupEmployeeModel({
     @required this.id,
     @required this.workGroupId,
     this.salary,
     this.role,
+    this.firstName,
+    this.lastName,
+    this.entryDate,
+    this.phoneNumber,
+    this.address,
+    this.picture,
   });
 
   Map<String, Object> toJson() {
@@ -18,6 +30,7 @@ class GroupEmployeeModel {
       'workGroupId': this.workGroupId,
       'salary': this.salary,
       'role': this.role,
+      'entryDate': this.entryDate,
     };
   }
 
@@ -26,6 +39,7 @@ class GroupEmployeeModel {
     workGroupId = snapshot['workGroupId'];
     salary = snapshot['salary'] ?? '';
     role = snapshot['role'] ?? '';
+    entryDate = snapshot['entryDate'] ?? '';
   }
 
   void updateGroupEmployee(GroupEmployeeModel groupEmployeeModel) {
