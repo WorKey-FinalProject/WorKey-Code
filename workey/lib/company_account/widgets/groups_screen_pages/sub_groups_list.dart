@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
+
 import 'package:workey/company_account/screens/add_workgroup_screen.dart';
 import 'package:workey/general/widgets/profile_picture.dart';
 import 'package:workey/general/models/snackbar_result.dart';
@@ -19,15 +20,30 @@ class SubGroupsList extends StatefulWidget {
 }
 
 class _SubGroupsListState extends State<SubGroupsList> {
+  CompanyGroups subWorkGroupsProvider;
   double heightForMargin = 0;
   List<WorkGroupModel> subGroupsList = [];
+  WorkGroupModel currentWorkGroup;
 
   var isShrinkLocal = false;
 
+  void updateCurrentWorkGroup(int index) async {
+    if (currentWorkGroup != null) {
+      if (currentWorkGroup.id == subGroupsList[index].id) {
+        await subWorkGroupsProvider.setCurrentWorkGroup(null);
+      } else {
+        await subWorkGroupsProvider.setCurrentWorkGroup(subGroupsList[index]);
+      }
+    } else {
+      await subWorkGroupsProvider.setCurrentWorkGroup(subGroupsList[index]);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
+    subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
     subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
+    currentWorkGroup = subWorkGroupsProvider.getCurrentWorkGroup;
 
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
@@ -106,7 +122,12 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                 child: Card(
                                   margin: EdgeInsets.symmetric(
                                       vertical: 25, horizontal: 20),
-                                  color: Colors.white,
+                                  color: currentWorkGroup != null
+                                      ? currentWorkGroup.id ==
+                                              subGroupsList[index].id
+                                          ? Colors.blue
+                                          : Colors.white
+                                      : Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
@@ -135,64 +156,76 @@ class _SubGroupsListState extends State<SubGroupsList> {
   }
 
   Widget groupsColumnView(int index) {
-    return Column(
-      children: [
-        Flexible(
-          flex: 2,
-          fit: FlexFit.tight,
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            child: ProfilePicture(
-              imageUrl: subGroupsList[index].workGroupLogo,
-              size: 150,
-              isEditable: false,
+    return InkWell(
+      onTap: () {
+        updateCurrentWorkGroup(index);
+      },
+      borderRadius: BorderRadius.circular(15),
+      child: Column(
+        children: [
+          Flexible(
+            flex: 2,
+            fit: FlexFit.tight,
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
+              child: ProfilePicture(
+                imageUrl: subGroupsList[index].workGroupLogo,
+                size: 150,
+                isEditable: false,
+              ),
             ),
           ),
-        ),
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Text(
-            subGroupsList[index].workGroupName,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Text(
+              subGroupsList[index].workGroupName,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget groupsRowView(int index) {
-    return Row(
-      children: [
-        Flexible(
-          flex: 2,
-          fit: FlexFit.tight,
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            child: ProfilePicture(
-              imageUrl: subGroupsList[index].workGroupLogo,
-              size: 150,
-              isEditable: false,
+    return InkWell(
+      onTap: () {
+        updateCurrentWorkGroup(index);
+      },
+      borderRadius: BorderRadius.circular(15),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 2,
+            fit: FlexFit.tight,
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
+              child: ProfilePicture(
+                imageUrl: subGroupsList[index].workGroupLogo,
+                size: 150,
+                isEditable: false,
+              ),
             ),
           ),
-        ),
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Text(
-            subGroupsList[index].workGroupName,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Text(
+              subGroupsList[index].workGroupName,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

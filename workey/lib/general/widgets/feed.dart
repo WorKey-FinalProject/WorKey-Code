@@ -6,7 +6,6 @@ import 'package:workey/general/providers/feed_list.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
 
 import '../../general/providers/auth.dart';
-import '../../general/providers/company_groups.dart';
 
 import 'feed_item.dart';
 

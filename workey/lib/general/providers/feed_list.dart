@@ -48,4 +48,28 @@ class FeedList with ChangeNotifier {
       throw 'feed_list -> fetchAndSetToList() error';
     }
   }
+
+  Future<void> updateFeed(List<FeedModel> newFeedList) async {
+    try {
+      var db = _dbRef.child('Company Groups').child(_userId).child('feedList');
+      await db.remove();
+      if (newFeedList.isNotEmpty) {
+        newFeedList.forEach((feed) {
+          if (feed.id == null) {
+            String newKey = db.push().key;
+            db.child(newKey).set(feed.toJson());
+            feed.id = newKey;
+          } else {
+            db.child(feed.id).set(feed.toJson());
+          }
+        });
+      } else {
+        newFeedList = [];
+      }
+      _feedList = newFeedList;
+      notifyListeners();
+    } on Exception {
+      throw ErrorHint;
+    }
+  }
 }

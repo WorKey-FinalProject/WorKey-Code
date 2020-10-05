@@ -28,7 +28,9 @@ packages:
       name: boolean_selector
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0-nullsafety"
+
+    version: "2.1.0-nullsafety.1"
+
   camera:
     dependency: "direct main"
     description:
@@ -119,7 +121,9 @@ packages:
       name: fake_async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0-nullsafety"
+
+    version: "1.2.0-nullsafety.1"
+
   ffi:
     dependency: transitive
     description:
@@ -573,7 +577,9 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19-nullsafety"
+
+    version: "0.2.19-nullsafety.2"
+
   tflite_flutter:
     dependency: "direct main"
     description:
