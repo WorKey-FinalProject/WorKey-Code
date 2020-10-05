@@ -23,38 +23,8 @@ class _State extends State<EmployeesList> {
   //List<WorkGroupModel> subGroupsList = [];
   WorkGroupModel currentWorkGroup;
 
-  List<GroupEmployeeModel> employeesList = [
-    //'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third'
-  ];
+  List<GroupEmployeeModel> employeesList = [];
+
   @override
   Widget build(BuildContext context) {
     final subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
@@ -173,7 +143,7 @@ class _State extends State<EmployeesList> {
                           leading: ProfilePicture(
                             isEditable: false,
                             size: 30,
-                            imageUrl: '',
+                            imageUrl: employeesList[index].picture,
                           ),
                           //CircleAvatar(
                           //   radius: 30,
@@ -185,7 +155,7 @@ class _State extends State<EmployeesList> {
                           //   ),
                           // ),
                           title: Text(
-                            employeesList[index].id,
+                            '${employeesList[index].firstName + employeesList[index].lastName}',
                             style: Theme.of(context).textTheme.title,
                           ),
                           subtitle: Text(
