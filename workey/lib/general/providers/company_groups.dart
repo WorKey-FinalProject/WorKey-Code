@@ -14,20 +14,7 @@ class CompanyGroups with ChangeNotifier {
   List<WorkGroupModel> _workGroupsList = [];
   List<GroupEmployeeModel> _employeeList = [];
 
-  FeedModel feedModel = FeedModel(
-    title: null,
-  );
-
-  WorkGroupModel workGroupModel = WorkGroupModel(
-      workGroupName: null,
-      managerId: null,
-      dateOfCreation: null,
-      workGroupLogo: null);
-
-  GroupEmployeeModel groupEmployeeModel = GroupEmployeeModel(
-    id: null,
-    workGroupId: null,
-  );
+  WorkGroupModel _currentWorkGroup;
 
   List<FeedModel> get getFeedList {
     return [..._feedList];
@@ -37,8 +24,22 @@ class CompanyGroups with ChangeNotifier {
     return [..._workGroupsList];
   }
 
-  List<GroupEmployeeModel> get getWorkGroupEmployeeList {
-    return [..._employeeList];
+  List<GroupEmployeeModel> getCurrentWorkGroupEmployeeList() {
+    List<GroupEmployeeModel> list = [];
+    if (_currentWorkGroup != null) {
+      _employeeList.forEach((employee) {
+        if (employee.workGroupId == _currentWorkGroup.id) {
+          list.add(employee);
+        }
+      });
+    } else {
+      throw 'getCurrentWorkGroupEmployeeListById Error -> currentWorkGroup == null';
+    }
+    return list;
+  }
+
+  WorkGroupModel get getCurrentWorkGroup {
+    return _currentWorkGroup;
   }
 
   FeedModel findFeedById(String id) {
@@ -60,6 +61,10 @@ class CompanyGroups with ChangeNotifier {
     } on Exception {
       throw ErrorHint;
     }
+  }
+
+  Future<void> setCurrentWorkGroup(WorkGroupModel workGroupModel) async {
+    _currentWorkGroup = workGroupModel;
   }
 
   Future<void> clearLists() async {
@@ -141,7 +146,7 @@ class CompanyGroups with ChangeNotifier {
       } else {
         newFeedList = [];
       }
-      //_feedList = newFeedList;
+      _feedList = newFeedList;
       notifyListeners();
     } on Exception {
       throw ErrorHint;
@@ -175,27 +180,6 @@ class CompanyGroups with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  // Future<void> addToFirebaseAndList(dynamic model) async {
-  //   try {
-  //     var db = _dbRef.child('Company Groups').child(_userId);
-  //     if (model is WorkGroupModel) {
-  //       db.child('workGroupsList');
-  //       String newKey = db.push().key;
-  //       await db.child(newKey).set(model.toJson());
-  //       model.id = newKey;
-  //       _workGroupsList.add(model);
-  //     } else if (model is GroupEmployeeModel) {
-  //       db.child('empolyeeList').child(model.id).set(model.toJson());
-  //       _employeeList.add(model);
-  //     } else {
-  //       throw 'Error in addToFirebaseAndList function';
-  //     }
-  //     notifyListeners();
-  //   } on Exception {
-  //     throw ErrorHint;
-  //   }
-  // }
 
   Future<void> updateInFirebaseAndList(dynamic model) async {
     try {
@@ -247,183 +231,4 @@ class CompanyGroups with ChangeNotifier {
       throw ErrorHint;
     }
   }
-
-  /*
-  Future<void> fatchAndSetFeedInList() async {
-    try {
-      await dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('feedList')
-          .orderByKey()
-          .once()
-          .then((DataSnapshot dataSnapshot) {
-        Map<dynamic, dynamic> list = dataSnapshot.value;
-        list.forEach((key, value) {
-          feedModel.fromJsonToObject(value, key);
-          feedList.add(feedModel);
-        });
-        notifyListeners();
-      });
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> fatchAndSetEmployeesInList() async {
-    try {
-      await dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('empolyeeList')
-          .orderByKey()
-          .once()
-          .then((DataSnapshot dataSnapshot) {
-        Map<dynamic, dynamic> list = dataSnapshot.value;
-        list.forEach((key, value) {
-          groupEmployeeModel.fromJsonToObject(value, key);
-          employeeList.add(groupEmployeeModel);
-        });
-        notifyListeners();
-      });
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> fatchAndSetWorkGroupsInList() async {
-    try {
-      await dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('workGroupsList')
-          .orderByKey()
-          .once()
-          .then((DataSnapshot dataSnapshot) {
-        Map<dynamic, dynamic> list = dataSnapshot.value;
-        list.forEach((key, value) {
-          workGroupModel.fromJson(value, key);
-          workGroupsList.add(workGroupModel);
-        });
-        notifyListeners();
-      });
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-  */
-
-  /*
-  Future<void> addFeedToFirebaseAndList(FeedModel feedModel) async {
-    var db = dbRef.child('Company Groups').child(userId).child('feedList');
-    try {
-      String newKey = db.push().key;
-      await db.child(newKey).set(feedModel.toJson());
-      feedModel.id = newKey;
-      feedList.add(feedModel);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> updateFeed(FeedModel feedModel) {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('feedList')
-          .child(feedModel.id)
-          .update(feedModel.toJson());
-      feedList[feedList.indexWhere((feed) => feed.id == feedModel.id)] =
-          feedModel;
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> deleteFeedById(String feedId) async {
-    try {
-      await dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('feedList')
-          .child(feedId)
-          .remove();
-      feedList.removeWhere((feed) => feed.id == feedId);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-    */
-
-  /*
-  Future<void> addEmployeeToFirebaseAndList(
-      GroupEmployeeModel groupEmployeeModel) async {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('empolyeeList')
-          .child(groupEmployeeModel.id)
-          .set(groupEmployeeModel.toJson());
-      employeeList.add(groupEmployeeModel);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> addWorkGroupToFirebaseAndList(
-      WorkGroupModel workGroupModel) async {
-    var db =
-        dbRef.child('Company Groups').child(userId).child('workGroupsList');
-    try {
-      String newKew = db.push().key;
-      await db.child(newKew).set(workGroupModel.toJson());
-      workGroupModel.id = newKew;
-      workGroupsList.add(workGroupModel);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-  */
-
-  /*
-  Future<void> updateEmployee(GroupEmployeeModel groupEmployeeModel) async {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('empolyeeList')
-          .child(groupEmployeeModel.id)
-          .update(groupEmployeeModel.toJson());
-      employeeList[employeeList
-              .indexWhere((employee) => employee.id == groupEmployeeModel.id)] =
-          groupEmployeeModel;
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-
-  Future<void> updateWorkGroup(WorkGroupModel workGroupModel) async {
-    try {
-      dbRef
-          .child('Company Groups')
-          .child(userId)
-          .child('workGroupsList')
-          .child(workGroupModel.id)
-          .update(workGroupModel.toJson());
-      workGroupsList[workGroupsList.indexWhere(
-          (workGroup) => workGroup.id == workGroupModel.id)] = workGroupModel;
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-  */
 }

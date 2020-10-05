@@ -57,9 +57,9 @@ class EmployeeList with ChangeNotifier {
           .child('Company Groups')
           .child(_userId)
           .child('empolyeeList')
-          .child(model.id)
-          .set(model.toJson());
-      _employeeList.add(model);
+          .child(groupEmployeeModel.id)
+          .set(groupEmployeeModel.toJson());
+      _employeeList.add(groupEmployeeModel);
     } on Exception {
       throw ErrorHint;
     }
