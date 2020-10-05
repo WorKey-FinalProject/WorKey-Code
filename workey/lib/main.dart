@@ -45,7 +45,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FeedList>(
           create: (ctx) => FeedList(),
+
         ),
+
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
