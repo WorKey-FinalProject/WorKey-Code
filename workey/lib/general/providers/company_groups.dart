@@ -11,17 +11,12 @@ class CompanyGroups with ChangeNotifier {
   final _dbRef = FirebaseDatabase.instance.reference();
   String _userId;
 
-  List<FeedModel> _feedList = [];
   List<WorkGroupModel> _workGroupsList = [];
   List<GroupEmployeeModel> _employeeList = [];
 
   WorkGroupModel _currentWorkGroup;
 
   String workGroupImagePath = 'workgroup_logo';
-
-  List<FeedModel> get getFeedList {
-    return [..._feedList];
-  }
 
   List<WorkGroupModel> get getWorkGroupsList {
     return [..._workGroupsList];
@@ -43,10 +38,6 @@ class CompanyGroups with ChangeNotifier {
 
   WorkGroupModel get getCurrentWorkGroup {
     return _currentWorkGroup;
-  }
-
-  FeedModel findFeedById(String id) {
-    return _feedList.firstWhere((feed) => feed.id == id);
   }
 
   WorkGroupModel findWorkGroupById(String id) {
@@ -71,7 +62,6 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> clearLists() async {
-    _feedList = [];
     _workGroupsList = [];
     _employeeList = [];
   }
@@ -80,7 +70,6 @@ class CompanyGroups with ChangeNotifier {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
-    await _fetchAndSetToListHandler('feedList');
     await _fetchAndSetToListHandler('empolyeeList');
     await _fetchAndSetToListHandler('workGroupsList');
   }
@@ -97,13 +86,7 @@ class CompanyGroups with ChangeNotifier {
         if (dataSnapshot.value != '') {
           Map<dynamic, dynamic> list = dataSnapshot.value;
           if (list != null) {
-            if (name == 'feedList') {
-              list.forEach((key, value) {
-                FeedModel feed = FeedModel(title: null);
-                feed.fromJsonToObject(value, key);
-                _feedList.add(feed);
-              });
-            } else if (name == 'empolyeeList') {
+            if (name == 'empolyeeList') {
               list.forEach((key, value) {
                 GroupEmployeeModel emp =
                     GroupEmployeeModel(id: null, workGroupId: null);

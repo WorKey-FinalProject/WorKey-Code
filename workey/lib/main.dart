@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/providers/feed_list.dart';
 import 'package:workey/general/providers/global_sizes.dart';
 import 'package:workey/general/screens/splash_screen.dart';
 
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<GlobalSizes>(
           create: (ctx) => GlobalSizes(),
+        ),
+        ChangeNotifierProvider<FeedList>(
+          create: (ctx) => FeedList(),
         )
       ],
       child: MaterialApp(
