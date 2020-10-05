@@ -68,6 +68,7 @@ class CompanyGroups with ChangeNotifier {
 
   Future<void> setCurrentWorkGroup(WorkGroupModel workGroupModel) async {
     _currentWorkGroup = workGroupModel;
+    notifyListeners();
   }
 
   Future<void> clearLists() async {

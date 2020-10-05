@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+
 import 'package:workey/company_account/screens/add_workgroup_screen.dart';
 import 'package:workey/general/widgets/profile_picture.dart';
 import 'package:workey/general/models/snackbar_result.dart';
@@ -23,17 +23,27 @@ class _SubGroupsListState extends State<SubGroupsList> {
   CompanyGroups subWorkGroupsProvider;
   double heightForMargin = 0;
   List<WorkGroupModel> subGroupsList = [];
+  WorkGroupModel currentWorkGroup;
 
   var isShrinkLocal = false;
 
   void updateCurrentWorkGroup(int index) async {
-    // await Provider.of<CompanyGroups>()
+    if (currentWorkGroup != null) {
+      if (currentWorkGroup.id == subGroupsList[index].id) {
+        await subWorkGroupsProvider.setCurrentWorkGroup(null);
+      } else {
+        await subWorkGroupsProvider.setCurrentWorkGroup(subGroupsList[index]);
+      }
+    } else {
+      await subWorkGroupsProvider.setCurrentWorkGroup(subGroupsList[index]);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
     subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
+    currentWorkGroup = subWorkGroupsProvider.getCurrentWorkGroup;
 
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
@@ -112,7 +122,12 @@ class _SubGroupsListState extends State<SubGroupsList> {
                                 child: Card(
                                   margin: EdgeInsets.symmetric(
                                       vertical: 25, horizontal: 20),
-                                  color: Colors.white,
+                                  color: currentWorkGroup != null
+                                      ? currentWorkGroup.id ==
+                                              subGroupsList[index].id
+                                          ? Colors.blue
+                                          : Colors.white
+                                      : Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
