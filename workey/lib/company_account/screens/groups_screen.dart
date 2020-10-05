@@ -127,17 +127,20 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                                   .height *
                                               0.14,
                                           isEditable: false,
-                                          imageUrl:
-                                              _currentWorkGroup.workGroupLogo,
+                                          imageUrl: _currentWorkGroup == null
+                                              ? _companyAccount.companyLogo
+                                              : _currentWorkGroup.workGroupLogo,
                                         ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
                                           bottom: 22,
                                         ),
-                                        child: Text(
-                                          _currentWorkGroup.workGroupName,
-                                        ),
+                                        child: currentWorkGroup == null
+                                            ? Text(_companyAccount.companyName)
+                                            : Text(
+                                                _currentWorkGroup.workGroupName,
+                                              ),
                                       ),
                                     ],
                                   )
@@ -157,17 +160,20 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                                   .height *
                                               0.14,
                                           isEditable: false,
-                                          imageUrl:
-                                              _currentWorkGroup.workGroupLogo,
+                                          imageUrl: _currentWorkGroup == null
+                                              ? _companyAccount.companyLogo
+                                              : _currentWorkGroup.workGroupLogo,
                                         ),
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(
                                           bottom: 40,
                                         ),
-                                        child: Text(
-                                          '${_currentWorkGroup.workGroupName}',
-                                        ),
+                                        child: currentWorkGroup == null
+                                            ? Text(_companyAccount.companyName)
+                                            : Text(
+                                                _currentWorkGroup.workGroupName,
+                                              ),
                                       ),
                                     ],
                                   ),
