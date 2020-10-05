@@ -21,7 +21,7 @@ class CompanyGroups with ChangeNotifier {
     return [..._workGroupsList];
   }
 
-  List<GroupEmployeeModel> get getCompanyEmployeeList {
+  List<GroupEmployeeModel> get getEmployeeList {
     if (_currentWorkGroup != null) {
       return [
         ..._employeeList
@@ -88,8 +88,8 @@ class CompanyGroups with ChangeNotifier {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
-    await _fetchAndSetToListHandler('empolyeeList');
-    await _fetchAndSetToListHandler('workGroupsList');
+    await _fetchAndSetToListHandler('employeeList');
+    await _fetchAndSetToListHandler('workGroupList');
   }
 
   Future<void> _fetchAndSetToListHandler(String name) async {
@@ -104,14 +104,14 @@ class CompanyGroups with ChangeNotifier {
         if (dataSnapshot.value != '') {
           Map<dynamic, dynamic> list = dataSnapshot.value;
           if (list != null) {
-            if (name == 'empolyeeList') {
+            if (name == 'employeeList') {
               list.forEach((key, value) {
                 GroupEmployeeModel emp =
                     GroupEmployeeModel(id: null, workGroupId: null);
                 emp.fromJsonToObject(value, key);
                 _employeeList.add(emp);
               });
-            } else if (name == 'workGroupsList') {
+            } else if (name == 'workGroupList') {
               list.forEach((key, value) {
                 WorkGroupModel wg = WorkGroupModel(
                     workGroupName: null,
@@ -142,7 +142,7 @@ class CompanyGroups with ChangeNotifier {
         var db = _dbRef
             .child('Company Groups')
             .child(_userId)
-            .child('workGroupsList');
+            .child('workGroupList');
         String newKey = db.push().key;
 
         model.id = newKey;
@@ -171,10 +171,11 @@ class CompanyGroups with ChangeNotifier {
 
         /// model == GroupEmployeeModel
       } else if (model is GroupEmployeeModel) {
+        print("fck");
         await _dbRef
             .child('Company Groups')
             .child(_userId)
-            .child('empolyeeList')
+            .child('employeeList')
             .child(model.id)
             .set(model.toJson());
         _employeeList.add(model);
@@ -191,11 +192,11 @@ class CompanyGroups with ChangeNotifier {
     try {
       var db = _dbRef.child('Company Groups').child(_userId);
       if (model is WorkGroupModel) {
-        db.child('workGroupsList');
+        db.child('workGroupList');
         _workGroupsList[_workGroupsList
             .indexWhere((workGroup) => workGroup.id == model.id)] = model;
       } else if (model is GroupEmployeeModel) {
-        db.child('empolyeeList');
+        db.child('employeeList');
         _employeeList[_employeeList
             .indexWhere((employee) => employee.id == model.id)] = model;
       } else {
@@ -213,7 +214,12 @@ class CompanyGroups with ChangeNotifier {
       await _dbRef
           .child("Company Groups")
           .child(_userId)
-          .child('empolyeeList')
+          .child('deletedEmployeeList')
+          .set(employeeId);
+      await _dbRef
+          .child("Company Groups")
+          .child(_userId)
+          .child('employeeList')
           .child(employeeId)
           .remove();
       _employeeList.removeWhere((employee) => employee.id == employeeId);
@@ -228,7 +234,7 @@ class CompanyGroups with ChangeNotifier {
       await _dbRef
           .child('Company Groups')
           .child(_userId)
-          .child('workGroupsList')
+          .child('workGroupList')
           .child(workGroupId)
           .remove();
       _workGroupsList.removeWhere((workGroup) => workGroup.id == workGroupId);
