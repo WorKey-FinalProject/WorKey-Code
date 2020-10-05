@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
@@ -15,6 +16,8 @@ class CompanyGroups with ChangeNotifier {
   List<GroupEmployeeModel> _employeeList = [];
 
   WorkGroupModel _currentWorkGroup;
+
+  String workGroupImagePath = 'workgroup_logo';
 
   List<FeedModel> get getFeedList {
     return [..._feedList];
@@ -154,16 +157,42 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> addToFirebaseAndList(dynamic model) async {
+    User user = FirebaseAuth.instance.currentUser;
     try {
+      /// model == WorkGroupModel
       if (model is WorkGroupModel) {
+        /// get db path & generate new Key
         var db = _dbRef
             .child('Company Groups')
             .child(_userId)
-            .child('workGroupList');
+            .child('workGroupsList');
         String newKey = db.push().key;
-        await db.child('workGroupList').child(newKey).set(model.toJson());
+
         model.id = newKey;
+
+        /// Add workgroup logo to firebase-storage
+        if (model.getImageFile != null) {
+          final ref = FirebaseStorage.instance
+              .ref()
+              .child(workGroupImagePath)
+              .child(user.uid)
+              .child(model.id + '.jpg');
+          await ref
+              .putFile(
+                model.imageFile,
+              )
+              .onComplete;
+          print('File Uploaded');
+
+          final url = await ref.getDownloadURL();
+          model.workGroupLogo = url;
+        }
+
+        /// Add model to Firebase-realtime & local-list
+        await db.child(model.id).set(model.toJson());
         _workGroupsList.add(model);
+
+        /// model == GroupEmployeeModel
       } else if (model is GroupEmployeeModel) {
         await _dbRef
             .child('Company Groups')

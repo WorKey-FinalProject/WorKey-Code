@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/snackbar_result.dart';
-import 'package:workey/general/models/work_group_model.dart';
-import 'package:workey/general/providers/company_groups.dart';
+
+import '../../general/widgets/profile_picture.dart';
+import '../../general/models/snackbar_result.dart';
+import '../../general/models/work_group_model.dart';
+import '../../general/providers/company_groups.dart';
 
 class AddWorkGroupForm extends StatefulWidget {
   @override
@@ -16,9 +18,11 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
   // final workGroupLocationController = GoogleMapController;
 
   final _workGroupNameController = TextEditingController();
-  final _workGroupLogoController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  File _userImageFile;
+  // String _userImage;
 
   Future<void> _addNewWorkGroup() async {
     final workGroupProvider =
@@ -32,8 +36,9 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
       WorkGroupModel newWorkGroup = WorkGroupModel(
         dateOfCreation: DateTime.now().toString(),
         workGroupName: _workGroupNameController.text,
-        workGroupLogo: _workGroupLogoController.text,
+        workGroupLogo: '',
       );
+      newWorkGroup.setImageFile(_userImageFile);
 
       var isError = false;
       String message;
@@ -46,27 +51,11 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
         if (err.message != null) {
           message = err.message;
         }
-
-        // Scaffold.of(context).showSnackBar(
-        //   SnackBar(
-        //     content: Text(message),
-        //     backgroundColor: Theme.of(context).errorColor,
-        //   ),
-        // );
       } catch (err) {
         isError = true;
         print(err);
       }
-      // Scaffold.of(context).showSnackBar(
-      //   SnackBar(
-      //     duration: Duration(seconds: 2),
-      //     content: Text(
-      //       'Changes saved successfully',
-      //       textAlign: TextAlign.center,
-      //     ),
-      //     backgroundColor: Colors.blue,
-      //   ),
-      // );
+
       if (isError == false) {
         message = 'Changes saved successfully';
       }
@@ -81,10 +70,13 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
     }
   }
 
+  void _selectImage(File pickedImage) {
+    _userImageFile = pickedImage;
+  }
+
   @override
   void dispose() {
     _workGroupNameController.dispose();
-    _workGroupLogoController.dispose();
     super.dispose();
   }
 
@@ -99,6 +91,13 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              ProfilePicture(
+                onSelectImage: _selectImage,
+                size: 150,
+                isEditable: true,
+                imageUrl: '',
+                keepImageFile: _userImageFile,
+              ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
                 child: TextFormField(
@@ -115,44 +114,44 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
                   },
                 ),
               ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 100,
-                      height: 100,
-                      margin: EdgeInsets.only(top: 8.0, right: 10.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                            width: 1, color: Theme.of(context).primaryColor),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(30),
-                        ),
-                      ),
-                      child: _workGroupLogoController.text.isEmpty
-                          ? Align(
-                              alignment: Alignment.center,
-                              child: Text('Enter a URL'))
-                          : FittedBox(
-                              child:
-                                  Image.network(_workGroupLogoController.text),
-                              fit: BoxFit.cover,
-                            ),
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        controller: _workGroupLogoController,
-                        keyboardType: TextInputType.url,
-                        decoration: InputDecoration(labelText: 'Image URL'),
-                        onSaved: (value) {
-                          _workGroupLogoController.text = value;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              // Container(
+              //   margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
+              //   child: Row(
+              //     children: [
+              //       Container(
+              //         width: 100,
+              //         height: 100,
+              //         margin: EdgeInsets.only(top: 8.0, right: 10.0),
+              //         decoration: BoxDecoration(
+              //           border: Border.all(
+              //               width: 1, color: Theme.of(context).primaryColor),
+              //           borderRadius: BorderRadius.all(
+              //             Radius.circular(30),
+              //           ),
+              //         ),
+              //         child: _workGroupLogoController.text.isEmpty
+              //             ? Align(
+              //                 alignment: Alignment.center,
+              //                 child: Text('Enter a URL'))
+              //             : FittedBox(
+              //                 child:
+              //                     Image.network(_workGroupLogoController.text),
+              //                 fit: BoxFit.cover,
+              //               ),
+              //       ),
+              //       Expanded(
+              //         child: TextFormField(
+              //           controller: _workGroupLogoController,
+              //           keyboardType: TextInputType.url,
+              //           decoration: InputDecoration(labelText: 'Image URL'),
+              //           onSaved: (value) {
+              //             _workGroupLogoController.text = value;
+              //           },
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),

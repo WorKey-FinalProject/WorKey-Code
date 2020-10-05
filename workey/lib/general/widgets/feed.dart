@@ -31,8 +31,6 @@ class _FeedState extends State<Feed> {
     final accountType = Provider.of<Auth>(context).accountType;
     final feedList = Provider.of<CompanyGroups>(context).getFeedList;
 
-    print('${feedList.length} -- FeedList.length');
-
     return LayoutBuilder(
       builder: (context, constraints) {
         return feedList.isEmpty

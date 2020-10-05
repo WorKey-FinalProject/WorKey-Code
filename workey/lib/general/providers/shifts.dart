@@ -34,7 +34,11 @@ class Shifts with ChangeNotifier {
         Map<dynamic, dynamic> list = dataSnapshot.value;
         if (list != null) {
           list.forEach((key, value) {
-            ShiftModel shiftModel = ShiftModel(startTime: null, endTime: null);
+            ShiftModel shiftModel = ShiftModel(
+              date: null,
+              startTime: null,
+              endTime: null,
+            );
             shiftModel.fromJsonToObject(value, key);
             _shiftList.add(shiftModel);
           });
