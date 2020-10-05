@@ -18,39 +18,23 @@ class _TimeTableState extends State<TimeTable> {
     _controller = TimetableController(
       // A basic EventProvider containing a single event:
       eventProvider: EventProvider.list([
-        BasicEvent(
-          id: 0,
-          title: 'My Event',
-          color: Colors.blue,
-          start: LocalDate.today().at(LocalTime(13, 0, 0)),
-          end: LocalDate.today().at(LocalTime(15, 0, 0)),
-        ),
+        // BasicEvent(
+        //   id: 0,
+        //   title: 'My Event',
+        //   color: Colors.blue,
+        //   start: LocalDate.today().at(LocalTime(13, 0, 0)),
+        //   end: LocalDate.today().at(LocalTime(15, 0, 0)),
+        // ),
+        // BasicEvent(
+        //   id: 1,
+        //   title: 'My Event',
+        //   color: Colors.blue,
+        //   start: LocalDate.today().at(LocalTime(9, 0, 0)),
+        //   end: LocalDate.today().at(LocalTime(10, 0, 0)),
+        // ),
       ]),
-
-      // For a demo of overlapping events, use this one instead:
-      // eventProvider: positioningDemoEventProvider,
-
-      // Or even this short example using a Stream:
-      // eventProvider: EventProvider.stream(
-      //   eventGetter: (range) => Stream.periodic(
-      //     Duration(milliseconds: 16),
-      //     (i) {
-      //       final start =
-      //           LocalDate.today().atMidnight() + Period(minutes: i * 2);
-      //       return [
-      //         BasicEvent(
-      //           id: 0,
-      //           title: 'Event',
-      //           color: Colors.blue,
-      //           start: start,
-      //           end: start + Period(hours: 5),
-      //         ),
-      //       ];
-      //     },
-      //   ),
-      // ),
-
       // Other (optional) parameters:
+
       initialTimeRange: InitialTimeRange.range(
         startTime: LocalTime(8, 0, 0),
         endTime: LocalTime(20, 0, 0),
