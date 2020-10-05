@@ -75,7 +75,7 @@ class CompanyGroups with ChangeNotifier {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
-    await _fetchAndSetToListHandler('feedList');
+    //await _fetchAndSetToListHandler('feedList');
     await _fetchAndSetToListHandler('empolyeeList');
     await _fetchAndSetToListHandler('workGroupsList');
   }
@@ -160,7 +160,6 @@ class CompanyGroups with ChangeNotifier {
         var db = _dbRef
             .child('Company Groups')
             .child(_userId)
-
             .child('workGroupsList');
         String newKey = db.push().key;
 
@@ -205,27 +204,6 @@ class CompanyGroups with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  // Future<void> addToFirebaseAndList(dynamic model) async {
-  //   try {
-  //     var db = _dbRef.child('Company Groups').child(_userId);
-  //     if (model is WorkGroupModel) {
-  //       db.child('workGroupsList');
-  //       String newKey = db.push().key;
-  //       await db.child(newKey).set(model.toJson());
-  //       model.id = newKey;
-  //       _workGroupsList.add(model);
-  //     } else if (model is GroupEmployeeModel) {
-  //       db.child('empolyeeList').child(model.id).set(model.toJson());
-  //       _employeeList.add(model);
-  //     } else {
-  //       throw 'Error in addToFirebaseAndList function';
-  //     }
-  //     notifyListeners();
-  //   } on Exception {
-  //     throw ErrorHint;
-  //   }
-  // }
 
   Future<void> updateInFirebaseAndList(dynamic model) async {
     try {

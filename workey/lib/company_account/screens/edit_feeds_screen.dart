@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/feed_model.dart';
+import 'package:workey/general/providers/feed_list.dart';
 import 'package:workey/general/widgets/feed_item.dart';
-
-import '../../general/providers/company_groups.dart';
 
 class EditFeedsScreen extends StatefulWidget {
   @override
@@ -42,7 +41,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    final feedProvider = Provider.of<CompanyGroups>(context, listen: false);
+    final feedProvider = Provider.of<FeedList>(context, listen: false);
 
     if (!_fetchListOnce) {
       feedList = feedProvider.getFeedList;
@@ -60,7 +59,7 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                 icon: Icon(Icons.save),
                 onPressed: () async {
                   try {
-                    await feedProvider.updateFeedInFirebaseAndList(feedList);
+                    await feedProvider.updateFeed(feedList);
                   } on PlatformException catch (err) {
                     var message = 'An error occurred';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/company_account/screens/add_workgroup_screen.dart';
 import 'package:workey/general/widgets/profile_picture.dart';
@@ -19,14 +20,19 @@ class SubGroupsList extends StatefulWidget {
 }
 
 class _SubGroupsListState extends State<SubGroupsList> {
+  CompanyGroups subWorkGroupsProvider;
   double heightForMargin = 0;
   List<WorkGroupModel> subGroupsList = [];
 
   var isShrinkLocal = false;
 
+  void updateCurrentWorkGroup(int index) async {
+    // await Provider.of<CompanyGroups>()
+  }
+
   @override
   Widget build(BuildContext context) {
-    final subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
+    subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
     subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
 
     var addEmployeeButton = Container(
@@ -135,64 +141,76 @@ class _SubGroupsListState extends State<SubGroupsList> {
   }
 
   Widget groupsColumnView(int index) {
-    return Column(
-      children: [
-        Flexible(
-          flex: 2,
-          fit: FlexFit.tight,
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            child: ProfilePicture(
-              imageUrl: subGroupsList[index].workGroupLogo,
-              size: 150,
-              isEditable: false,
+    return InkWell(
+      onTap: () {
+        updateCurrentWorkGroup(index);
+      },
+      borderRadius: BorderRadius.circular(15),
+      child: Column(
+        children: [
+          Flexible(
+            flex: 2,
+            fit: FlexFit.tight,
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
+              child: ProfilePicture(
+                imageUrl: subGroupsList[index].workGroupLogo,
+                size: 150,
+                isEditable: false,
+              ),
             ),
           ),
-        ),
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Text(
-            subGroupsList[index].workGroupName,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Text(
+              subGroupsList[index].workGroupName,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget groupsRowView(int index) {
-    return Row(
-      children: [
-        Flexible(
-          flex: 2,
-          fit: FlexFit.tight,
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(10),
-            child: ProfilePicture(
-              imageUrl: subGroupsList[index].workGroupLogo,
-              size: 150,
-              isEditable: false,
+    return InkWell(
+      onTap: () {
+        updateCurrentWorkGroup(index);
+      },
+      borderRadius: BorderRadius.circular(15),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 2,
+            fit: FlexFit.tight,
+            child: Container(
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(10),
+              child: ProfilePicture(
+                imageUrl: subGroupsList[index].workGroupLogo,
+                size: 150,
+                isEditable: false,
+              ),
             ),
           ),
-        ),
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: Text(
-            subGroupsList[index].workGroupName,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Text(
+              subGroupsList[index].workGroupName,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
