@@ -50,19 +50,19 @@ class EmployeeList with ChangeNotifier {
     }
   }
 
-  // Future<void> addToFirebaseAndList(
-  //     GroupEmployeeModel groupEmployeeModel) async {
-  //   try {
-  //     await _dbRef
-  //         .child('Company Groups')
-  //         .child(_userId)
-  //         .child('empolyeeList')
-  //         .child(model.id)
-  //         .set(model.toJson());
-  //     _employeeList.add(model);
-  //   } on Exception {
-  //     throw ErrorHint;
-  //   }
-  //   notifyListeners();
-  // }
+  Future<void> addToFirebaseAndList(
+      GroupEmployeeModel groupEmployeeModel) async {
+    try {
+      await _dbRef
+          .child('Company Groups')
+          .child(_userId)
+          .child('empolyeeList')
+          .child(groupEmployeeModel.id)
+          .set(groupEmployeeModel.toJson());
+      _employeeList.add(groupEmployeeModel);
+    } on Exception {
+      throw ErrorHint;
+    }
+    notifyListeners();
+  }
 }
