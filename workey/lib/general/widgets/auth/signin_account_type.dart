@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/providers/feed_list.dart';
 
 import '../../../general/providers/company_groups.dart';
 import '../../../general/screens/auth_screen.dart';
@@ -23,6 +24,7 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
   Widget build(BuildContext context) {
     final _companyGroupsProvider =
         Provider.of<CompanyGroups>(context, listen: false);
+    final _feedProvider = Provider.of<FeedList>(context, listen: false);
 
     final _auth = Provider.of<Auth>(context, listen: false);
 
@@ -33,6 +35,7 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
           accountTypeChosen = accountType;
           if (accountTypeChosen == AccountTypeChosen.company) {
             await _companyGroupsProvider.fetchAndSetToLists();
+            await _feedProvider.fetchAndSetToList();
           }
           setState(() {
             _isLoading = false;

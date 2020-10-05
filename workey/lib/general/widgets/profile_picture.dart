@@ -58,9 +58,11 @@ class _ProfilePictureState extends State<ProfilePicture> {
       padding: widget.isEditable ? const EdgeInsets.all(16) : null,
       child: InkWell(
         borderRadius: BorderRadius.circular(90),
-        onTap: () {
-          return widget.isEditable ? choosePictureMethodDialog(context) : null;
-        },
+        onTap: widget.isEditable
+            ? () {
+                return choosePictureMethodDialog(context);
+              }
+            : null,
         child: Stack(
           children: [
             Container(
