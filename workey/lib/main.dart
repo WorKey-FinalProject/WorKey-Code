@@ -2,22 +2,29 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/providers/company_groups.dart';
-import 'package:workey/general/providers/feed_list.dart';
-import 'package:workey/general/providers/global_sizes.dart';
-import 'package:workey/general/screens/splash_screen.dart';
 
-import 'package:workey/general/widgets/auth/signin_account_type.dart';
-import 'package:workey/personal_account/screens/personal_tabs_screen.dart';
+import 'package:time_machine/time_machine.dart';
 
+import './general/providers/company_groups.dart';
+import './general/providers/feed_list.dart';
+import './general/providers/global_sizes.dart';
+import './general/screens/splash_screen.dart';
+
+import './general/widgets/auth/signin_account_type.dart';
 import './personal_account/screens/personal_tabs_screen.dart';
+
 import './general/screens/signup_screen.dart';
 import './general/screens/auth_screen.dart';
 import './general/providers/auth.dart';
 
 Future<void> main() async {
+  // Call these two functions before `runApp()`.
   WidgetsFlutterBinding.ensureInitialized();
+
+  await TimeMachine.initialize({'rootBundle': rootBundle});
+
   await Firebase.initializeApp();
   runApp(MyApp());
 }
@@ -45,9 +52,7 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<FeedList>(
           create: (ctx) => FeedList(),
-
         ),
-
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

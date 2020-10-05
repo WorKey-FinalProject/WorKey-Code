@@ -135,9 +135,13 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                         padding: EdgeInsets.only(
                                           bottom: 22,
                                         ),
-                                        child: Text(
-                                          _currentWorkGroup.workGroupName,
-                                        ),
+                                        child: currentWorkGroup == null
+                                            ? Text(
+                                                _companyAccount.companyName,
+                                              )
+                                            : Text(
+                                                _currentWorkGroup.workGroupName,
+                                              ),
                                       ),
                                     ],
                                   )
@@ -165,9 +169,13 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                         padding: EdgeInsets.only(
                                           bottom: 40,
                                         ),
-                                        child: Text(
-                                          '${_currentWorkGroup.workGroupName}',
-                                        ),
+                                        child: currentWorkGroup == null
+                                            ? Text(
+                                                _companyAccount.companyName,
+                                              )
+                                            : Text(
+                                                _currentWorkGroup.workGroupName,
+                                              ),
                                       ),
                                     ],
                                   ),
