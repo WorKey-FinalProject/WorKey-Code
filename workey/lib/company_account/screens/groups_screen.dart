@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:workey/company_account/widgets/groups_screen_pages/employees_list.dart';
-import 'package:workey/company_account/widgets/groups_screen_pages/settings_view.dart';
-import 'package:workey/company_account/widgets/groups_screen_pages/sub_groups_list.dart';
-import 'package:workey/general/providers/company_groups.dart';
+import 'groups_screen_pages/employees_list.dart';
+import 'groups_screen_pages/settings_view.dart';
+import 'groups_screen_pages/sub_groups_list.dart';
+import '../../general/providers/company_groups.dart';
 import '../../general/providers/auth.dart';
 import '../../general/models/company_account_model.dart';
 import '../../general/models/work_group_model.dart';
@@ -26,7 +26,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
   CompanyAccountModel _companyAccount;
   var _isLoading = false;
   WorkGroupModel _currentWorkGroup;
-  File _pickedImage;
+  //File _pickedImage;
 
   ScrollController _scrollController;
   bool lastStatus = true;
@@ -45,9 +45,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
         _scrollController.offset > (height - kToolbarHeight - 150);
   }
 
-  void _selectImage(File pickedImage) {
-    _pickedImage = pickedImage;
-  }
+  // void _selectImage(File pickedImage) {
+  //   _pickedImage = pickedImage;
+  // }
 
   void getUserData() async {
     setState(() {
@@ -127,8 +127,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                                   .height *
                                               0.14,
                                           isEditable: false,
-                                          imageUrl:
-                                              _currentWorkGroup.workGroupLogo,
+                                          imageUrl: _currentWorkGroup == null
+                                              ? _companyAccount.companyLogo
+                                              : _currentWorkGroup.workGroupLogo,
                                         ),
                                       ),
                                       Padding(
@@ -136,9 +137,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                           bottom: 22,
                                         ),
                                         child: currentWorkGroup == null
-                                            ? Text(
-                                                _companyAccount.companyName,
-                                              )
+                                            ? Text(_companyAccount.companyName)
                                             : Text(
                                                 _currentWorkGroup.workGroupName,
                                               ),
@@ -161,8 +160,9 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                                   .height *
                                               0.14,
                                           isEditable: false,
-                                          imageUrl:
-                                              _currentWorkGroup.workGroupLogo,
+                                          imageUrl: _currentWorkGroup == null
+                                              ? _companyAccount.companyLogo
+                                              : _currentWorkGroup.workGroupLogo,
                                         ),
                                       ),
                                       Padding(
@@ -170,9 +170,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                           bottom: 40,
                                         ),
                                         child: currentWorkGroup == null
-                                            ? Text(
-                                                _companyAccount.companyName,
-                                              )
+                                            ? Text(_companyAccount.companyName)
                                             : Text(
                                                 _currentWorkGroup.workGroupName,
                                               ),
@@ -198,7 +196,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 body: TabBarView(
                   children: [
                     SubGroupsList(_isShrink),
-                    EmployeesList(_currentWorkGroup.id),
+                    EmployeesList(),
                     SettingsView(),
                   ],
                 ),
