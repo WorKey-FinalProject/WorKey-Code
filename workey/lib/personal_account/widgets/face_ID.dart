@@ -60,7 +60,9 @@ class FaceID extends StatelessWidget {
                 maxRadius: 50,
                 child: IconButton(
                   icon: Icon(MdiIcons.faceRecognition),
-                  onPressed: null,
+                  onPressed: () {
+                    print('Enter shift - Face recognition button');
+                  },
                   iconSize: 40,
                 ),
               ),

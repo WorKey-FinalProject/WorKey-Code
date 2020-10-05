@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:workey/company_account/widgets/test.dart';
+import 'package:provider/provider.dart';
 
+import '../../../general/providers/company_groups.dart';
+//import '../../widgets/test.dart';
+import '../../../general/models/work_group_model.dart';
 import '../../screens/employee_detail_screen.dart';
 
 class EmployeesList extends StatefulWidget {
+  String currentWorkGroupId;
+
+  EmployeesList(this.currentWorkGroupId);
+
   @override
   _State createState() => _State();
 }
 
 class _State extends State<EmployeesList> {
+  List<WorkGroupModel> subGroupsList = [];
+
   List<String> emp = [
     'first',
     // 'second',
@@ -44,6 +53,9 @@ class _State extends State<EmployeesList> {
   ];
   @override
   Widget build(BuildContext context) {
+    final subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
+    subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
+
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,

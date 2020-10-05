@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:workey/general/models/group_employee_model.dart';
@@ -12,6 +14,8 @@ class WorkGroupModel {
   List<GroupEmployeeModel> employeeList;
   List<WorkGroupModel> workGroupList;
 
+  File imageFile;
+
   final dbRef = FirebaseDatabase.instance.reference();
 
   WorkGroupModel({
@@ -23,6 +27,14 @@ class WorkGroupModel {
     this.employeeList,
     this.workGroupLocation,
   });
+
+  void setImageFile(File file) {
+    imageFile = file;
+  }
+
+  File get getImageFile {
+    return imageFile;
+  }
 
   Map<String, Object> toJson() {
     return {

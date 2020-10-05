@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:workey/company_account/widgets/add_workgroup_form.dart';
+import '../widgets/add_workgroup_form.dart';
 
 class AddWorkGroupScreen extends StatelessWidget {
   @override
