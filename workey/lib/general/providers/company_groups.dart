@@ -47,6 +47,14 @@ class CompanyGroups with ChangeNotifier {
     try {
       User user = FirebaseAuth.instance.currentUser;
       _userId = user.uid;
+      GroupEmployeeModel groupEmployeeModel = GroupEmployeeModel(
+          id: '8X5JitmE2sTx7WJZGIPLosCCOxM2',
+          workGroupId: '-MItWGniLPJo7ikJzGfV',
+          role: 'actor',
+          salary: '500');
+      //addToFirebaseAndList(groupEmployeeModel);
+      deleteEmployeeById(
+          'ZkI5O2XfLpR1ji17WHn0HxKP7Ww2', '-MItWGniLPJo7ikJzGfV');
     } on Exception {
       throw ErrorHint;
     }
@@ -171,7 +179,6 @@ class CompanyGroups with ChangeNotifier {
 
         /// model == GroupEmployeeModel
       } else if (model is GroupEmployeeModel) {
-        print("fck");
         await _dbRef
             .child('Company Groups')
             .child(_userId)
@@ -209,13 +216,16 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> deleteEmployeeById(String employeeId) async {
+  Future<void> deleteEmployeeById(String employeeId, String workGroupId) async {
+    GroupEmployeeModel groupEmployeeModel =
+        GroupEmployeeModel(id: employeeId, workGroupId: workGroupId);
     try {
       await _dbRef
           .child("Company Groups")
           .child(_userId)
           .child('deletedEmployeeList')
-          .set(employeeId);
+          .child(employeeId)
+          .set(groupEmployeeModel.toJson());
       await _dbRef
           .child("Company Groups")
           .child(_userId)
