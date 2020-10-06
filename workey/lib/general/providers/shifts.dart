@@ -50,10 +50,14 @@ class Shifts with ChangeNotifier {
     }
   }
 
-  Future<void> addToFirebaseAndList(ShiftModel shiftModel) async {
+  Future<void> addToFirebaseAndList(
+      ShiftModel shiftModel, String companyId) async {
     try {
-      var db = _dbRef.child('Shifts').child(_userId);
-      db.child('shiftList');
+      var db = _dbRef
+          .child('Company Groups')
+          .child(companyId)
+          .child('shiftList')
+          .child(_userId);
       String newKey = db.push().key;
       await db.child(newKey).set(shiftModel.toJson());
       shiftModel.id = newKey;
@@ -102,11 +106,11 @@ class Shifts with ChangeNotifier {
 
   Future<void> _shiftTotalHours(ShiftModel shiftModel) async {
     try {
-      DateTime start = DateTime.parse(shiftModel.startTime);
-      DateTime end = DateTime.parse(shiftModel.endTime);
-      shiftModel.totalHours = end.difference(start).inHours.toString();
+      //DateTime start = DateTime.parse(shiftModel.startTime);
+      //DateTime end = DateTime.parse(shiftModel.endTime);
+      //shiftModel.totalHours = end.difference(start).inHours.toString();
     } on Exception {
-      ErrorHint;
+      throw 'Error in _shiftTotalHours function';
     }
   }
 

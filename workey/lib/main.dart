@@ -5,6 +5,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
+import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/providers/feed_list.dart';
+import 'package:workey/general/providers/global_sizes.dart';
+import 'package:workey/general/providers/shifts.dart';
+import 'package:workey/general/screens/splash_screen.dart';
+
+
 import 'package:time_machine/time_machine.dart';
 
 import './general/providers/company_groups.dart';
@@ -53,6 +60,10 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<FeedList>(
           create: (ctx) => FeedList(),
         ),
+        ChangeNotifierProvider<Shifts>(
+          create: (ctx) => Shifts(),
+        ),
+
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

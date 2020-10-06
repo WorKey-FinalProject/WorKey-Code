@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -90,6 +91,7 @@ class CompanyGroups with ChangeNotifier {
     clearLists();
     await _fetchAndSetToListHandler('employeeList');
     await _fetchAndSetToListHandler('workGroupList');
+    await _fetchGroupEmployeeData();
   }
 
   Future<void> _fetchAndSetToListHandler(String name) async {
@@ -133,6 +135,55 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> fetchEmployeeData(GroupEmployeeModel groupEmployeeModel) async {
+    await _dbRef
+        .child('Users')
+        .child('Personal Accounts')
+        .child(groupEmployeeModel.id)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      PersonalAccountModel p = PersonalAccountModel(
+          email: null, firstName: null, lastName: null, dateOfCreation: null);
+      p.fromJsonToObject(dataSnapshot.value, groupEmployeeModel.id);
+      groupEmployeeModel.address = p.address;
+      groupEmployeeModel.firstName = p.firstName;
+      groupEmployeeModel.lastName = p.lastName;
+      groupEmployeeModel.phoneNumber = p.phoneNumber;
+      groupEmployeeModel.picture = p.profilePicture;
+    });
+  }
+
+  Future<void> _fetchGroupEmployeeData() async {
+    try {
+      if (_employeeList.isNotEmpty) {
+        _dbRef
+            .child('Users')
+            .child('Personal Accounts')
+            .orderByKey()
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          Map<dynamic, dynamic> map = dataSnapshot.value;
+          _employeeList.forEach((employee) {
+            PersonalAccountModel p = PersonalAccountModel(
+                email: null,
+                firstName: null,
+                lastName: null,
+                dateOfCreation: null);
+            p.fromJsonToObject(map[employee.id], employee.id);
+            employee.firstName = p.firstName;
+            employee.lastName = p.lastName;
+            employee.phoneNumber = p.phoneNumber;
+            employee.address = p.address;
+            employee.picture = p.profilePicture;
+          });
+        });
+      }
+    } on Exception {
+      throw 'Error in _fetchGroupEmployeeData()';
+    }
+    notifyListeners();
+  }
+
   Future<void> addToFirebaseAndList(dynamic model) async {
     User user = FirebaseAuth.instance.currentUser;
     try {
@@ -144,7 +195,6 @@ class CompanyGroups with ChangeNotifier {
             .child(_userId)
             .child('workGroupList');
         String newKey = db.push().key;
-
         model.id = newKey;
 
         /// Add workgroup logo to firebase-storage
@@ -160,7 +210,6 @@ class CompanyGroups with ChangeNotifier {
               )
               .onComplete;
           print('File Uploaded');
-
           final url = await ref.getDownloadURL();
           model.workGroupLogo = url;
         }
@@ -171,6 +220,7 @@ class CompanyGroups with ChangeNotifier {
 
         /// model == GroupEmployeeModel
       } else if (model is GroupEmployeeModel) {
+        model.entryDate = DateTime.now().toString();
         await _dbRef
             .child('Company Groups')
             .child(_userId)
@@ -244,5 +294,31 @@ class CompanyGroups with ChangeNotifier {
     } on Exception {
       throw ErrorHint;
     }
+  }
+
+  Future<List<PersonalAccountModel>> getAllPersonalAccounts() async {
+    List<PersonalAccountModel> list = [];
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> map = dataSnapshot.value;
+        map.forEach((key, value) {
+          PersonalAccountModel p = PersonalAccountModel(
+              email: null,
+              firstName: null,
+              lastName: null,
+              dateOfCreation: null);
+          p.fromJsonToObject(value, key);
+          list.add(p);
+        });
+      });
+    } on Exception {
+      throw 'Error in getAllPersonalAccounts()';
+    }
+    return list;
   }
 }
