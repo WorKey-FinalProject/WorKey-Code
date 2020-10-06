@@ -30,12 +30,6 @@ class _AuthScreenState extends State<AuthScreen> {
         password,
       );
       await Provider.of<CompanyGroups>(context, listen: false).getUserId();
-      ShiftModel shiftModel = ShiftModel(
-          date: DateTime.now(),
-          startTime: DateTime.now(),
-          endTime: DateTime.now().add(Duration(minutes: 800)));
-      await Provider.of<Shifts>(context, listen: false)
-          .addToFirebaseAndList(shiftModel, 'eSGvvbiuEhQiLkOOckj3acTZF9H2');
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 
