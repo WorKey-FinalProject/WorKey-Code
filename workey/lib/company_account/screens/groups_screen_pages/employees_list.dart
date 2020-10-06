@@ -148,21 +148,19 @@ class _State extends State<EmployeesList> {
                         child: ListTile(
                           leading: CircleAvatar(
                             radius: 30,
+                            backgroundColor: Colors.black,
                             backgroundImage:
-                                NetworkImage(employeesList[index].picture),
+                                employeesList[index].picture.isNotEmpty
+                                    ? NetworkImage(
+                                        employeesList[index].picture,
+                                      )
+                                    : null,
                           ),
-                          // ProfilePicture(
-                          //   isEditable: false,
-                          //   size: 30,
-                          //   imageUrl: '', //employeesList[index].picture,
-                          // ),
-
                           title: Text(
-                            '${employeesList[index].firstName} ${employeesList[index].lastName}',
-                            style: Theme.of(context).textTheme.title,
-                          ),
+                              '${employeesList[index].firstName} ${employeesList[index].lastName}'),
+                          isThreeLine: true,
                           subtitle: Text(
-                            employeesList[index].entryDate,
+                            '${employeesList[index].email} \n${employeesList[index].role} \n${DateFormat.yMd().format(employeesList[index].entryDate)}',
                           ),
                           trailing: MediaQuery.of(context).size.width > 460
                               ? FlatButton.icon(

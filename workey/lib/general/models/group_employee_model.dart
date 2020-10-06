@@ -7,7 +7,7 @@ class GroupEmployeeModel {
   String role;
   String firstName;
   String lastName;
-  String entryDate;
+  DateTime entryDate;
   String phoneNumber;
   String address;
   String picture;
@@ -32,7 +32,7 @@ class GroupEmployeeModel {
       'workGroupId': this.workGroupId,
       'salary': this.salary,
       'role': this.role,
-      'entryDate': this.entryDate,
+      'entryDate': this.entryDate.toString(),
     };
   }
 
@@ -41,7 +41,7 @@ class GroupEmployeeModel {
     workGroupId = snapshot['workGroupId'];
     salary = snapshot['salary'] ?? '';
     role = snapshot['role'] ?? '';
-    entryDate = snapshot['entryDate'] ?? '';
+    entryDate = DateTime.parse(snapshot['entryDate']) ?? '';
   }
 
   void updateGroupEmployee(GroupEmployeeModel groupEmployeeModel) {

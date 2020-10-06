@@ -63,10 +63,11 @@ class _MembersScreenState extends State<MembersScreen> {
                 employeeList[index].picture,
               ),
             ),
-            title: Text(employeeList[index].role),
+            title: Text(
+                '${employeeList[index].firstName} ${employeeList[index].lastName}'),
             isThreeLine: true,
             subtitle: Text(
-              '${employeeList[index].firstName} ${employeeList[index].lastName} \n${employeeList[index].email}',
+              '${employeeList[index].email} \n${employeeList[index].role}',
             ),
           );
         },
