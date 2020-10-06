@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:workey/personal_account/screens/members_screen.dart';
 
 import '../../personal_account/screens/weekly_shifts_screen.dart';
 import 'icons_grid_view.dart';
@@ -35,6 +36,12 @@ class GridViewIconButton extends StatelessWidget {
 
       case ButtonType.groupMembers:
         {
+          Navigator.push(
+            ctx,
+            MaterialPageRoute(
+              builder: (context) => MembersScreen(),
+            ),
+          );
           print('Selected groupMembers button');
         }
         break;

@@ -116,8 +116,7 @@ class Shifts with ChangeNotifier {
 
   Future<void> _shiftTotalMoney(ShiftModel shiftModel) async {
     try {
-      shiftModel.totalMoney =
-          double.parse(shiftModel.totalHours) * shiftModel.hourlyWage;
+      shiftModel.totalWage = shiftModel.totalHours * shiftModel.hourlyWage;
     } on Exception {
       ErrorHint;
     }
