@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
 
 class MembersScreen extends StatefulWidget {
   @override
@@ -7,41 +9,44 @@ class MembersScreen extends StatefulWidget {
 }
 
 class _MembersScreenState extends State<MembersScreen> {
-  List<GroupEmployeeModel> employeeList = [
-    GroupEmployeeModel(
-      id: DateTime.now().toString(),
-      workGroupId: DateTime.now().toString(),
-      firstName: 'firstName',
-      lastName: 'lastName',
-      picture:
-          'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
-      role: 'role1',
-      salary: 'salary',
-    ),
-    GroupEmployeeModel(
-      id: DateTime.now().toString(),
-      workGroupId: DateTime.now().toString(),
-      firstName: 'firstName',
-      lastName: 'lastName',
-      picture:
-          'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
-      role: 'role2',
-      salary: 'salary',
-    ),
-    GroupEmployeeModel(
-      id: DateTime.now().toString(),
-      workGroupId: DateTime.now().toString(),
-      firstName: 'firstName',
-      lastName: 'lastName',
-      picture:
-          'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
-      role: 'role3',
-      salary: 'salary',
-    ),
-  ];
+  List<GroupEmployeeModel> employeeList; //= [
+  //   GroupEmployeeModel(
+  //     id: DateTime.now().toString(),
+  //     workGroupId: DateTime.now().toString(),
+  //     firstName: 'firstName',
+  //     lastName: 'lastName',
+  //     picture:
+  //         'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
+  //     role: 'role1',
+  //     salary: 'salary',
+  //   ),
+  //   GroupEmployeeModel(
+  //     id: DateTime.now().toString(),
+  //     workGroupId: DateTime.now().toString(),
+  //     firstName: 'firstName',
+  //     lastName: 'lastName',
+  //     picture:
+  //         'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
+  //     role: 'role2',
+  //     salary: 'salary',
+  //   ),
+  //   GroupEmployeeModel(
+  //     id: DateTime.now().toString(),
+  //     workGroupId: DateTime.now().toString(),
+  //     firstName: 'firstName',
+  //     lastName: 'lastName',
+  //     picture:
+  //         'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
+  //     role: 'role3',
+  //     salary: 'salary',
+  //   ),
+  // ];
 
   @override
   Widget build(BuildContext context) {
+    final companyGroupsProvider =
+        Provider.of<CompanyGroups>(context, listen: false);
+    employeeList = companyGroupsProvider.getEmployeeList;
     return Scaffold(
       appBar: AppBar(
         title: Text('Group Members'),
@@ -61,7 +66,7 @@ class _MembersScreenState extends State<MembersScreen> {
             title: Text(employeeList[index].role),
             isThreeLine: true,
             subtitle: Text(
-              '${employeeList[index].firstName} ${employeeList[index].lastName} \nEmail',
+              '${employeeList[index].firstName} ${employeeList[index].lastName} \n${employeeList[index].email}',
             ),
           );
         },

@@ -289,8 +289,9 @@ class _EditFeedsScreenState extends State<EditFeedsScreen> {
                       if (value.isEmpty) {
                         return 'Please enter a description.';
                       }
-                      if (value.length < 5) {
-                        return 'Should be at least 5 characters long.';
+                      if (value.isEmpty) {
+                        // return 'Should be at least 5 characters long.';
+                        return 'Please enter some text';
                       }
                       return null;
                     },
