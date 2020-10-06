@@ -48,6 +48,33 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
     });
   }
 
+  void deleteBasicEvent(BasicEvent basicEvent) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Are you sure?'),
+        content: Text('Do you want to delete this Event?'),
+        actions: [
+          FlatButton(
+            child: Text("Cancel"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          FlatButton(
+            child: Text("Yes"),
+            onPressed: () {
+              setState(() {
+                _list.remove(basicEvent);
+              });
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,7 +105,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
       appBar: AppBar(
         title: Text('Weekly Shifts'),
       ),
-      body: TimeTable(_list),
+      body: TimeTable(_list, deleteBasicEvent),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Theme.of(context).primaryColor,
