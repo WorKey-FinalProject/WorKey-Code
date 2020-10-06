@@ -12,22 +12,22 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
   List<ShiftModel> shiftsList = [
     ShiftModel(
       date: DateTime.now(),
-      startTime: '14:00',
-      endTime: '22:00',
+      //startTime: '14:00',
+      //endTime: '22:00',
+      //totalHours: '08:00',
+      totalMoney: 240,
+    ),
+    ShiftModel(
+      date: DateTime.now(),
+      //startTime: '14:00',
+      //endTime: '22:00',
       totalHours: '08:00',
       totalMoney: 240,
     ),
     ShiftModel(
       date: DateTime.now(),
-      startTime: '14:00',
-      endTime: '22:00',
-      totalHours: '08:00',
-      totalMoney: 240,
-    ),
-    ShiftModel(
-      date: DateTime.now(),
-      startTime: '14:00',
-      endTime: '22:00',
+      //startTime: '14:00',
+      //endTime: '22:00',
       totalHours: '08:00',
       totalMoney: 240,
     ),
@@ -193,13 +193,13 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
                 ),
                 DataCell(
                   FittedBox(
-                    child: Text(shift.startTime),
-                  ),
+                      //child: Text(shift.startTime),
+                      ),
                 ),
                 DataCell(
                   FittedBox(
-                    child: Text(shift.endTime),
-                  ),
+                      //child: Text(shift.endTime),
+                      ),
                 ),
                 DataCell(
                   FittedBox(

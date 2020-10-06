@@ -5,12 +5,14 @@ class CompanyGroupModel {
   String feedList;
   String employeeList;
   String workGroupList;
+  String shiftList;
 
   CompanyGroupModel({
     @required this.id,
     this.feedList,
     this.employeeList,
     this.workGroupList,
+    this.shiftList,
   });
 
   Map<String, Object> toJson() {
@@ -18,6 +20,7 @@ class CompanyGroupModel {
       'employeeList': this.employeeList,
       'feedList': this.feedList,
       'workGroupList': this.workGroupList,
+      'shiftList': this.shiftList,
     };
   }
 
@@ -26,5 +29,6 @@ class CompanyGroupModel {
     employeeList = snapshot['employeeList'] ?? '';
     feedList = snapshot['feedList'] ?? '';
     workGroupList = snapshot['workGroupList'] ?? '';
+    shiftList = snapshot['shiftList'] ?? '';
   }
 }

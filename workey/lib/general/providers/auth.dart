@@ -149,6 +149,7 @@ class Auth with ChangeNotifier {
         employeeList: '',
         feedList: '',
         workGroupList: '',
+        shiftList: '',
       );
       await dbRef
           .child('Users')
