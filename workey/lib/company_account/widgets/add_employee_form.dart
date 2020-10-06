@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/models/personal_account_model.dart';
 
 import '../../general/widgets/profile_picture.dart';
 import '../../general/models/snackbar_result.dart';
@@ -16,13 +18,30 @@ class AddEmployeeForm extends StatefulWidget {
 
 class _AddEmployeeForm extends State<AddEmployeeForm> {
   // final workGroupLocationController = GoogleMapController;
-
-  final _workGroupNameController = TextEditingController();
+  List<PersonalAccountModel> personalAccountList = [];
+  List<String> tempSearchList = [];
+  final _employeeEmailController = TextEditingController();
+  final _employeeSalaryController = TextEditingController();
+  final _employeePositionController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
-  File _userImageFile;
-  // String _userImage;
+  _searchNewEmployee(String searchValue) {
+    if (searchValue.isEmpty) {
+      setState(() {
+        personalAccountList = [];
+        tempSearchList = [];
+      });
+    } else {
+      personalAccountList.forEach((element) {
+        if (element.email.startsWith(searchValue)) {
+          setState(() {
+            tempSearchList.add(element.email);
+          });
+        }
+      });
+    }
+  }
 
   Future<void> _addNewWorkGroup() async {
     final workGroupProvider =
@@ -33,12 +52,12 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
     if (isValid) {
       _formKey.currentState.save();
 
+//GroupEmployeeModel newEmoloyee = GroupEmployeeModel(id: null, workGroupId: null)
       WorkGroupModel newWorkGroup = WorkGroupModel(
         dateOfCreation: DateTime.now().toString(),
-        workGroupName: _workGroupNameController.text,
+        workGroupName: _employeeEmailController.text,
         workGroupLogo: '',
       );
-      newWorkGroup.setImageFile(_userImageFile);
 
       var isError = false;
       String message;
@@ -70,13 +89,11 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
     }
   }
 
-  void _selectImage(File pickedImage) {
-    _userImageFile = pickedImage;
-  }
-
   @override
   void dispose() {
-    _workGroupNameController.dispose();
+    _employeeEmailController.dispose();
+    _employeePositionController.dispose();
+    _employeeSalaryController.dispose();
     super.dispose();
   }
 
@@ -91,29 +108,25 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ProfilePicture(
-                onSelectImage: _selectImage,
-                size: 150,
-                isEditable: true,
-                imageUrl: '',
-                keepImageFile: _userImageFile,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
-                child: TextFormField(
-                  controller: _workGroupNameController,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter a name for the workgroup';
-                    }
-                    return null;
-                  },
-                  decoration: InputDecoration(labelText: 'Work Group Name'),
-                  onSaved: (value) {
-                    _workGroupNameController.text = value;
-                  },
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (searchValue) => _searchNewEmployee(searchValue),
+                  decoration: InputDecoration(
+                    //prefixIcon: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),iconSize: 20.0,onPressed: ,),
+                    contentPadding: EdgeInsets.only(left: 25.0),
+                    hintText: 'Search Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(4.0),
+                    ),
+                  ),
                 ),
               ),
+
+              _textFieldForm(_employeeEmailController, 'Employee\'s Email'),
+              _textFieldForm(_employeeSalaryController, 'Employee\'s Salary'),
+              _textFieldForm(
+                  _employeePositionController, 'Employee\'s Position'),
               // Container(
               //   margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
               //   child: Row(
@@ -172,6 +185,25 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _textFieldForm(TextEditingController controller, String labelText) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+      child: TextFormField(
+        controller: controller,
+        validator: (value) {
+          if (value.isEmpty) {
+            return 'Please enter an email address';
+          }
+          return null;
+        },
+        decoration: InputDecoration(labelText: labelText),
+        onSaved: (value) {
+          controller.text = value;
+        },
       ),
     );
   }
