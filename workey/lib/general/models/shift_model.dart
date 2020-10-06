@@ -3,8 +3,8 @@ import 'package:flutter/foundation.dart';
 class ShiftModel {
   String id;
   DateTime date;
-  String startTime;
-  String endTime;
+  DateTime startTime;
+  DateTime endTime;
   double hourlyWage;
   String totalHours;
   double totalMoney;
@@ -23,18 +23,21 @@ class ShiftModel {
 
   Map<String, Object> toJson() {
     return {
-      'startTime': this.startTime,
-      'endTime': this.endTime,
+      'date': this.date.toString(),
+      'startTime': this.startTime.toString(),
+      'endTime': this.endTime.toString(),
     };
   }
 
   void fromJsonToObject(Map snapshot, String uid) {
     id = uid;
+    date = snapshot['date'];
     startTime = snapshot['startTime'];
-    endTime = snapshot['endTime'] ?? '';
+    endTime = snapshot['endTime'];
   }
 
   void updateShift(ShiftModel shiftModel) {
+    this.date = shiftModel.date;
     this.startTime = shiftModel.startTime;
     this.endTime = shiftModel.endTime;
   }

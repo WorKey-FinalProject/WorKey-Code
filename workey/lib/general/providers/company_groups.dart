@@ -295,4 +295,30 @@ class CompanyGroups with ChangeNotifier {
       throw ErrorHint;
     }
   }
+
+  Future<List<PersonalAccountModel>> getAllPersonalAccounts() async {
+    List<PersonalAccountModel> list = [];
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> map = dataSnapshot.value;
+        map.forEach((key, value) {
+          PersonalAccountModel p = PersonalAccountModel(
+              email: null,
+              firstName: null,
+              lastName: null,
+              dateOfCreation: null);
+          p.fromJsonToObject(value, key);
+          list.add(p);
+        });
+      });
+    } on Exception {
+      throw 'Error in getAllPersonalAccounts()';
+    }
+    return list;
+  }
 }
