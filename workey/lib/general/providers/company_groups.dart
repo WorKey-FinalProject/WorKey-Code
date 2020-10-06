@@ -235,7 +235,7 @@ class CompanyGroups with ChangeNotifier {
 
         /// model == GroupEmployeeModel
       } else if (model is GroupEmployeeModel) {
-        model.entryDate = DateTime.now().toString();
+        model.entryDate = DateTime.now();
         await _dbRef
             .child('Company Groups')
             .child(_userId)
