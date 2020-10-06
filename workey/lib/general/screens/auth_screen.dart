@@ -30,6 +30,14 @@ class _AuthScreenState extends State<AuthScreen> {
         password,
       );
       await Provider.of<CompanyGroups>(context, listen: false).getUserId();
+      ShiftModel shiftModel = ShiftModel(
+          date: null,
+          startTime: null,
+          endTime: null,
+          employeeId: 'ZkI5O2XfLpR1ji17WHn0HxKP7Ww2');
+      await Provider.of<Shifts>(context, listen: false)
+          .shiftSummary(shiftModel);
+      print(shiftModel.hourlyWage);
     } on PlatformException catch (err) {
       var message = 'An error occurred, please check your credentials!';
 

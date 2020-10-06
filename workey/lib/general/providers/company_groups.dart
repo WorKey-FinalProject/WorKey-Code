@@ -53,6 +53,20 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> setPersonalCompanyIdInFirebase(
+      String personalId, String companyId) async {
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child('personalId')
+          .child('companyId')
+          .set(companyId);
+    } on Exception {
+      throw 'Error in setPersonalCompanyId';
+    }
+  }
+
   Future<void> setCurrentWorkGroup(WorkGroupModel workGroupModel) async {
     _currentWorkGroup = workGroupModel;
     notifyListeners();
@@ -150,6 +164,7 @@ class CompanyGroups with ChangeNotifier {
       groupEmployeeModel.lastName = p.lastName;
       groupEmployeeModel.phoneNumber = p.phoneNumber;
       groupEmployeeModel.picture = p.profilePicture;
+      groupEmployeeModel.email = p.email;
     });
   }
 
