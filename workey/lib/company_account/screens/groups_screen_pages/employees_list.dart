@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/group_employee_model.dart';
-import 'package:workey/general/widgets/profile_picture.dart';
-
-import '../../../general/models/company_account_model.dart';
 import '../../../general/providers/company_groups.dart';
 import '../../../general/models/work_group_model.dart';
 import '../../screens/employee_detail_screen.dart';
