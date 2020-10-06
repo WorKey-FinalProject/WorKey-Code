@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:workey/general/screens/signup_screen.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+import '../../../general/screens/signup_screen.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(
@@ -44,6 +47,55 @@ class _AuthFormState extends State<AuthForm> {
       );
     }
   }
+
+  // Future<bool> _googleSignIn() async {
+  //   final googleSignIn = GoogleSignIn();
+  //   FirebaseAuth auth = FirebaseAuth.instance;
+
+  //   GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+
+  //   if (googleSignInAccount != null) {
+  //     GoogleSignInAuthentication googleSignInAuthentication =
+  //         await googleSignInAccount.authentication;
+
+  //     AuthCredential credential = GoogleAuthProvider.getCredential(
+  //       idToken: googleSignInAuthentication.idToken,
+  //       accessToken: googleSignInAuthentication.accessToken,
+  //     );
+
+  //     UserCredential userCredential =
+  //         await auth.signInWithCredential(credential);
+
+  //     User user = auth.currentUser;
+  //     print(user.uid);
+
+  //     return Future.value(true);
+  //   }
+  // }
+
+  // Future<void> _handleSignIn() async {
+  //   GoogleSignIn _googleSignIn = GoogleSignIn();
+  //   // scopes: [
+  //   //   'email',
+  //   //   'https://www.googleapis.com/auth/contacts.readonly',
+  //   // ],
+  //   // );
+  //   try {
+  //     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+  //     final GoogleSignInAuthentication googleAuth =
+  //         await googleUser.authentication;
+
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleAuth.accessToken,
+  //       idToken: googleAuth.idToken,
+  //     );
+
+  //     UserCredential user =
+  //         await FirebaseAuth.instance.signInWithCredential(credential);
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +191,11 @@ class _AuthFormState extends State<AuthForm> {
                         child: Center(child: CircularProgressIndicator()),
                       )
                     : Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: const EdgeInsets.only(
+                          right: 20.0,
+                          left: 20.0,
+                          bottom: 20.0,
+                        ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(5),
                           child: Container(
@@ -148,11 +204,12 @@ class _AuthFormState extends State<AuthForm> {
                             child: RaisedButton(
                               color: Theme.of(context).buttonColor,
                               child: Text(
-                                'SIGN IN',
+                                'Sign In',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                ),
                               ),
                               onPressed: _trySubmit,
                             ),
@@ -161,6 +218,49 @@ class _AuthFormState extends State<AuthForm> {
                       ),
               ),
             ),
+            // Flexible(
+            //   child: Container(
+            //     margin: const EdgeInsets.only(
+            //       right: 20.0,
+            //       left: 20.0,
+            //       bottom: 5,
+            //     ),
+            //     child: ClipRRect(
+            //       borderRadius: BorderRadius.circular(5),
+            //       child: RaisedButton(
+            //           onPressed: _googleSignIn,
+            //           padding:
+            //               EdgeInsets.only(top: 3.0, bottom: 3.0, left: 3.0),
+            //           color: const Color(0xFF4285F4),
+            //           child: Row(
+            //             mainAxisSize: MainAxisSize.max,
+            //             children: <Widget>[
+            //               ClipRRect(
+            //                 borderRadius: BorderRadius.circular(5),
+            //                 child: Container(
+            //                   color: Colors.white,
+            //                   child: Image.asset(
+            //                     'assets/images/google-icon.png',
+            //                     height: 48.0,
+            //                   ),
+            //                 ),
+            //               ),
+            //               Container(
+            //                 padding: EdgeInsets.only(left: 40.0, right: 10.0),
+            //                 child: Text(
+            //                   "Sign in with Google",
+            //                   style: TextStyle(
+            //                     color: Colors.white,
+            //                     fontWeight: FontWeight.bold,
+            //                     fontSize: 20,
+            //                   ),
+            //                 ),
+            //               ),
+            //             ],
+            //           )),
+            //     ),
+            //   ),
+            // ),
             InkWell(
               onTap: () {
                 Navigator.of(context).pushNamed(SignUpScreen.routeName);

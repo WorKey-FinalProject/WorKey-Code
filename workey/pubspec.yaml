@@ -33,6 +33,7 @@ dependencies:
   firebase_messaging: ^6.0.16
   firebase_storage: ^4.0.0
   firebase_ml_vision: ^0.9.6+2
+  google_sign_in: ^4.5.4
 
   camera: ^0.5.8+5
   tflite_flutter: ^0.5.0
@@ -52,6 +53,7 @@ dependencies:
   simple_animations: ^2.2.2
   url_launcher: ^5.4.1
   timetable: ^0.2.8
+  
 
 
   flutter_keyboard_visibility: ^3.2.2
@@ -92,6 +94,8 @@ flutter:
       - assets/images/card_types/rupay.png
       - assets/images/card_types/visa.png
       - assets/images/login_pic.jpg
+
+      - assets/images/google-icon.png
 
       - packages/time_machine/data/cultures/cultures.bin
       - packages/time_machine/data/tzdb/tzdb.bin
