@@ -51,6 +51,7 @@ dependencies:
   flutter_staggered_animations: ^0.1.2
   simple_animations: ^2.2.2
   url_launcher: ^5.4.1
+  timetable: ^0.2.8
 
 
   flutter_keyboard_visibility: ^3.2.2
@@ -91,6 +92,9 @@ flutter:
       - assets/images/card_types/rupay.png
       - assets/images/card_types/visa.png
       - assets/images/login_pic.jpg
+
+      - packages/time_machine/data/cultures/cultures.bin
+      - packages/time_machine/data/tzdb/tzdb.bin
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,67 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/widgets/profile_picture.dart';
 
+import '../../../general/models/company_account_model.dart';
 import '../../../general/providers/company_groups.dart';
-//import '../../widgets/test.dart';
 import '../../../general/models/work_group_model.dart';
 import '../../screens/employee_detail_screen.dart';
 
 class EmployeesList extends StatefulWidget {
-  String currentWorkGroupId;
+  // String currentWorkGroupId;
 
-  EmployeesList(this.currentWorkGroupId);
+  // EmployeesList(this.currentWorkGroupId);
 
   @override
   _State createState() => _State();
 }
 
 class _State extends State<EmployeesList> {
-  List<WorkGroupModel> subGroupsList = [];
+  //List<WorkGroupModel> subGroupsList = [];
+  WorkGroupModel currentWorkGroup;
 
-  List<String> emp = [
-    'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third',
-    // 'first',
-    // 'second',
-    // 'third'
-  ];
+  List<GroupEmployeeModel> employeesList = [];
+
   @override
   Widget build(BuildContext context) {
     final subWorkGroupsProvider = Provider.of<CompanyGroups>(context);
-    subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
+    employeesList = subWorkGroupsProvider.getEmployeeList;
+
+    //subGroupsList = subWorkGroupsProvider.getWorkGroupsList;
 
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,
         top: 20,
       ),
-      alignment: emp.isEmpty ? Alignment.center : Alignment.bottomRight,
+      alignment:
+          employeesList.isEmpty ? Alignment.center : Alignment.bottomRight,
       child: RawMaterialButton(
         onPressed: () {},
         elevation: 2.0,
@@ -74,7 +51,7 @@ class _State extends State<EmployeesList> {
         shape: CircleBorder(),
       ),
     );
-    return emp.isEmpty
+    return employeesList.isEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -105,7 +82,7 @@ class _State extends State<EmployeesList> {
               ListView.builder(
                 itemBuilder: (context, index) {
                   return Dismissible(
-                    key: Key('${emp[index]}'),
+                    key: Key('${employeesList[index]}'),
                     direction: DismissDirection.endToStart,
                     background: Container(
                       decoration: BoxDecoration(
@@ -163,17 +140,22 @@ class _State extends State<EmployeesList> {
                         margin:
                             EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                         child: ListTile(
-                          leading: CircleAvatar(
-                            radius: 30,
-                            child: Padding(
-                              padding: EdgeInsets.all(6),
-                              child: FittedBox(
-                                child: Text('Profile Pic'),
-                              ),
-                            ),
+                          leading: ProfilePicture(
+                            isEditable: false,
+                            size: 30,
+                            imageUrl: employeesList[index].picture,
                           ),
+                          //CircleAvatar(
+                          //   radius: 30,
+                          //   child: Padding(
+                          //     padding: EdgeInsets.all(6),
+                          //     child: FittedBox(
+                          //       child: Text('Profile Pic'),
+                          //     ),
+                          //   ),
+                          // ),
                           title: Text(
-                            emp[index],
+                            '${employeesList[index].firstName + employeesList[index].lastName}',
                             style: Theme.of(context).textTheme.title,
                           ),
                           subtitle: Text(
@@ -198,7 +180,7 @@ class _State extends State<EmployeesList> {
                     ),
                   );
                 },
-                itemCount: emp.length,
+                itemCount: employeesList.length,
               ),
               addEmployeeButton,
             ],
