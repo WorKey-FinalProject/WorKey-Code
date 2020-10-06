@@ -3,15 +3,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/group_employee_model.dart';
-import 'package:workey/general/models/personal_account_model.dart';
 
+import '../../general/models/group_employee_model.dart';
+import '../../general/models/personal_account_model.dart';
 import '../../general/widgets/profile_picture.dart';
 import '../../general/models/snackbar_result.dart';
 import '../../general/models/work_group_model.dart';
 import '../../general/providers/company_groups.dart';
 
 class AddEmployeeForm extends StatefulWidget {
+  final CompanyGroups provider;
+
+  AddEmployeeForm(this.provider);
   @override
   _AddEmployeeForm createState() => _AddEmployeeForm();
 }
@@ -89,6 +92,12 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
     }
   }
 
+  Future<List<PersonalAccountModel>> _fetchPersonalList() async {
+    personalAccountList = await widget.provider.getAllPersonalAccounts()
+        as List<PersonalAccountModel>;
+    return personalAccountList;
+  }
+
   @override
   void dispose() {
     _employeeEmailController.dispose();
@@ -99,6 +108,8 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
 
   @override
   Widget build(BuildContext context) {
+    _fetchPersonalList();
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: Container(
