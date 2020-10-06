@@ -33,10 +33,12 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
       _auth.findCurrAccountType(user).then(
         (accountType) async {
           accountTypeChosen = accountType;
-          if (accountTypeChosen == AccountTypeChosen.company) {
-            await _companyGroupsProvider.fetchAndSetToLists();
-            await _feedProvider.fetchAndSetToList();
-          }
+          // if (accountTypeChosen == AccountTypeChosen.company) {
+          //   await _companyGroupsProvider.fetchAndSetToLists();
+          //   await _feedProvider.fetchAndSetToList();
+          // }
+          await _companyGroupsProvider.fetchAndSetToLists();
+          await _feedProvider.fetchAndSetToList();
           setState(() {
             _isLoading = false;
           });
