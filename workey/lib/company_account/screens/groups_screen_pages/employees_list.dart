@@ -43,7 +43,7 @@ class _State extends State<EmployeesList> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddEmployeeScreen(),
+              builder: (context) => AddEmployeeScreen(subWorkGroupsProvider),
             ),
           );
         },
