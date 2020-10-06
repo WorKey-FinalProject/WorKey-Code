@@ -11,6 +11,7 @@ class GroupEmployeeModel {
   String phoneNumber;
   String address;
   String picture;
+  String email;
 
   GroupEmployeeModel({
     @required this.id,
@@ -23,6 +24,7 @@ class GroupEmployeeModel {
     this.phoneNumber,
     this.address,
     this.picture,
+    this.email,
   });
 
   Map<String, Object> toJson() {

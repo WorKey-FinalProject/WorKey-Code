@@ -11,7 +11,7 @@ class PersonalAccountModel {
   String phoneNumber;
   String dateOfBirth;
   String address;
-
+  String companyId;
   String faceRecognitionPicture;
   String fingerPrint;
   String profilePicture;
@@ -26,6 +26,7 @@ class PersonalAccountModel {
     @required this.dateOfCreation,
     this.phoneNumber,
     this.dateOfBirth,
+    this.companyId,
     this.address,
     this.faceRecognitionPicture,
     this.fingerPrint,
@@ -56,6 +57,7 @@ class PersonalAccountModel {
       'faceRecognitionPicture': this.faceRecognitionPicture,
       'fingerPrint': this.fingerPrint,
       'profilePicture': this.profilePicture,
+      'companyId': this.companyId,
     };
   }
 
@@ -71,6 +73,7 @@ class PersonalAccountModel {
     phoneNumber = snapshot['phoneNumber'] ?? '';
     profilePicture = snapshot['profilePicture'] ?? '';
     fingerPrint = snapshot['fingerPrint'] ?? '';
+    companyId = snapshot['companyId'] ?? '';
   }
 
   void updateUser(PersonalAccountModel personalUserModel) {
@@ -84,5 +87,6 @@ class PersonalAccountModel {
     this.lastName = personalUserModel.lastName;
     this.phoneNumber = personalUserModel.phoneNumber;
     this.profilePicture = personalUserModel.profilePicture;
+    this.companyId = personalUserModel.companyId;
   }
 }
