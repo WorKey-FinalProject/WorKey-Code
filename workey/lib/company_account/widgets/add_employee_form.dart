@@ -21,9 +21,6 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
 
   final _formKey = GlobalKey<FormState>();
 
-  File _userImageFile;
-  // String _userImage;
-
   Future<void> _addNewWorkGroup() async {
     final workGroupProvider =
         Provider.of<CompanyGroups>(context, listen: false);
@@ -38,7 +35,6 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
         workGroupName: _workGroupNameController.text,
         workGroupLogo: '',
       );
-      newWorkGroup.setImageFile(_userImageFile);
 
       var isError = false;
       String message;
@@ -70,10 +66,6 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
     }
   }
 
-  void _selectImage(File pickedImage) {
-    _userImageFile = pickedImage;
-  }
-
   @override
   void dispose() {
     _workGroupNameController.dispose();
@@ -91,13 +83,6 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ProfilePicture(
-                onSelectImage: _selectImage,
-                size: 150,
-                isEditable: true,
-                imageUrl: '',
-                keepImageFile: _userImageFile,
-              ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 14.0),
                 child: TextFormField(
