@@ -73,7 +73,7 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
             ],
             onChanged: (itemIdentifier) {
               if (itemIdentifier == 'logout') {
-                FirebaseAuth.instance.signOut();
+                auth.logout();
               }
             },
           )
