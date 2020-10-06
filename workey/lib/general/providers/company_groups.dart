@@ -11,7 +11,7 @@ class CompanyGroups with ChangeNotifier {
   final _dbRef = FirebaseDatabase.instance.reference();
   String _userId;
 
-  List<WorkGroupModel> _workGroupsList = [];
+  List<WorkGroupModel> _workGroupList = [];
   List<GroupEmployeeModel> _employeeList = [];
 
   WorkGroupModel _currentWorkGroup;
@@ -19,7 +19,7 @@ class CompanyGroups with ChangeNotifier {
   String workGroupImagePath = 'workgroup_logo';
 
   List<WorkGroupModel> get getWorkGroupsList {
-    return [..._workGroupsList];
+    return [..._workGroupList];
   }
 
   List<GroupEmployeeModel> get getEmployeeList {
@@ -37,7 +37,7 @@ class CompanyGroups with ChangeNotifier {
   }
 
   WorkGroupModel findWorkGroupById(String id) {
-    return _workGroupsList.firstWhere((workGroup) => workGroup.id == id);
+    return _workGroupList.firstWhere((workGroup) => workGroup.id == id);
   }
 
   GroupEmployeeModel findEmployeeById(String id) {
@@ -95,7 +95,7 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> clearLists() async {
-    _workGroupsList = [];
+    _workGroupList = [];
     _employeeList = [];
   }
 
@@ -135,7 +135,7 @@ class CompanyGroups with ChangeNotifier {
                     dateOfCreation: null,
                     workGroupLogo: null);
                 wg.fromJson(value, key);
-                _workGroupsList.add(wg);
+                _workGroupList.add(wg);
               });
             } else {
               throw 'Error in fatchAndSetToListHandler function';
@@ -231,11 +231,11 @@ class CompanyGroups with ChangeNotifier {
 
         /// Add model to Firebase-realtime & local-list
         await db.child(model.id).set(model.toJson());
-        _workGroupsList.add(model);
+        _workGroupList.add(model);
 
         /// model == GroupEmployeeModel
       } else if (model is GroupEmployeeModel) {
-        model.entryDate = DateTime.now().toString();
+        model.entryDate = DateTime.now();
         await _dbRef
             .child('Company Groups')
             .child(_userId)
@@ -257,7 +257,7 @@ class CompanyGroups with ChangeNotifier {
       var db = _dbRef.child('Company Groups').child(_userId);
       if (model is WorkGroupModel) {
         db.child('workGroupList');
-        _workGroupsList[_workGroupsList
+        _workGroupList[_workGroupList
             .indexWhere((workGroup) => workGroup.id == model.id)] = model;
       } else if (model is GroupEmployeeModel) {
         db.child('employeeList');
@@ -296,15 +296,30 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> deleteWorkGroupById(String workGroupId) async {
+  Future<void> deleteWorkGroup(WorkGroupModel workGroupModel) async {
+    WorkGroupModel wg = WorkGroupModel(
+        workGroupName: null,
+        dateOfCreation: null,
+        workGroupLogo: null,
+        id: workGroupModel.id);
     try {
       await _dbRef
           .child('Company Groups')
           .child(_userId)
           .child('workGroupList')
-          .child(workGroupId)
+          .child(workGroupModel.id)
           .remove();
-      _workGroupsList.removeWhere((workGroup) => workGroup.id == workGroupId);
+      await _dbRef
+          .child('Company Groups')
+          .child(_userId)
+          .child('deletedWorkGroupList')
+          .child(workGroupModel.id)
+          .set(wg.toJson());
+      workGroupModel.employeeList.forEach((employee) {
+        deleteEmployeeById(employee.id, workGroupModel.id);
+      });
+      _workGroupList
+          .removeWhere((workGroup) => workGroup.id == workGroupModel.id);
       notifyListeners();
     } on Exception {
       throw ErrorHint;
