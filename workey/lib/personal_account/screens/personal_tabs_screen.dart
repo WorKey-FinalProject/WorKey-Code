@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/providers/auth.dart';
 
 import './home_screen.dart';
 import './group_screen.dart';
@@ -44,6 +46,8 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<Auth>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

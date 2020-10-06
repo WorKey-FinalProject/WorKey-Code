@@ -4,8 +4,9 @@ import 'package:time_machine/time_machine.dart';
 
 class TimeTable extends StatefulWidget {
   final List<BasicEvent> list;
+  final Function deleteBasicEvent;
 
-  TimeTable(this.list);
+  TimeTable(this.list, this.deleteBasicEvent);
 
   @override
   _TimeTableState createState() => _TimeTableState();
@@ -54,12 +55,15 @@ class _TimeTableState extends State<TimeTable> {
     return Timetable<BasicEvent>(
       controller: _controller,
       onEventBackgroundTap: (start, isAllDay) {
-        _showSnackBar('Background tapped $start is all day event $isAllDay');
+        print('Background tapped $start is all day event $isAllDay');
       },
       eventBuilder: (event) {
         return BasicEventWidget(
           event,
-          onTap: () => _showSnackBar('Part-day event $event tapped'),
+          //onTap: () => print('Part-day event $event tapped'),
+          onTap: () {
+            return widget.deleteBasicEvent(event);
+          },
         );
       },
       allDayEventBuilder: (context, event, info) => BasicAllDayEventWidget(
