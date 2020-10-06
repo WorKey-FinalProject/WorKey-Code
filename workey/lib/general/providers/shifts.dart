@@ -115,43 +115,24 @@ class Shifts with ChangeNotifier {
   }
   */
 
-  Future<void> shiftSummary(ShiftModel shiftModel) async {
-    await _getHourlyWage(shiftModel);
-    //await _shiftTotalHours(shiftModel);
-    //await _shiftTotalMoney(shiftModel);
-  }
-
-  Future<void> _getHourlyWage(ShiftModel shiftModel) async {
+  Future<void> shiftSummary(ShiftModel shiftModel, String companyId) async {
     try {
       _dbRef
           .child('Company Groups')
-          .child('eSGvvbiuEhQiLkOOckj3acTZF9H2')
+          .child(companyId)
           .child('employeeList')
           .child(shiftModel.employeeId)
           .once()
           .then((DataSnapshot dataSnapshot) {
         shiftModel.hourlyWage = double.parse(dataSnapshot.value['salary']);
+        DateTime start = shiftModel.startTime;
+        DateTime end = shiftModel.endTime;
+        shiftModel.totalHours = end.difference(start).inMinutes.toDouble() / 60;
+        shiftModel.totalWage = shiftModel.totalHours * shiftModel.hourlyWage;
+        print(shiftModel.totalWage);
       });
     } on Exception {
       throw 'Error in _getHourlyWage(String id)';
-    }
-  }
-
-  Future<void> _shiftTotalHours(ShiftModel shiftModel) async {
-    try {
-      //DateTime start = DateTime.parse(shiftModel.startTime);
-      //DateTime end = DateTime.parse(shiftModel.endTime);
-      //shiftModel.totalHours = end.difference(start).inHours.toString();
-    } on Exception {
-      throw 'Error in _shiftTotalHours function';
-    }
-  }
-
-  Future<void> _shiftTotalMoney(ShiftModel shiftModel) async {
-    try {
-      shiftModel.totalWage = shiftModel.totalHours * shiftModel.hourlyWage;
-    } on Exception {
-      ErrorHint;
     }
   }
 }
