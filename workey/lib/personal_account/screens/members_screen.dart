@@ -7,22 +7,34 @@ class MembersScreen extends StatefulWidget {
 }
 
 class _MembersScreenState extends State<MembersScreen> {
-  List<GroupEmployeeModel> employeesList = [
+  List<GroupEmployeeModel> employeeList = [
     GroupEmployeeModel(
       id: DateTime.now().toString(),
       workGroupId: DateTime.now().toString(),
+      firstName: 'firstName',
+      lastName: 'lastName',
+      picture:
+          'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
       role: 'role1',
       salary: 'salary',
     ),
     GroupEmployeeModel(
       id: DateTime.now().toString(),
       workGroupId: DateTime.now().toString(),
+      firstName: 'firstName',
+      lastName: 'lastName',
+      picture:
+          'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
       role: 'role2',
       salary: 'salary',
     ),
     GroupEmployeeModel(
       id: DateTime.now().toString(),
       workGroupId: DateTime.now().toString(),
+      firstName: 'firstName',
+      lastName: 'lastName',
+      picture:
+          'https://firebasestorage.googleapis.com/v0/b/workey-8c645.appspot.com/o/personal_account_pic%2F8X5JitmE2sTx7WJZGIPLosCCOxM2.jpg?alt=media&token=90883d65-8231-4f67-b910-657cd3215365',
       role: 'role3',
       salary: 'salary',
     ),
@@ -35,15 +47,22 @@ class _MembersScreenState extends State<MembersScreen> {
         title: Text('Group Members'),
       ),
       body: ListView.builder(
-        itemCount: employeesList.length,
+        itemCount: employeeList.length,
         itemBuilder: (context, index) {
           return ListTile(
             onTap: null,
             leading: CircleAvatar(
+              radius: 30,
               backgroundColor: Colors.black,
+              backgroundImage: NetworkImage(
+                employeeList[index].picture,
+              ),
             ),
-            title: Text(employeesList[index].role),
-            subtitle: Text(employeesList[index].id),
+            title: Text(employeeList[index].role),
+            isThreeLine: true,
+            subtitle: Text(
+              '${employeeList[index].firstName} ${employeeList[index].lastName} \nEmail',
+            ),
           );
         },
       ),

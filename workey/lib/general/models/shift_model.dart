@@ -6,8 +6,8 @@ class ShiftModel {
   DateTime startTime;
   DateTime endTime;
   double hourlyWage;
-  String totalHours;
-  double totalMoney;
+  double totalHours;
+  double totalWage;
   String location;
 
   ShiftModel({
@@ -17,7 +17,7 @@ class ShiftModel {
     @required this.endTime,
     this.hourlyWage,
     this.totalHours,
-    this.totalMoney,
+    this.totalWage,
     this.location,
   });
 

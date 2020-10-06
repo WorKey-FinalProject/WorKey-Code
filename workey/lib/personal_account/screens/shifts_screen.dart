@@ -12,24 +12,24 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
   List<ShiftModel> shiftsList = [
     ShiftModel(
       date: DateTime.now(),
-      //startTime: '14:00',
-      //endTime: '22:00',
-      //totalHours: '08:00',
-      totalMoney: 240,
+      startTime: DateTime.now(),
+      endTime: DateTime.now(),
+      totalHours: null,
+      totalWage: 240,
     ),
     ShiftModel(
       date: DateTime.now(),
-      //startTime: '14:00',
-      //endTime: '22:00',
-      totalHours: '08:00',
-      totalMoney: 240,
+      startTime: DateTime.now(),
+      endTime: DateTime.now(),
+      totalHours: null,
+      totalWage: 240,
     ),
     ShiftModel(
       date: DateTime.now(),
-      //startTime: '14:00',
-      //endTime: '22:00',
-      totalHours: '08:00',
-      totalMoney: 240,
+      startTime: DateTime.now(),
+      endTime: DateTime.now(),
+      totalHours: null,
+      totalWage: 240,
     ),
   ];
 
@@ -150,26 +150,26 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
                       ),
                     ),
                   ),
-
                   DataCell(
                     FittedBox(
-                      //child: Text(shift.startTime),
+                      child: Text(
+                          '${shift.startTime.hour}:${shift.startTime.minute}'),
                     ),
                   ),
                   DataCell(
                     FittedBox(
-                      //child: Text(shift.endTime),
+                      child:
+                          Text('${shift.endTime.hour}:${shift.endTime.minute}'),
                     ),
                   ),
                   DataCell(
                     FittedBox(
-                      child: Text(shift.totalHours),
+                      child: Text('${shift.totalHours}'),
                     ),
-
                   ),
                   DataCell(
                     FittedBox(
-                      child: Text('${shift.totalMoney}'),
+                      child: Text('${shift.totalWage}'),
                     ),
                   ),
                 ],
