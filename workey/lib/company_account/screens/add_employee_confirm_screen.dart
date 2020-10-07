@@ -63,14 +63,15 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
       if (isError == false) {
         message = 'Changes saved successfully';
       }
-
-      Navigator.pop(
-        context,
-        SnackBarResult(
-          message: message,
-          isError: isError,
-        ),
-      );
+      int count = 0;
+      Navigator.of(context).popUntil((_) => count++ >= 2);
+      // Navigator.pop(
+      //   context,
+      //   SnackBarResult(
+      //     message: message,
+      //     isError: isError,
+      //   ),
+      // );
     }
   }
 
