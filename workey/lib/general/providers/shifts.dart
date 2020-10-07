@@ -49,9 +49,6 @@ class Shifts with ChangeNotifier {
           .once()
           .then((DataSnapshot dataSnapshot) {
         shiftModel.hourlyWage = double.parse(dataSnapshot.value['salary']);
-        DateTime start = shiftModel.startTime;
-        DateTime end = shiftModel.endTime;
-        shiftModel.totalHours = end.difference(start).inMinutes.toDouble() / 60;
         shiftModel.totalWage = shiftModel.totalHours * shiftModel.hourlyWage;
       });
     } on Exception {

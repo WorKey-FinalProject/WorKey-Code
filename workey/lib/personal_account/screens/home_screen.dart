@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/face_ID.dart';
+import '../widgets/home_top_view.dart';
 import '../../general/widgets/feed.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                child: FaceID(constraints.maxHeight * 0.25),
+                child: HomeTopView(constraints.maxHeight * 0.25),
               ),
               SizedBox(
                 height: constraints.maxHeight * 0.05,

@@ -11,21 +11,18 @@ class ShiftsScreen extends StatefulWidget {
 class _ShiftsScreenState extends State<ShiftsScreen> {
   List<ShiftModel> shiftsList = [
     ShiftModel(
-      date: DateTime.now(),
       startTime: DateTime.now(),
       endTime: DateTime.now(),
       totalHours: null,
       totalWage: 240,
     ),
     ShiftModel(
-      date: DateTime.now(),
       startTime: DateTime.now(),
       endTime: DateTime.now(),
       totalHours: null,
       totalWage: 240,
     ),
     ShiftModel(
-      date: DateTime.now(),
       startTime: DateTime.now(),
       endTime: DateTime.now(),
       totalHours: null,
@@ -89,11 +86,6 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
             columns: [
               DataColumn(
                 label: FittedBox(
-                  child: Text('Date'),
-                ),
-              ),
-              DataColumn(
-                label: FittedBox(
                   child: Text('Start'),
                 ),
               ),
@@ -133,13 +125,13 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
                     Container(
                       margin: const EdgeInsets.all(3),
                       child: CircleAvatar(
-                        backgroundColor: getDayColor(shift.date.weekday),
+                        backgroundColor: getDayColor(shift.startTime.weekday),
                         radius: 30,
                         child: Padding(
                           padding: const EdgeInsets.all(6),
                           child: FittedBox(
                             child: Text(
-                              '${DateFormat.MEd().format(shift.date)}',
+                              '${DateFormat.MEd().format(shift.startTime)}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
