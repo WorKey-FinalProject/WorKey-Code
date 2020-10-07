@@ -36,7 +36,7 @@ class _AddWorkGroupFormState extends State<AddWorkGroupForm> {
       WorkGroupModel newWorkGroup = WorkGroupModel(
         dateOfCreation: DateTime.now().toString(),
         workGroupName: _workGroupNameController.text,
-        workGroupLogo: '',
+        logo: '',
       );
       newWorkGroup.setImageFile(_userImageFile);
 
