@@ -107,7 +107,9 @@ class _State extends State<EmployeesList> {
                     children: [
                       ListView.builder(
                         itemBuilder: (context, index) {
+
                           return GestureDetector(
+
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
