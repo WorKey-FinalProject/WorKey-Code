@@ -41,6 +41,7 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
         role: _employeePositionController.text,
         workGroupId: widget.provider.getCurrentWorkGroup.id,
       );
+      _newEmployeeProvider.fetchEmployeeData(editedEmployee);
 
       var isError = false;
       String message;

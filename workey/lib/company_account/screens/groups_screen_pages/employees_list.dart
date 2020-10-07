@@ -123,7 +123,6 @@ class _State extends State<EmployeesList> {
                     children: [
                       ListView.builder(
                         itemBuilder: (context, index) {
-                          print(employeesList[index].picture);
                           var gestureDetector = GestureDetector(
                             onTap: () => Navigator.push(
                               context,
