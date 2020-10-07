@@ -290,6 +290,7 @@ class CompanyGroups with ChangeNotifier {
           .child('employeeList')
           .child(employeeId)
           .remove();
+      setPersonalCompanyIdInFirebase(employeeId, '');
       _employeeList.removeWhere((employee) => employee.id == employeeId);
       notifyListeners();
     } on Exception {
