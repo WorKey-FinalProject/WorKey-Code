@@ -11,7 +11,7 @@ class LonleyAccountScreen extends StatefulWidget {
 class _LonleyAccountScreenState extends State<LonleyAccountScreen> {
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<Auth>(context);
+    final _auth = Provider.of<Auth>(context, listen: false);
     final personalAccountModel = _auth.getDynamicUser as PersonalAccountModel;
 
     return Container(
