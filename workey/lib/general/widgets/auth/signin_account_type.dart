@@ -37,6 +37,7 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
           //   await _companyGroupsProvider.fetchAndSetToLists();
           //   await _feedProvider.fetchAndSetToList();
           // }
+          await _auth.getCurrUserData();
           await _companyGroupsProvider.fetchAndSetToLists();
           await _feedProvider.fetchAndSetToList();
           setState(() {

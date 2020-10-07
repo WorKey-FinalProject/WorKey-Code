@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:workey/general/models/company_group_model.dart';
 
-import '../../general/models/work_group_model.dart';
+import '../../general/models/company_group_model.dart';
 import '../../general/widgets/auth/signup_type.dart';
 import '../models/company_account_model.dart';
 import '../models/personal_account_model.dart';
@@ -21,6 +20,8 @@ class Auth with ChangeNotifier {
 
   String companyAccountImagePath = 'company_account_logo';
   String personalAccountImagePath = 'personal_account_pic';
+
+  dynamic _dynamicUser;
 
   CompanyAccountModel companyAccountModel = CompanyAccountModel(
     companyEmail: null,
@@ -39,6 +40,10 @@ class Auth with ChangeNotifier {
 
   get getAccountTypeChosen {
     return accountType;
+  }
+
+  get getDynamicUser {
+    return _dynamicUser;
   }
 
   /// signUpPersonalAccount
@@ -91,6 +96,7 @@ class Auth with ChangeNotifier {
         profilePicture: profilePicture,
         fingerPrint: fingerPrint,
         dateOfCreation: DateTime.now().toString(),
+        companyId: '',
       );
       await dbRef
           .child('Users')
@@ -236,6 +242,7 @@ class Auth with ChangeNotifier {
     } on Exception {
       throw ErrorHint;
     }
+    _dynamicUser = dynamicUser;
     return dynamicUser;
   }
 
@@ -321,6 +328,5 @@ class Auth with ChangeNotifier {
 
   void logout() {
     FirebaseAuth.instance.signOut();
-    accountType = null;
   }
 }
