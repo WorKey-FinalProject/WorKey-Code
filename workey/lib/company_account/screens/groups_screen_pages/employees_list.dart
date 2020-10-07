@@ -129,7 +129,7 @@ class _State extends State<EmployeesList> {
                               child: ListTile(
                                 leading: CircleAvatar(
                                   radius: 30,
-                                  backgroundColor: Colors.black,
+                                  backgroundColor: Colors.white,
                                   backgroundImage:
                                       employeesList[index].picture.isEmpty
                                           ? AssetImage(

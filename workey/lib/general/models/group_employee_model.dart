@@ -23,7 +23,7 @@ class GroupEmployeeModel {
     this.entryDate,
     this.phoneNumber,
     this.address,
-    this.picture,
+    this.picture = '',
     this.email,
   });
 
