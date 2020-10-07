@@ -24,12 +24,16 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
         tempSearchList = [];
       });
     } else {
-      personalAccountList.forEach((element) {
-        if (element.email.startsWith(searchValue)) {
-          setState(() {
-            tempSearchList.add(element);
-          });
-        }
+      List<PersonalAccountModel> fittedValues = [];
+      personalAccountList.forEach(
+        (element) {
+          if (element.email.startsWith(searchValue)) {
+            fittedValues.add(element);
+          }
+        },
+      );
+      setState(() {
+        tempSearchList = fittedValues;
       });
     }
   }
@@ -54,6 +58,7 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextField(
+                keyboardType: TextInputType.emailAddress,
                 onChanged: (searchValue) => _searchNewEmployee(searchValue),
                 decoration: InputDecoration(
                   //prefixIcon: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),iconSize: 20.0,onPressed: ,),
@@ -77,7 +82,9 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AddEmployeeConfirmScreen(
-                            widget.provider, tempSearchList[index].id),
+                          widget.provider,
+                          tempSearchList[index].id,
+                        ),
                       ),
                     ),
                     child: Card(
@@ -87,29 +94,16 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
                         leading: CircleAvatar(
                           radius: 30,
                           backgroundImage: NetworkImage(
-                              tempSearchList[index].profilePicture),
+                            tempSearchList[index].profilePicture,
+                          ),
                         ),
                         title: Text(
-                          '${tempSearchList[index].firstName}',
+                          '${tempSearchList[index].email}',
                           style: Theme.of(context).textTheme.title,
                         ),
                         subtitle: Text(
-                          '${tempSearchList[index].lastName}',
+                          '${tempSearchList[index].firstName} ${tempSearchList[index].lastName}',
                         ),
-                        trailing: MediaQuery.of(context).size.width > 460
-                            ? FlatButton.icon(
-                                icon: Icon(Icons.person_outline_rounded),
-                                label: Text('Employee details'),
-                                onPressed:
-                                    null, //() => deleteTx(emp[index].id),
-                                textColor: Theme.of(context).accentColor,
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.person_outline_rounded),
-                                color: Theme.of(context).accentColor,
-                                onPressed: () =>
-                                    null //deleteTx(transactions[index].id),
-                                ),
                       ),
                     ),
                   );

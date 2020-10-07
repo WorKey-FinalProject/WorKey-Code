@@ -18,20 +18,13 @@ class EmployeesList extends StatefulWidget {
 }
 
 class _State extends State<EmployeesList> {
-  //List<WorkGroupModel> subGroupsList = [];
   var _isLoading = false;
   WorkGroupModel currentWorkGroup;
 
   List<GroupEmployeeModel> employeesList = [];
 
   _getEmployeesList() {
-    setState(() {
-      _isLoading = true;
-    });
     employeesList = widget.subWorkGroupsProvider.getEmployeeList;
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   _deleteEmployee(index) {
@@ -40,23 +33,9 @@ class _State extends State<EmployeesList> {
   }
 
   @override
-  void didChangeDependencies() {
-    print("didChangeDependencies called");
-
-    _getEmployeesList();
-
-    super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
-    _getEmployeesList();
-    currentWorkGroup = widget.subWorkGroupsProvider.getCurrentWorkGroup;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    _getEmployeesList();
+
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,
