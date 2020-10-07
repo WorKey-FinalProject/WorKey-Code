@@ -49,7 +49,6 @@ class _State extends State<EmployeesList> {
   @override
   Widget build(BuildContext context) {
     currentWorkGroup = widget.subWorkGroupsProvider.getCurrentWorkGroup;
-
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,
@@ -132,12 +131,11 @@ class _State extends State<EmployeesList> {
                                   radius: 30,
                                   backgroundColor: Colors.black,
                                   backgroundImage:
-                                      employeesList[index].picture == null
-                                          ? AssetImage(
-                                              'assets/images/google-icon.png')
-                                          : NetworkImage(
+                                      employeesList[index].picture.isNotEmpty
+                                          ? NetworkImage(
                                               employeesList[index].picture,
-                                            ),
+                                            )
+                                          : null,
                                 ),
                                 title: Text(
                                     '${employeesList[index].firstName} ${employeesList[index].lastName}'),
@@ -219,11 +217,11 @@ class _State extends State<EmployeesList> {
                                               child: const Text("Cancel"),
                                             ),
                                             FlatButton(
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pop(true);
-                                                },
-                                                child: const Text("Delete")),
+                                              onPressed: () {
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: const Text("Delete"),
+                                            ),
                                           ],
                                         );
                                       },
