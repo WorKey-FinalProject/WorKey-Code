@@ -3,12 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/providers/company_groups.dart';
 
-class MembersScreen extends StatefulWidget {
+class MembersListScreen extends StatefulWidget {
   @override
-  _MembersScreenState createState() => _MembersScreenState();
+  _MembersListScreenState createState() => _MembersListScreenState();
 }
 
-class _MembersScreenState extends State<MembersScreen> {
+class _MembersListScreenState extends State<MembersListScreen> {
   List<GroupEmployeeModel> employeeList; //= [
   //   GroupEmployeeModel(
   //     id: DateTime.now().toString(),
@@ -46,7 +46,9 @@ class _MembersScreenState extends State<MembersScreen> {
   Widget build(BuildContext context) {
     final companyGroupsProvider =
         Provider.of<CompanyGroups>(context, listen: false);
+
     employeeList = companyGroupsProvider.getEmployeeList;
+    print(employeeList.length);
     return Scaffold(
       appBar: AppBar(
         title: Text('Group Members'),
