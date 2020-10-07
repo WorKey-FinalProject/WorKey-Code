@@ -49,7 +49,6 @@ class CompanyGroups with ChangeNotifier {
     try {
       User user = FirebaseAuth.instance.currentUser;
       _userId = user.uid;
-      await deleteCompanyAccount();
     } on Exception {
       throw ErrorHint;
     }
@@ -61,7 +60,7 @@ class CompanyGroups with ChangeNotifier {
       await _dbRef
           .child('Users')
           .child('Personal Accounts')
-          .child('personalId')
+          .child(personalId)
           .child('companyId')
           .set(companyId);
     } on Exception {
@@ -356,6 +355,9 @@ class CompanyGroups with ChangeNotifier {
 
   Future<void> deleteCompanyAccount() async {
     try {
+      _employeeList.forEach((employee) {
+        setPersonalCompanyIdInFirebase(employee.id, '');
+      });
       await _dbRef
           .child('Users')
           .child('Company Accounts')
