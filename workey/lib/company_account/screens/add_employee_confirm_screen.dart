@@ -48,6 +48,8 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
       String message;
       try {
         await _newEmployeeProvider.addToFirebaseAndList(editedEmployee);
+        await _newEmployeeProvider.setPersonalCompanyIdInFirebase(
+            editedEmployee.id, _auth.user.uid);
       } on PlatformException catch (err) {
         message = 'An error occurred';
         isError = true;
