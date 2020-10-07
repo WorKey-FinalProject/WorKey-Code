@@ -63,19 +63,18 @@ class _EmployeesInfoViewState extends State<EmployeesInfoView> {
                       : title == 'E-Mail'
                           ? Text(widget.currentEmployee.email)
                           : title == 'Phone Number'
-                              ? widget.currentEmployee.phoneNumber == null
+                              ? widget.currentEmployee.phoneNumber.isEmpty
                                   ? Text('no data')
                                   : Text(widget.currentEmployee.phoneNumber)
                               : title == 'Address'
-                                  ? widget.currentEmployee.phoneNumber == null
+                                  ? widget.currentEmployee.phoneNumber.isEmpty
                                       ? Text('no data')
                                       : Text(widget.currentEmployee.address)
-                                  : title == 'Date Of Adddition'
-                                      ? Text(
-                                          DateFormat.yMd().format(
-                                              widget.currentEmployee.entryDate),
-                                        )
-                                      : Text('')
+                                  // : title == 'Date Of Adddition'
+                                  //     ? Text(
+                                  //         '$DateFormat.yMd().format(widget.currentEmployee.entryDate)',
+                                  //       )
+                                  : Text('no data')
             ],
           ),
         ),
