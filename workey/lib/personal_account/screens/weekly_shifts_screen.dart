@@ -74,7 +74,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
         BasicEvent(
           id: DateTime.now(),
           title: 'Test',
-          color: Colors.green,
+          color: Colors.blue,
           start: LocalDate.today().at(
             LocalTime(
               _timeOfDay_start.hour,
