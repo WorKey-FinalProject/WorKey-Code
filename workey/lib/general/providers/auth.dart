@@ -244,6 +244,7 @@ class Auth with ChangeNotifier {
       throw ErrorHint;
     }
     _dynamicUser = dynamicUser;
+    notifyListeners();
     return dynamicUser;
   }
 

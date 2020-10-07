@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:timetable/timetable.dart';
 import 'package:time_machine/time_machine.dart';
+import 'package:workey/general/models/group_employee_model.dart';
 
 import '../../personal_account/widgets/time_table.dart';
 
@@ -21,6 +22,51 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
 
   final _startTimeController = TextEditingController();
   final _endTimeController = TextEditingController();
+
+  List<GroupEmployeeModel> _dropdownItems = [
+    GroupEmployeeModel(id: '1', workGroupId: '1', email: 'a'),
+    GroupEmployeeModel(id: '2', workGroupId: '2', email: 'b'),
+    GroupEmployeeModel(id: '3', workGroupId: '3', email: 'c'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
+  ];
+
+  List<DropdownMenuItem<GroupEmployeeModel>> _dropdownMenuItems;
+  GroupEmployeeModel _selectedEmployee;
+
+  List<DropdownMenuItem<GroupEmployeeModel>> buildDropDownMenuItems(
+    List listItems,
+  ) {
+    List<DropdownMenuItem<GroupEmployeeModel>> items = List();
+    for (GroupEmployeeModel listItem in listItems) {
+      items.add(
+        DropdownMenuItem(
+          child: Text(listItem.email),
+          value: listItem,
+        ),
+      );
+    }
+    return items;
+  }
 
   void _addBasicEvent() {
     setState(() {
@@ -80,27 +126,13 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
     super.initState();
     _timeOfDay_start = TimeOfDay.now();
     _timeOfDay_end = TimeOfDay.now();
+
+    _dropdownMenuItems = buildDropDownMenuItems(_dropdownItems);
+    _selectedEmployee = _dropdownMenuItems[0].value;
   }
 
   @override
   Widget build(BuildContext context) {
-    // _list = [
-    // BasicEvent(
-    //   id: 0,
-    //   title: 'My Event',
-    //   color: Colors.blue,
-    //   start: LocalDate.today().at(LocalTime(13, 0, 0)),
-    //   end: LocalDate.today().at(LocalTime(15, 0, 0)),
-    // ),
-    //   BasicEvent(
-    //     id: 1,
-    //     title: 'My Event',
-    //     color: Colors.blue,
-    //     start: LocalDate.today().at(LocalTime(9, 0, 0)),
-    //     end: LocalDate.today().at(LocalTime(10, 0, 0)),
-    //   ),
-    // ];
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Weekly Shifts'),
@@ -118,23 +150,47 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
                   return ListView(
                     padding: const EdgeInsets.all(16.0),
                     children: [
-                      TextField(
-                        readOnly: true,
-                        controller: _startTimeController,
-                        onTap: () => _pickTime(setModalState, ShiftTime.start),
-                        decoration: InputDecoration(
-                          suffixIcon: Icon(Icons.calendar_today),
-                          labelText: 'Start',
-                        ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: TextField(
+                              readOnly: true,
+                              controller: _startTimeController,
+                              onTap: () =>
+                                  _pickTime(setModalState, ShiftTime.start),
+                              decoration: InputDecoration(
+                                suffixIcon: Icon(Icons.calendar_today),
+                                labelText: 'Start',
+                              ),
+                            ),
+                          ),
+                          VerticalDivider(
+                            width: 30,
+                          ),
+                          Flexible(
+                            child: TextField(
+                              readOnly: true,
+                              controller: _endTimeController,
+                              onTap: () =>
+                                  _pickTime(setModalState, ShiftTime.end),
+                              decoration: InputDecoration(
+                                suffixIcon: Icon(Icons.calendar_today),
+                                labelText: 'End',
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      TextField(
-                        readOnly: true,
-                        controller: _endTimeController,
-                        onTap: () => _pickTime(setModalState, ShiftTime.end),
-                        decoration: InputDecoration(
-                          suffixIcon: Icon(Icons.calendar_today),
-                          labelText: 'End',
-                        ),
+                      Container(
+                        padding: EdgeInsets.all(20.0),
+                        child: DropdownButton<GroupEmployeeModel>(
+                            value: _selectedEmployee,
+                            items: _dropdownMenuItems,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedEmployee = value;
+                              });
+                            }),
                       ),
                       SizedBox(
                         height: 40,
@@ -152,20 +208,6 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
                           ),
                         ),
                       ),
-                      // ListTile(
-                      //   title: Text(
-                      //     'Start: ${_timeOfDay.hour}:${_timeOfDay.minute}',
-                      //   ),
-                      //   trailing: Icon(Icons.timer),
-                      //   onTap: () => _pickTime(setModalState),
-                      // ),
-                      // ListTile(
-                      //   title: Text(
-                      //     'End: ${_timeOfDay.hour}:${_timeOfDay.minute}',
-                      //   ),
-                      //   trailing: Icon(Icons.timer),
-                      //   onTap: () => _pickTime(setModalState),
-                      // ),
                     ],
                   );
                 },

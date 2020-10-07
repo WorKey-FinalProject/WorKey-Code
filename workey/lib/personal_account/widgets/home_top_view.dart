@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class FaceID extends StatelessWidget {
+class HomeTopView extends StatelessWidget {
   final double constraintsMaxHeight;
 
-  FaceID(this.constraintsMaxHeight);
+  HomeTopView(this.constraintsMaxHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +34,6 @@ class FaceID extends StatelessWidget {
                 ),
               ],
             ),
-
-            // child: Center(
-            //   child:
-            //       IconButton(icon: Icon(MdiIcons.faceRecognition), onPressed: null),
-            //   // child: GestureDetector(
-            //   //   onTap: () => null,
-            //   //   child: Icon(
-            //   //     MdiIcons.faceRecognition,
-            //   //     color: Colors.white,
-            //   //     size: 70,
-            //   //   ),
-            //   // ),Icon
-            // ),
           ),
           Positioned(
             bottom: -10,
