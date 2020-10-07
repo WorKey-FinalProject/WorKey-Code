@@ -57,7 +57,6 @@ class _State extends State<EmployeesList> {
 
   @override
   Widget build(BuildContext context) {
-    currentWorkGroup = widget.subWorkGroupsProvider.getCurrentWorkGroup;
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,
