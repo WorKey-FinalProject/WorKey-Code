@@ -131,11 +131,13 @@ class _State extends State<EmployeesList> {
                                   radius: 30,
                                   backgroundColor: Colors.black,
                                   backgroundImage:
-                                      employeesList[index].picture.isNotEmpty
-                                          ? NetworkImage(
-                                              employeesList[index].picture,
+                                      employeesList[index].picture.isEmpty
+                                          ? AssetImage(
+                                              'assets/images/no_image_available.png',
                                             )
-                                          : null,
+                                          : NetworkImage(
+                                              employeesList[index].picture,
+                                            ),
                                 ),
                                 title: Text(
                                     '${employeesList[index].firstName} ${employeesList[index].lastName}'),
