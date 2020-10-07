@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../../../general/models/group_employee_model.dart';
 import '../../../general/providers/company_groups.dart';
@@ -25,11 +24,6 @@ class _State extends State<EmployeesList> {
 
   _getEmployeesList() {
     employeesList = widget.subWorkGroupsProvider.getEmployeeList;
-  }
-
-  _deleteEmployee(index) {
-    widget.subWorkGroupsProvider
-        .deleteEmployeeById(employeesList[index].id, currentWorkGroup.id);
   }
 
   @override
@@ -102,11 +96,12 @@ class _State extends State<EmployeesList> {
                     children: [
                       ListView.builder(
                         itemBuilder: (context, index) {
-                          var gestureDetector = GestureDetector(
+                          return GestureDetector(
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EmployeeDetailScreen(),
+                                builder: (context) => EmployeeDetailScreen(
+                                    employeesList[index].id),
                               ),
                             ),
                             child: Card(
@@ -153,71 +148,6 @@ class _State extends State<EmployeesList> {
                               ),
                             ),
                           );
-                          return currentWorkGroup == null
-                              ? gestureDetector
-                              : Dismissible(
-                                  key: Key('${employeesList[index]}'),
-                                  direction: DismissDirection.endToStart,
-                                  onDismissed: (_) {
-                                    _deleteEmployee(index);
-                                    setState(() {
-                                      employeesList.removeAt(index);
-                                    });
-                                  },
-                                  background: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(5.0),
-                                        bottomRight: Radius.circular(5.0),
-                                      ),
-                                    ),
-                                    margin: EdgeInsets.all(8.0),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(15),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: <Widget>[
-                                          Icon(Icons.delete,
-                                              color: Colors.white),
-                                          Text('Remove',
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  confirmDismiss:
-                                      (DismissDirection direction) async {
-                                    return await showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title:
-                                              const Text("Delete Confirmation"),
-                                          content: const Text(
-                                              "Are you sure you want to remove this employee?"),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              onPressed: () =>
-                                                  Navigator.of(context)
-                                                      .pop(false),
-                                              child: const Text("Cancel"),
-                                            ),
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop(true);
-                                              },
-                                              child: const Text("Delete"),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                  child: gestureDetector,
-                                );
                         },
                         itemCount: employeesList.length,
                       ),
