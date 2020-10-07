@@ -28,7 +28,7 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
     },
     {
       'page': ShiftsScreen(),
-      'title': 'Groups',
+      'title': 'Shifts',
     },
     {
       'page': ProfileScreen(),
