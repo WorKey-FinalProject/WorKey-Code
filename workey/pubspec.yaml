@@ -93,9 +93,10 @@ flutter:
       - assets/images/card_types/master_card.png
       - assets/images/card_types/rupay.png
       - assets/images/card_types/visa.png
-      - assets/images/login_pic.jpg
 
+      - assets/images/login_pic.jpg
       - assets/images/google-icon.png
+      - assets/images/no_image_available.png
 
       - packages/time_machine/data/cultures/cultures.bin
       - packages/time_machine/data/tzdb/tzdb.bin
