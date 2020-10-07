@@ -23,16 +23,20 @@ class GroupEmployeeModel {
     this.entryDate,
     this.phoneNumber,
     this.address,
-    this.picture,
+    this.picture = '',
     this.email,
   });
 
   Map<String, Object> toJson() {
+    String entryDate;
+    if (this.entryDate != null) {
+      entryDate = this.entryDate.toString();
+    }
     return {
       'workGroupId': this.workGroupId,
       'salary': this.salary,
       'role': this.role,
-      'entryDate': this.entryDate.toString(),
+      'entryDate': entryDate ?? this.entryDate,
     };
   }
 
