@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/personal_account_model.dart';
@@ -60,7 +59,7 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<Auth>(context);
+    final auth = Provider.of<Auth>(context, listen: false);
     personalAccountModel = auth.getDynamicUser;
 
     return Scaffold(
