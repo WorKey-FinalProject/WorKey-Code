@@ -35,15 +35,22 @@ class _State extends State<EmployeesList> {
   }
 
   _deleteEmployee(index) {
-    widget.subWorkGroupsProvider
-        .deleteEmployeeById(employeesList[index].id, currentWorkGroup.id);
+    widget.subWorkGroupsProvider.deleteEmployeeById(
+      employeesList[index].id,
+      currentWorkGroup.id,
+    );
+    setState(() {
+      _getEmployeesList();
+    });
   }
 
   @override
   void didChangeDependencies() {
     print("didChangeDependencies called");
 
-    _getEmployeesList();
+    setState(() {
+      _getEmployeesList();
+    });
 
     super.didChangeDependencies();
   }
@@ -57,7 +64,7 @@ class _State extends State<EmployeesList> {
 
   @override
   Widget build(BuildContext context) {
-    currentWorkGroup = widget.subWorkGroupsProvider.getCurrentWorkGroup;
+    _getEmployeesList();
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,
@@ -124,7 +131,12 @@ class _State extends State<EmployeesList> {
                     children: [
                       ListView.builder(
                         itemBuilder: (context, index) {
-                          print(employeesList[index].picture);
+                          print(employeesList[index].firstName);
+                          print(employeesList[index].lastName);
+
+                          print(employeesList[index].email);
+                          print(employeesList[index].entryDate);
+
                           var gestureDetector = GestureDetector(
                             onTap: () => Navigator.push(
                               context,
@@ -185,6 +197,7 @@ class _State extends State<EmployeesList> {
                                     _deleteEmployee(index);
                                     setState(() {
                                       employeesList.removeAt(index);
+                                      _getEmployeesList();
                                     });
                                   },
                                   background: Container(
@@ -223,16 +236,16 @@ class _State extends State<EmployeesList> {
                                               "Are you sure you want to remove this employee?"),
                                           actions: <Widget>[
                                             FlatButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(true);
+                                                },
+                                                child: const Text("Delete")),
+                                            FlatButton(
                                               onPressed: () =>
                                                   Navigator.of(context)
                                                       .pop(false),
                                               child: const Text("Cancel"),
-                                            ),
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop(true);
-                                              },
-                                              child: const Text("Delete"),
                                             ),
                                           ],
                                         );
