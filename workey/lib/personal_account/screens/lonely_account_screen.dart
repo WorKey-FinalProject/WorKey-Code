@@ -54,12 +54,22 @@ class _LonleyAccountScreenState extends State<LonleyAccountScreen> {
               elevation: 5,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  personalAccountModel.email,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  // mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      personalAccountModel.email,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.copy),
+                      onPressed: null,
+                    ),
+                  ],
                 ),
               ),
             ),
