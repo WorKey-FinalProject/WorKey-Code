@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:timetable/timetable.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/personal_account/widgets/employee_list_item.dart';
 
 import '../../personal_account/widgets/time_table.dart';
 
@@ -25,7 +28,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
 
   List<GroupEmployeeModel> _dropdownItems = [];
 
-  List<DropdownMenuItem<GroupEmployeeModel>> _dropdownMenuItems;
+  List<DropdownMenuItem<GroupEmployeeModel>> _dropdownMenuItems = [];
   GroupEmployeeModel _selectedEmployee;
 
   List<DropdownMenuItem<GroupEmployeeModel>> buildDropDownMenuItems(
@@ -35,7 +38,10 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
     for (GroupEmployeeModel listItem in listItems) {
       items.add(
         DropdownMenuItem(
-          child: Text(listItem.email),
+          child: EmployeeListItem(
+            groupEmployeeModel: listItem,
+            isDropDownItem: true,
+          ),
           value: listItem,
         ),
       );
@@ -48,7 +54,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
       _list.add(
         BasicEvent(
           id: DateTime.now(),
-          title: 'Test',
+          title: '${_selectedEmployee.firstName} ${_selectedEmployee.lastName}',
           color: Colors.blue,
           start: LocalDate.today().at(
             LocalTime(
@@ -96,18 +102,27 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
     );
   }
 
+  void fillDropDownList() {
+    _dropdownMenuItems = buildDropDownMenuItems(_dropdownItems);
+    _selectedEmployee =
+        _dropdownItems.isEmpty ? null : _dropdownMenuItems[0].value;
+  }
+
   @override
   void initState() {
     super.initState();
     _timeOfDay_start = TimeOfDay.now();
     _timeOfDay_end = TimeOfDay.now();
-
-    _dropdownMenuItems = buildDropDownMenuItems(_dropdownItems);
-    _selectedEmployee = _dropdownMenuItems[0].value;
   }
 
   @override
   Widget build(BuildContext context) {
+    final companyGroupsProvider =
+        Provider.of<CompanyGroups>(context, listen: false);
+    _dropdownItems = companyGroupsProvider.getEmployeeList;
+
+    fillDropDownList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Weekly Shifts'),
@@ -162,7 +177,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
                             value: _selectedEmployee,
                             items: _dropdownMenuItems,
                             onChanged: (value) {
-                              setState(() {
+                              setModalState(() {
                                 _selectedEmployee = value;
                               });
                             }),
@@ -209,14 +224,12 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
       if (shiftTime == ShiftTime.start) {
         setModalState(() {
           _timeOfDay_start = time;
-          _startTimeController.text =
-              '${_timeOfDay_start.hour}:${_timeOfDay_start.minute}';
+          _startTimeController.text = _timeOfDay_start.format(context);
         });
       } else if (shiftTime == ShiftTime.end) {
         setModalState(() {
           _timeOfDay_end = time;
-          _endTimeController.text =
-              '${_timeOfDay_end.hour}:${_timeOfDay_end.minute}';
+          _endTimeController.text = _timeOfDay_end.format(context);
         });
       }
     }
