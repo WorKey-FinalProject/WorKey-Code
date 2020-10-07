@@ -59,7 +59,7 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
       WorkGroupModel newWorkGroup = WorkGroupModel(
         dateOfCreation: DateTime.now().toString(),
         workGroupName: _employeeEmailController.text,
-        workGroupLogo: '',
+        logo: '',
       );
 
       var isError = false;

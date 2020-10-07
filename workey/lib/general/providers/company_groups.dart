@@ -133,7 +133,7 @@ class CompanyGroups with ChangeNotifier {
                     workGroupName: null,
                     managerId: null,
                     dateOfCreation: null,
-                    workGroupLogo: null);
+                    logo: null);
                 wg.fromJson(value, key);
                 _workGroupList.add(wg);
               });
@@ -226,7 +226,7 @@ class CompanyGroups with ChangeNotifier {
               .onComplete;
           print('File Uploaded');
           final url = await ref.getDownloadURL();
-          model.workGroupLogo = url;
+          model.logo = url;
         }
 
         /// Add model to Firebase-realtime & local-list
@@ -296,11 +296,26 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> deleteCompanyAccount() async {
+    try {
+      await _dbRef.child('Company Groups').child(_userId).remove();
+      await _dbRef
+          .child('Users')
+          .child('Company Accounts')
+          .child(_userId)
+          .remove();
+      User user = FirebaseAuth.instance.currentUser;
+      await user.delete();
+    } on Exception {
+      throw 'Error in deleteCompanyAccount function';
+    }
+  }
+
   Future<void> deleteWorkGroup(WorkGroupModel workGroupModel) async {
     WorkGroupModel wg = WorkGroupModel(
         workGroupName: null,
         dateOfCreation: null,
-        workGroupLogo: null,
+        logo: null,
         id: workGroupModel.id);
     try {
       await _dbRef

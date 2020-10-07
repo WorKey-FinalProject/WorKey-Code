@@ -7,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:workey/general/models/company_group_model.dart';
 
-import '../../general/models/work_group_model.dart';
 import '../../general/widgets/auth/signup_type.dart';
 import '../models/company_account_model.dart';
 import '../models/personal_account_model.dart';

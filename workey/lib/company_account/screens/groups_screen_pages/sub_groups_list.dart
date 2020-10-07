@@ -170,7 +170,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
               alignment: Alignment.center,
               padding: EdgeInsets.all(10),
               child: ProfilePicture(
-                imageUrl: subGroupsList[index].workGroupLogo,
+                imageUrl: subGroupsList[index].logo,
                 size: 150,
                 isEditable: false,
               ),
@@ -207,7 +207,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
               alignment: Alignment.center,
               padding: EdgeInsets.all(10),
               child: ProfilePicture(
-                imageUrl: subGroupsList[index].workGroupLogo,
+                imageUrl: subGroupsList[index].logo,
                 size: 150,
                 isEditable: false,
               ),

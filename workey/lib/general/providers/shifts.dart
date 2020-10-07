@@ -6,16 +6,11 @@ import 'package:workey/general/models/shift_model.dart';
 class Shifts with ChangeNotifier {
   final _dbRef = FirebaseDatabase.instance.reference();
   String _userId = FirebaseAuth.instance.currentUser.uid;
-  String _currentCompanyId;
 
   List<ShiftModel> _shiftList = [];
 
   List<ShiftModel> get getShiftList {
     return [..._shiftList];
-  }
-
-  Future<void> setCurrentCompanyId(String companyId) async {
-    _currentCompanyId = companyId;
   }
 
   ShiftModel findFeedById(String id) {
@@ -26,11 +21,12 @@ class Shifts with ChangeNotifier {
     _shiftList = [];
   }
 
-  Future<void> addToFirebaseAndList(ShiftModel shiftModel) async {
+  Future<void> addToFirebaseAndList(
+      ShiftModel shiftModel, String companyId) async {
     try {
       var db = _dbRef
           .child('Company Groups')
-          .child(_currentCompanyId)
+          .child(companyId)
           .child('shiftList')
           .child(_userId);
       String newKey = db.push().key;

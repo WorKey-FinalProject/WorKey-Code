@@ -58,7 +58,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
     _currentWorkGroup = WorkGroupModel(
       workGroupName: _companyAccount.companyName,
       dateOfCreation: _companyAccount.dateOfCreation,
-      workGroupLogo: _companyAccount.companyLogo,
+      logo: _companyAccount.companyLogo,
     );
 
     setState(() {
@@ -129,7 +129,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                           isEditable: false,
                                           imageUrl: _currentWorkGroup == null
                                               ? _companyAccount.companyLogo
-                                              : _currentWorkGroup.workGroupLogo,
+                                              : _currentWorkGroup.logo,
                                         ),
                                       ),
                                       Padding(
@@ -162,7 +162,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                                           isEditable: false,
                                           imageUrl: _currentWorkGroup == null
                                               ? _companyAccount.companyLogo
-                                              : _currentWorkGroup.workGroupLogo,
+                                              : _currentWorkGroup.logo,
                                         ),
                                       ),
                                       Padding(

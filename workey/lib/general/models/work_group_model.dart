@@ -9,10 +9,10 @@ class WorkGroupModel {
   String workGroupName;
   String managerId;
   String dateOfCreation;
-  String workGroupLocation;
-  String workGroupLogo;
+  String location;
+  String logo;
+  String whatsAppUrl;
   List<GroupEmployeeModel> employeeList;
-  List<WorkGroupModel> workGroupList;
 
   File imageFile;
 
@@ -23,9 +23,10 @@ class WorkGroupModel {
     @required this.workGroupName,
     this.managerId,
     @required this.dateOfCreation,
-    @required this.workGroupLogo,
+    @required this.logo,
     this.employeeList,
-    this.workGroupLocation,
+    this.location,
+    this.whatsAppUrl,
   });
 
   void setImageFile(File file) {
@@ -41,9 +42,10 @@ class WorkGroupModel {
       'workGroupName': this.workGroupName,
       'managerId': this.managerId,
       'dateOfCreation': this.dateOfCreation,
-      'workGroupLogo': this.workGroupLogo,
-      'workGroupLocation': this.workGroupLocation,
+      'workGroupLogo': this.logo,
+      'workGroupLocation': this.location,
       'employeeList': this.employeeList,
+      'whatsAppUrl': this.whatsAppUrl,
     };
   }
 
@@ -51,9 +53,10 @@ class WorkGroupModel {
     id = uid;
     workGroupName = snapshot['workGroupName'];
     managerId = snapshot['managerId'];
-    workGroupLogo = snapshot['workGroupLogo'];
+    logo = snapshot['workGroupLogo'];
     dateOfCreation = snapshot['dateOfCreation'];
     employeeList = snapshot['employeeList'] ?? null;
-    workGroupLocation = snapshot['workGroupLocation'] ?? '';
+    location = snapshot['workGroupLocation'] ?? '';
+    whatsAppUrl = snapshot['whatsAppUrl'] ?? '';
   }
 }
