@@ -39,9 +39,7 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
         id: widget.newEmployeeId,
         salary: _employeeSalaryController.text,
         role: _employeePositionController.text,
-        workGroupId: widget.provider.getCurrentWorkGroup.id == null
-            ? _auth.user.uid
-            : widget.provider.getCurrentWorkGroup.id,
+        workGroupId: widget.provider.getCurrentWorkGroup.id,
       );
 
       var isError = false;
