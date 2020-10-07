@@ -23,32 +23,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
   final _startTimeController = TextEditingController();
   final _endTimeController = TextEditingController();
 
-  List<GroupEmployeeModel> _dropdownItems = [
-    GroupEmployeeModel(id: '1', workGroupId: '1', email: 'a'),
-    GroupEmployeeModel(id: '2', workGroupId: '2', email: 'b'),
-    GroupEmployeeModel(id: '3', workGroupId: '3', email: 'c'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-    GroupEmployeeModel(id: '4', workGroupId: '4', email: 'd'),
-  ];
+  List<GroupEmployeeModel> _dropdownItems = [];
 
   List<DropdownMenuItem<GroupEmployeeModel>> _dropdownMenuItems;
   GroupEmployeeModel _selectedEmployee;

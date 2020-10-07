@@ -143,6 +143,7 @@ class CompanyGroups with ChangeNotifier {
           list[list.indexWhere((emp) => emp.id == _userId)].workGroupId;
       list.forEach((emp) {
         if (emp.workGroupId == userWorkGroupId) {
+          fetchEmployeeData(emp);
           _employeeList.add(emp);
         }
       });
