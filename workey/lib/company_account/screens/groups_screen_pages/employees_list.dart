@@ -26,15 +26,15 @@ class _State extends State<EmployeesList> {
     employeesList = widget.subWorkGroupsProvider.getEmployeeList;
   }
 
-  _deleteEmployee(index) {
-    widget.subWorkGroupsProvider.deleteEmployeeById(
-      employeesList[index].id,
-      currentWorkGroup.id,
-    );
-    setState(() {
-      _getEmployeesList();
-    });
-  }
+  // _deleteEmployee(index) {
+  //   widget.subWorkGroupsProvider.deleteEmployeeById(
+  //     employeesList[index].id,
+  //     currentWorkGroup.id,
+  //   );
+  //   setState(() {
+  //     _getEmployeesList();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,8 @@ class _State extends State<EmployeesList> {
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => EmployeeDetailScreen(),
+                                builder: (context) => EmployeeDetailScreen(
+                                    employeesList[index].id),
                               ),
                             ),
                             child: Card(
