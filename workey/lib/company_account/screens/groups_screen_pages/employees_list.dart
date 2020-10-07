@@ -26,16 +26,6 @@ class _State extends State<EmployeesList> {
     employeesList = widget.subWorkGroupsProvider.getEmployeeList;
   }
 
-  // _deleteEmployee(index) {
-  //   widget.subWorkGroupsProvider.deleteEmployeeById(
-  //     employeesList[index].id,
-  //     currentWorkGroup.id,
-  //   );
-  //   setState(() {
-  //     _getEmployeesList();
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     _getEmployeesList();

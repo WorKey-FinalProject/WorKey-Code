@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
 
 enum TextFieldType {
   salary,
@@ -26,6 +29,8 @@ class _EmployeesInfoViewState extends State<EmployeesInfoView> {
   final salaryController = TextEditingController();
   final positionController = TextEditingController();
 
+  WorkGroupModel currentWorkGroup;
+
   @override
   void dispose() {
     salaryController.dispose();
@@ -33,8 +38,24 @@ class _EmployeesInfoViewState extends State<EmployeesInfoView> {
     super.dispose();
   }
 
+  _deleteEmployee(currentWorkGroup) {
+    var groupId = widget.currentEmployee.workGroupId;
+    var employeeId = widget.currentEmployee.id;
+    print('');
+    print(employeeId);
+
+    currentWorkGroup.deleteEmployeeById(
+      employeeId,
+      groupId,
+    );
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final currentWorkGroup = Provider.of<CompanyGroups>(context);
+    print(currentWorkGroup);
     Widget textView(
       String title,
     ) {
@@ -81,11 +102,6 @@ class _EmployeesInfoViewState extends State<EmployeesInfoView> {
       );
     }
 
-    print(widget.currentEmployee.address);
-    print(widget.currentEmployee.firstName);
-    print(widget.currentEmployee.lastName);
-    print(widget.currentEmployee.phoneNumber);
-    print(widget.currentEmployee.entryDate);
     return Scaffold(
       body: Column(
         children: [
@@ -150,6 +166,23 @@ class _EmployeesInfoViewState extends State<EmployeesInfoView> {
                   textView('Phone Number'),
                   textView('Address'),
                   textView('Date Of Addition'),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: RaisedButton(
+                        onPressed: () async {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                          await _deleteEmployee(currentWorkGroup);
+                        },
+                        padding: EdgeInsets.symmetric(horizontal: 50),
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text("DELETE"),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),

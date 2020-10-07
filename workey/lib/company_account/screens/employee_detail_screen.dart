@@ -104,7 +104,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                           padding: const EdgeInsets.only(top: 8.0),
                           sliver: SliverToBoxAdapter(
                             child: Container(
-                              height: 600,
+                              height: 700,
                               child: EmployeesInfoView(currentEmployee),
                             ),
                           ),
