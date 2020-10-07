@@ -196,6 +196,7 @@ class CompanyGroups with ChangeNotifier {
             employee.phoneNumber = p.phoneNumber;
             employee.address = p.address;
             employee.picture = p.profilePicture;
+            employee.email = p.email;
           });
         });
       }

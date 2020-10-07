@@ -8,6 +8,11 @@ import '../../general/providers/auth.dart';
 import '../../general/providers/company_groups.dart';
 import '../../general/models/snackbar_result.dart';
 
+enum Field {
+  role,
+  salary,
+}
+
 class AddEmployeeConfirmScreen extends StatefulWidget {
   final CompanyGroups provider;
   final String newEmployeeId;
@@ -41,13 +46,15 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
         role: _employeePositionController.text,
         workGroupId: widget.provider.getCurrentWorkGroup.id,
       );
-
+      _newEmployeeProvider.fetchEmployeeData(editedEmployee);
       var isError = false;
       String message;
       try {
         await _newEmployeeProvider.addToFirebaseAndList(editedEmployee);
         await _newEmployeeProvider.setPersonalCompanyIdInFirebase(
-            editedEmployee.id, _auth.user.uid);
+          editedEmployee.id,
+          _auth.user.uid,
+        );
       } on PlatformException catch (err) {
         message = 'An error occurred';
         isError = true;
@@ -93,9 +100,16 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
           key: _formKey,
           child: Column(
             children: [
-              _textFieldForm(_employeeSalaryController, 'Employee\'s Salary'),
               _textFieldForm(
-                  _employeePositionController, 'Employee\'s Position'),
+                _employeeSalaryController,
+                'Employee\'s Salary',
+                Field.salary,
+              ),
+              _textFieldForm(
+                _employeePositionController,
+                'Employee\'s Role',
+                Field.role,
+              ),
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -120,10 +134,16 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
     );
   }
 
-  Widget _textFieldForm(TextEditingController controller, String labelText) {
+  Widget _textFieldForm(
+    TextEditingController controller,
+    String labelText,
+    Field field,
+  ) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
       child: TextFormField(
+        keyboardType:
+            field == Field.salary ? TextInputType.number : TextInputType.text,
         controller: controller,
         validator: (value) {
           if (value.isEmpty) {
