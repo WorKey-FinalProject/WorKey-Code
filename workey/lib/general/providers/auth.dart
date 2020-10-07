@@ -36,6 +36,10 @@ class Auth with ChangeNotifier {
     lastName: null,
   );
 
+  get getAccountTypeChosen {
+    return accountType;
+  }
+
   /// signUpPersonalAccount
   Future<void> signUpPersonalAccount({
     String email,
@@ -312,5 +316,10 @@ class Auth with ChangeNotifier {
     } on Exception {
       throw ErrorHint;
     }
+  }
+
+  void logout() {
+    FirebaseAuth.instance.signOut();
+    accountType = null;
   }
 }
