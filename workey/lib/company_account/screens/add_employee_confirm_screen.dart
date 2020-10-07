@@ -6,7 +6,6 @@ import '../../general/models/group_employee_model.dart';
 //import '../../general/models/personal_account_model.dart';
 import '../../general/providers/auth.dart';
 import '../../general/providers/company_groups.dart';
-import '../../general/models/snackbar_result.dart';
 
 enum Field {
   role,

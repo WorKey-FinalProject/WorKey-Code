@@ -62,7 +62,6 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
   Widget build(BuildContext context) {
     final auth = Provider.of<Auth>(context);
     personalAccountModel = auth.getDynamicUser;
-    print(personalAccountModel.companyId);
 
     return Scaffold(
       appBar: AppBar(

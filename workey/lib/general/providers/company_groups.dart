@@ -100,7 +100,59 @@ class CompanyGroups with ChangeNotifier {
     _employeeList = [];
   }
 
-  Future<void> fetchAndSetToLists() async {
+  Future<void> fetchAndSetToListForPersonal() async {
+    User user = FirebaseAuth.instance.currentUser;
+    _userId = user.uid;
+    clearLists();
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child(_userId)
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        _fetchAndSetToListForPersonal(dataSnapshot.value['companyId']);
+      });
+    } on Exception {
+      throw 'Error in fetchAndSetToListForPersonal';
+    }
+    notifyListeners();
+  }
+
+  Future<void> _fetchAndSetToListForPersonal(String companyId) async {
+    List<GroupEmployeeModel> list = [];
+    try {
+      await _dbRef
+          .child('Company Groups')
+          .child(companyId)
+          .child('employeeList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> map = dataSnapshot.value;
+        if (map != null) {
+          map.forEach((key, value) {
+            GroupEmployeeModel emp =
+                GroupEmployeeModel(id: null, workGroupId: null);
+            emp.fromJsonToObject(value, key);
+            list.add(emp);
+          });
+        }
+      });
+      String userWorkGroupId =
+          list[list.indexWhere((emp) => emp.id == _userId)].workGroupId;
+      list.forEach((emp) {
+        if (emp.workGroupId == userWorkGroupId) {
+          _employeeList.add(emp);
+        }
+      });
+    } on Exception {
+      throw 'Error in _fetchAndSetToListForPersonal';
+    }
+    notifyListeners();
+  }
+
+  Future<void> fetchAndSetToListsForCompany() async {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
