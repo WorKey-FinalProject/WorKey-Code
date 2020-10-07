@@ -40,6 +40,15 @@ class _State extends State<EmployeesList> {
   }
 
   @override
+  void didChangeDependencies() {
+    print("didChangeDependencies called");
+
+    _getEmployeesList();
+
+    super.didChangeDependencies();
+  }
+
+  @override
   void initState() {
     _getEmployeesList();
     currentWorkGroup = widget.subWorkGroupsProvider.getCurrentWorkGroup;
@@ -115,6 +124,7 @@ class _State extends State<EmployeesList> {
                     children: [
                       ListView.builder(
                         itemBuilder: (context, index) {
+                          print(employeesList[index].picture);
                           var gestureDetector = GestureDetector(
                             onTap: () => Navigator.push(
                               context,
