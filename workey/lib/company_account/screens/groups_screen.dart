@@ -84,6 +84,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
   Widget build(BuildContext context) {
     final currentWorkGroup =
         Provider.of<CompanyGroups>(context).getCurrentWorkGroup;
+    final employeesProvider = Provider.of<CompanyGroups>(context);
 
     if (currentWorkGroup != null) {
       _currentWorkGroup = currentWorkGroup;
@@ -196,7 +197,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
                 body: TabBarView(
                   children: [
                     SubGroupsList(_isShrink),
-                    EmployeesList(),
+                    EmployeesList(employeesProvider),
                     SettingsView(),
                   ],
                 ),
