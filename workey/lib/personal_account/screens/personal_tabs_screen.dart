@@ -3,6 +3,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/personal_account/screens/lonely_account_screen.dart';
 
 import './home_screen.dart';
@@ -59,8 +60,9 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final auth = Provider.of<Auth>(context, listen: false);
+    final auth = Provider.of<Auth>(context);
     personalAccountModel = auth.getDynamicUser;
+    print(personalAccountModel.companyId);
 
     return Scaffold(
       appBar: AppBar(

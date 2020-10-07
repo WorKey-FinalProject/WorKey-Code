@@ -48,6 +48,7 @@ class _State extends State<EmployeesList> {
 
   @override
   Widget build(BuildContext context) {
+    currentWorkGroup = widget.subWorkGroupsProvider.getCurrentWorkGroup;
     var addEmployeeButton = Container(
       padding: EdgeInsets.only(
         bottom: 10,
@@ -210,16 +211,16 @@ class _State extends State<EmployeesList> {
                                               "Are you sure you want to remove this employee?"),
                                           actions: <Widget>[
                                             FlatButton(
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .pop(true);
-                                                },
-                                                child: const Text("Delete")),
-                                            FlatButton(
                                               onPressed: () =>
                                                   Navigator.of(context)
                                                       .pop(false),
                                               child: const Text("Cancel"),
+                                            ),
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: const Text("Delete"),
                                             ),
                                           ],
                                         );
