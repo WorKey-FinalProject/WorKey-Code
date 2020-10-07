@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
@@ -48,6 +49,7 @@ class CompanyGroups with ChangeNotifier {
     try {
       User user = FirebaseAuth.instance.currentUser;
       _userId = user.uid;
+      await deleteCompanyAccount();
     } on Exception {
       throw ErrorHint;
     }
@@ -296,8 +298,80 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> _addDeletedPersonalAccount(
+      PersonalAccountModel personalAccountModel) async {
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Deleted Personal Accounts')
+          .child(personalAccountModel.id)
+          .set(personalAccountModel.toJson());
+    } on Exception {
+      throw 'Error in _addDeletedPersonalAccount function';
+    }
+  }
+
+  Future<void> deletePersonalAccount() async {
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child(_userId)
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        PersonalAccountModel personalAccountModel = PersonalAccountModel(
+          email: null,
+          firstName: null,
+          lastName: null,
+          dateOfCreation: null,
+        );
+        personalAccountModel.fromJsonToObject(
+            dataSnapshot.value, dataSnapshot.key);
+        _addDeletedPersonalAccount(personalAccountModel);
+      });
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child(_userId)
+          .remove();
+      User user = FirebaseAuth.instance.currentUser;
+      await user.delete();
+    } on Exception {
+      throw 'Error in deletePersonalAccount function';
+    }
+  }
+
+  Future<void> _addDeletedCompanyAccount(
+      CompanyAccountModel companyAccountModel) async {
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Deleted Company Accounts')
+          .child(companyAccountModel.id)
+          .set(companyAccountModel.toJson());
+    } on Exception {
+      throw 'Error in _addDeletedPersonalAccount function';
+    }
+  }
+
   Future<void> deleteCompanyAccount() async {
     try {
+      await _dbRef
+          .child('Users')
+          .child('Company Accounts')
+          .child(_userId)
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        CompanyAccountModel companyAccountModel = CompanyAccountModel(
+            companyEmail: null,
+            companyName: null,
+            owenrFirstName: null,
+            owenrLastName: null,
+            dateOfCreation: null);
+        companyAccountModel.fromJsonToObject(
+            dataSnapshot.value, dataSnapshot.key);
+        _addDeletedCompanyAccount(companyAccountModel);
+      });
       await _dbRef.child('Company Groups').child(_userId).remove();
       await _dbRef
           .child('Users')
