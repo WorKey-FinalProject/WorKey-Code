@@ -1,23 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:workey/company_account/widgets/employee_sliver.dart';
+import 'package:provider/provider.dart';
 
+import '../widgets/employee_sliver.dart';
+import '../../general/models/group_employee_model.dart';
+import '../../general/providers/company_groups.dart';
 import '../widgets/group_screen_widgets/opaque_image.dart';
 import 'employee_detail_pages/employees_shifts_view.dart';
 import 'employee_detail_pages/employees_info_view.dart';
 
 class EmployeeDetailScreen extends StatefulWidget {
+  final String employeesId;
+
+  EmployeeDetailScreen(this.employeesId);
+
   @override
   _EmployeeDetailScreenState createState() => _EmployeeDetailScreenState();
 }
 
 class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
-  final List _tabs = [
-    EmployeesInfoView(),
-    EmployeesShiftsView(),
-  ];
+  GroupEmployeeModel currentEmployee;
 
   @override
   Widget build(BuildContext context) {
+    final currentEmployee = Provider.of<CompanyGroups>(context)
+        .findEmployeeById(widget.employeesId);
+
+    final List _tabs = [
+      EmployeesInfoView(currentEmployee),
+      EmployeesShiftsView(),
+    ];
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -33,10 +45,17 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                   expandedHeight: 200,
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
-                    background: OpaqueImage(
-                      imageUrl:
-                          'https://pbs.twimg.com/profile_images/1192101281252495363/c_xL2w3j.jpg',
-                    ),
+                    background: currentEmployee.picture.isEmpty
+                        ? Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/no_image_available.png',
+                                ),
+                              ),
+                            ),
+                          )
+                        : OpaqueImage(imageUrl: currentEmployee.picture),
                   ),
                   forceElevated: innerBoxIsScrolled,
                   bottom: PreferredSize(
@@ -73,7 +92,8 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                 child: Builder(
                   builder: (BuildContext context) {
                     return CustomScrollView(
-                      key: PageStorageKey<String>(EmployeesInfoView().getName),
+                      key: PageStorageKey<String>(
+                          EmployeesInfoView(currentEmployee).getName),
                       slivers: <Widget>[
                         SliverOverlapInjector(
                           handle:
@@ -84,8 +104,8 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                           padding: const EdgeInsets.only(top: 8.0),
                           sliver: SliverToBoxAdapter(
                             child: Container(
-                              height: 600,
-                              child: EmployeesInfoView(),
+                              height: 700,
+                              child: EmployeesInfoView(currentEmployee),
                             ),
                           ),
                         ),
