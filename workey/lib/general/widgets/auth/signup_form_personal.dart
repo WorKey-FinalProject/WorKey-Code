@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:workey/general/widgets/profile_picture.dart';
+import '../date_picker.dart';
 import '../previous_next_button.dart';
 
 class SignUpFormPersonal extends StatefulWidget {
@@ -39,6 +41,8 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
 
   final _formKey = GlobalKey<FormState>();
 
+  DateTime _selectedDate;
+
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
@@ -71,6 +75,23 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
     _formKey.currentState.save();
     setState(() {
       this.step = step;
+    });
+  }
+
+  void _presentDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year - 100),
+      lastDate: DateTime.now(),
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      setState(() {
+        _selectedDate = pickedDate;
+        dateOfBirthController.text = DateFormat.yMd().format(_selectedDate);
+      });
     });
   }
 
@@ -284,8 +305,19 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
                       ),
 
                       /// Date of birth
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: DatePicker(
+                      //     firstDate: DateTime(DateTime.now().year - 100),
+                      //     lastDate: DateTime.now(),
+                      //     labelText: 'Date of Birth',
+                      //     selectedDate: _selectedDate,
+                      //   ),
+                      // ),
                       TextFormField(
+                        readOnly: true,
                         controller: dateOfBirthController,
+                        onTap: _presentDatePicker,
                         onSaved: (value) {
                           dateOfBirthController.text = value;
                         },
@@ -337,6 +369,10 @@ class _SignUpFormPersonalState extends State<SignUpFormPersonal> {
       ),
     );
 
-    return step == 0 ? card1 : step == 1 ? card2 : card2;
+    return step == 0
+        ? card1
+        : step == 1
+            ? card2
+            : card2;
   }
 }
