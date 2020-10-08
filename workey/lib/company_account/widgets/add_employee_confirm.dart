@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/models/snackbar_result.dart';
 
 import '../../general/models/group_employee_model.dart';
 //import '../../general/models/personal_account_model.dart';
@@ -69,15 +70,14 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
       if (isError == false) {
         message = 'Changes saved successfully';
       }
-      int count = 0;
-      Navigator.of(context).popUntil((_) => count++ >= 2);
-      // Navigator.pop(
-      //   context,
-      //   SnackBarResult(
-      //     message: message,
-      //     isError: isError,
-      //   ),
-      // );
+
+      Navigator.pop(
+        context,
+        SnackBarResult(
+          message: message,
+          isError: isError,
+        ),
+      );
     }
   }
 
@@ -90,44 +90,39 @@ class _AddEmployeeConfirmScreenState extends State<AddEmployeeConfirmScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Add Employee'),
-      ),
-      body: Container(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              _textFieldForm(
-                _employeeSalaryController,
-                'Employee\'s Salary',
-                Field.salary,
-              ),
-              _textFieldForm(
-                _employeePositionController,
-                'Employee\'s Role',
-                Field.role,
-              ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RaisedButton(
-                    onPressed: () async {
-                      FocusScope.of(context).requestFocus(new FocusNode());
-                      await _addNewEmployee();
-                    },
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text("Done"),
+    return Container(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            _textFieldForm(
+              _employeeSalaryController,
+              'Employee\'s Salary',
+              Field.salary,
+            ),
+            _textFieldForm(
+              _employeePositionController,
+              'Employee\'s Role',
+              Field.role,
+            ),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(
+                  onPressed: () async {
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                    await _addNewEmployee();
+                  },
+                  padding: EdgeInsets.symmetric(horizontal: 50),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
+                  child: Text("Done"),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

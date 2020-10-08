@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:workey/company_account/screens/add_employee_confirm_screen.dart';
+import 'package:workey/company_account/widgets/add_employee_confirm.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/models/personal_account_model.dart';
 
 import '../../general/providers/company_groups.dart';
 
-import '../widgets/add_employee_form.dart';
+import '../widgets/add_employee_search.dart';
 
 class AddEmployeeScreen extends StatefulWidget {
   final CompanyGroups provider;
@@ -18,9 +19,11 @@ class AddEmployeeScreen extends StatefulWidget {
 class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   GroupEmployeeModel _selectedEmployee;
 
-  void _selectedEmp(GroupEmployeeModel employeeModel) {
+  Future<void> _selectedEmp(PersonalAccountModel employeeModel) {
     setState(() {
-      _selectedEmployee = employeeModel;
+      _selectedEmployee = GroupEmployeeModel(
+          id: employeeModel.id,
+          workGroupId: widget.provider.getCurrentWorkGroup.id);
     });
   }
 
@@ -31,8 +34,8 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
         title: Text('Add Employee'),
       ),
       body: _selectedEmployee == null
-          ? AddEmployeeForm(widget.provider)
-          : AddEmployeeConfirmScreen(provider, newEmployeeId),
+          ? AddEmployeeSearch(widget.provider, _selectedEmp)
+          : AddEmployeeConfirmScreen(widget.provider, _selectedEmployee.id),
     );
   }
 }

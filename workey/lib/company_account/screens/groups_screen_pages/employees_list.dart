@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:workey/general/models/snackbar_result.dart';
 
 import '../../../general/models/group_employee_model.dart';
 import '../../../general/providers/company_groups.dart';
@@ -39,13 +40,7 @@ class _State extends State<EmployeesList> {
           employeesList.isEmpty ? Alignment.center : Alignment.bottomRight,
       child: RawMaterialButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  AddEmployeeScreen(widget.subWorkGroupsProvider),
-            ),
-          );
+          _showSnackBarResult(context);
         },
         elevation: 2.0,
         fillColor: Theme.of(context).accentColor,
@@ -156,5 +151,29 @@ class _State extends State<EmployeesList> {
                           : Container(),
                     ],
                   );
+  }
+
+  _showSnackBarResult(BuildContext context) async {
+    final SnackBarResult snackBarResult = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddEmployeeScreen(widget.subWorkGroupsProvider),
+      ),
+    );
+
+    if (snackBarResult?.message != null) {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 2),
+          content: Text(
+            snackBarResult.message,
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: snackBarResult.isError
+              ? Theme.of(context).errorColor
+              : Colors.blue,
+        ),
+      );
+    }
   }
 }
