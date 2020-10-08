@@ -241,6 +241,7 @@ class _ProfileFormState extends State<ProfileForm> {
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: DatePicker(
+                                dateController: dateOfBirthTextController,
                                 firstDate: DateTime(DateTime.now().year - 100),
                                 lastDate: DateTime.now(),
                                 labelText: 'Date of Birth',
