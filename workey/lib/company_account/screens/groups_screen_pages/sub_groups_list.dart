@@ -73,7 +73,6 @@ class _SubGroupsListState extends State<SubGroupsList> {
         isShrinkLocal = false;
       });
     }
-    print(isShrinkLocal);
     return subGroupsList.isEmpty
         ? Column(
             mainAxisAlignment: MainAxisAlignment.center,
