@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DatePicker extends StatefulWidget {
-  final TextEditingController dateController;
+  //final TextEditingController dateController;
+  final firstDate;
+  final lastDate;
   final String labelText;
+  final Function selectedDate;
 
-  DatePicker(this.dateController, this.labelText);
+  DatePicker({
+    this.firstDate,
+    this.lastDate,
+    this.labelText,
+    this.selectedDate,
+  });
   @override
   _DatePickerState createState() => _DatePickerState();
 }
 
 class _DatePickerState extends State<DatePicker> {
+  final _dateController = TextEditingController();
   DateTime _selectedDate;
   String dateStr;
 
@@ -18,16 +27,17 @@ class _DatePickerState extends State<DatePicker> {
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(1940),
-      lastDate: DateTime.now(),
+      firstDate: widget.firstDate,
+      lastDate: widget.lastDate,
     ).then((pickedDate) {
       if (pickedDate == null) {
         return;
       }
       setState(() {
         _selectedDate = pickedDate;
-        widget.dateController.text = DateFormat.yMd().format(_selectedDate);
+        _dateController.text = DateFormat.yMd().format(_selectedDate);
       });
+      widget.selectedDate(_selectedDate);
     });
   }
 
@@ -35,7 +45,7 @@ class _DatePickerState extends State<DatePicker> {
   Widget build(BuildContext context) {
     return TextField(
       readOnly: true,
-      controller: widget.dateController,
+      controller: _dateController,
       onTap: _presentDatePicker,
       decoration: InputDecoration(
         suffixIcon: Icon(Icons.calendar_today),
