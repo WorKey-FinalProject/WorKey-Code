@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:timetable/timetable.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/widgets/date_picker.dart';
 import 'package:workey/personal_account/widgets/employee_list_item.dart';
 
 import '../../personal_account/widgets/time_table.dart';
@@ -23,8 +25,14 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
   TimeOfDay _timeOfDay_start;
   TimeOfDay _timeOfDay_end;
 
+  DateTime _dateTimeStart;
+  DateTime _dateTimeEnd;
+
+  final _dateController = TextEditingController();
   final _startTimeController = TextEditingController();
   final _endTimeController = TextEditingController();
+
+  Function _setModalState;
 
   List<GroupEmployeeModel> _dropdownItems = [];
 
@@ -56,14 +64,14 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
           id: DateTime.now(),
           title: '${_selectedEmployee.firstName} ${_selectedEmployee.lastName}',
           color: Colors.blue,
-          start: LocalDate.today().at(
+          start: LocalDate.dateTime(_dateTimeStart).at(
             LocalTime(
               _timeOfDay_start.hour,
               _timeOfDay_start.minute,
               0,
             ),
           ),
-          end: LocalDate.today().at(
+          end: LocalDate.dateTime(_dateTimeEnd).at(
             LocalTime(
               _timeOfDay_end.hour,
               _timeOfDay_end.minute,
@@ -108,6 +116,18 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
         _dropdownItems.isEmpty ? null : _dropdownMenuItems[0].value;
   }
 
+  void _selectedDateStart(DateTime dateTime) {
+    _setModalState(() {
+      _dateTimeStart = dateTime;
+    });
+  }
+
+  void _selectedDateEnd(DateTime dateTime) {
+    _setModalState(() {
+      _dateTimeEnd = dateTime;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -137,21 +157,18 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
             builder: (context) {
               return StatefulBuilder(
                 builder: (context, setModalState) {
+                  _setModalState = setModalState;
                   return ListView(
                     padding: const EdgeInsets.all(16.0),
                     children: [
                       Row(
                         children: [
                           Flexible(
-                            child: TextField(
-                              readOnly: true,
-                              controller: _startTimeController,
-                              onTap: () =>
-                                  _pickTime(setModalState, ShiftTime.start),
-                              decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.calendar_today),
-                                labelText: 'Start',
-                              ),
+                            child: DatePicker(
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(DateTime.now().year + 1),
+                              labelText: 'Date',
+                              selectedDate: _selectedDateStart,
                             ),
                           ),
                           VerticalDivider(
@@ -159,12 +176,42 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
                           ),
                           Flexible(
                             child: TextField(
+                              enabled: _dateTimeStart == null ? false : true,
+                              readOnly: true,
+                              controller: _startTimeController,
+                              onTap: () => _pickTime(ShiftTime.start),
+                              decoration: InputDecoration(
+                                suffixIcon: Icon(Icons.timer),
+                                labelText: 'Start',
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: DatePicker(
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(DateTime.now().year + 1),
+                              labelText: 'Date',
+                              selectedDate: _selectedDateEnd,
+                            ),
+                          ),
+                          VerticalDivider(
+                            width: 30,
+                          ),
+                          Flexible(
+                            child: TextField(
+                              enabled: _startTimeController.text.isEmpty ||
+                                      _dateTimeEnd == null
+                                  ? false
+                                  : true,
                               readOnly: true,
                               controller: _endTimeController,
-                              onTap: () =>
-                                  _pickTime(setModalState, ShiftTime.end),
+                              onTap: () => _pickTime(ShiftTime.end),
                               decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.calendar_today),
+                                suffixIcon: Icon(Icons.timer),
                                 labelText: 'End',
                               ),
                             ),
@@ -209,7 +256,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
     );
   }
 
-  _pickTime(Function setModalState, ShiftTime shiftTime) async {
+  _pickTime(ShiftTime shiftTime) async {
     TimeOfDay time = await showTimePicker(
       context: context,
       initialTime: _timeOfDay_start,
@@ -222,12 +269,12 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
     );
     if (time != null) {
       if (shiftTime == ShiftTime.start) {
-        setModalState(() {
+        _setModalState(() {
           _timeOfDay_start = time;
           _startTimeController.text = _timeOfDay_start.format(context);
         });
       } else if (shiftTime == ShiftTime.end) {
-        setModalState(() {
+        _setModalState(() {
           _timeOfDay_end = time;
           _endTimeController.text = _timeOfDay_end.format(context);
         });

@@ -40,8 +40,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   String _userImage;
 
   var showPassword = true;
+  var showVerifyPassword = true;
+
   final _formKey = GlobalKey<FormState>();
   final _formKeyForPassword = GlobalKey<FormState>();
+
+  Function _setModalState;
 
   Future<void> _trySubmit() async {
     final isValid = _formKey.currentState.validate();
@@ -122,6 +126,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         ),
       );
       Navigator.pop(context);
+      passwordTextController.text = '';
+      verifyPasswordTextController.text = '';
     }
   }
 
@@ -219,64 +225,72 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                     elevation: 5,
                                     context: context,
                                     builder: (_) {
-                                      return GestureDetector(
-                                        onTap: () {},
-                                        child: SingleChildScrollView(
-                                          child: Container(
-                                            padding: EdgeInsets.all(10),
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.75,
-                                            child: Form(
-                                              key: _formKeyForPassword,
-                                              child: Column(
-                                                children: [
-                                                  Flexible(
-                                                    child: buildTextField(
-                                                      'New Password',
-                                                      TextFieldType.password,
-                                                      passwordTextController,
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                    child: buildTextField(
-                                                      'Verify Password',
-                                                      TextFieldType
-                                                          .verifyPassword,
-                                                      verifyPasswordTextController,
-                                                    ),
-                                                  ),
-                                                  Flexible(
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.bottomRight,
-                                                      padding:
-                                                          EdgeInsets.all(20),
-                                                      child: RaisedButton(
-                                                        onPressed: () {
-                                                          _tryChangePassword();
-                                                        },
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
-                                                        child: Text(
-                                                          'Confirm Change',
-                                                          style: TextStyle(
-                                                              fontSize: 16),
+                                      return StatefulBuilder(
+                                        builder: (context, setModalState) {
+                                          _setModalState = setModalState;
+                                          return GestureDetector(
+                                            onTap: () {},
+                                            child: SingleChildScrollView(
+                                              child: Container(
+                                                padding: EdgeInsets.all(10),
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.75,
+                                                child: Form(
+                                                  key: _formKeyForPassword,
+                                                  child: Column(
+                                                    children: [
+                                                      Flexible(
+                                                        child: buildTextField(
+                                                          'New Password',
+                                                          TextFieldType
+                                                              .password,
+                                                          passwordTextController,
                                                         ),
                                                       ),
-                                                    ),
+                                                      Flexible(
+                                                        child: buildTextField(
+                                                          'Verify Password',
+                                                          TextFieldType
+                                                              .verifyPassword,
+                                                          verifyPasswordTextController,
+                                                        ),
+                                                      ),
+                                                      Flexible(
+                                                        child: Container(
+                                                          alignment: Alignment
+                                                              .bottomRight,
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  20),
+                                                          child: RaisedButton(
+                                                            onPressed: () {
+                                                              _tryChangePassword();
+                                                            },
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10),
+                                                            ),
+                                                            child: Text(
+                                                              'Confirm Change',
+                                                              style: TextStyle(
+                                                                  fontSize: 16),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        behavior: HitTestBehavior.opaque,
+                                            behavior: HitTestBehavior.opaque,
+                                          );
+                                        },
                                       );
                                     },
                                   );
@@ -390,10 +404,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                 return null;
                               }
                             : null,
-        obscureText: (textFieldType == TextFieldType.password ||
-                textFieldType == TextFieldType.verifyPassword)
+        obscureText: textFieldType == TextFieldType.password
             ? showPassword
-            : false,
+            : textFieldType == TextFieldType.verifyPassword
+                ? showVerifyPassword
+                : false,
         keyboardType: textFieldType == TextFieldType.email
             ? TextInputType.emailAddress
             : textFieldType == TextFieldType.password
@@ -410,8 +425,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   textFieldType == TextFieldType.verifyPassword)
               ? IconButton(
                   onPressed: () {
-                    setState(() {
-                      showPassword = !showPassword;
+                    _setModalState(() {
+                      if (textFieldType == TextFieldType.password) {
+                        showPassword = !showPassword;
+                      }
+                      if (textFieldType == TextFieldType.verifyPassword) {
+                        showVerifyPassword = !showVerifyPassword;
+                      }
                     });
                   },
                   icon: Icon(Icons.remove_red_eye),
