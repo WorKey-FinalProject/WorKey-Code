@@ -97,8 +97,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     if (isValid) {
       _formKeyForPassword.currentState.save();
       try {
-        await widget.auth
-            .updateCurrUserPassword(passwordTextController.text.trim());
+        await widget.auth.updateCurrUserPassword(
+            'oldPassword', passwordTextController.text.trim());
       } on PlatformException catch (err) {
         var message = 'An error occurred';
 

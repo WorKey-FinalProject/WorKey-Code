@@ -54,6 +54,24 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
+  Future<void> setWhatsAppUrl(String url) async {
+    try {
+      await _dbRef
+          .child('Company Groups')
+          .child(_userId)
+          .child('workGroupList')
+          .child(_currentWorkGroup.id)
+          .child('whatsAppUrl')
+          .set(url);
+      _currentWorkGroup.whatsAppUrl = url;
+      _workGroupList[_workGroupList
+              .indexWhere((workGroup) => workGroup.id == _currentWorkGroup.id)]
+          .whatsAppUrl = url;
+    } on Exception {
+      throw 'Error in setWhatsAppUrl fonction';
+    }
+  }
+
   Future<void> setPersonalCompanyIdInFirebase(
       String personalId, String companyId) async {
     try {

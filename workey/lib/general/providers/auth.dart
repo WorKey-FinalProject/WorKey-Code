@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 
 import '../../general/models/company_group_model.dart';
 
@@ -248,15 +249,22 @@ class Auth with ChangeNotifier {
     return dynamicUser;
   }
 
+  Future<void> checkIfPasswordIsCorrect(String password) async {}
+
   /// updateCurrUserPassword
-  Future<void> updateCurrUserPassword(String newPassword) async {
+  Future<void> updateCurrUserPassword(
+      String oldPassword, String newPassword) async {
     try {
-      User user = FirebaseAuth.instance.currentUser;
-      await user.updatePassword(newPassword);
+      AuthCredential authCredential = EmailAuthProvider.credential(
+          email: user.email, password: oldPassword);
+      user.reauthenticateWithCredential(authCredential).then((result) async {
+        await user.updatePassword(newPassword);
+      }).catchError((error) {
+        print(error);
+      });
     } catch (error) {
       throw error;
     }
-    print('Password updated Successfully');
   }
 
   Future<void> updateCurrUserData(dynamic userNewData) async {
