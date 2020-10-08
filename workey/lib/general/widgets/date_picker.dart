@@ -7,12 +7,14 @@ class DatePicker extends StatefulWidget {
   final lastDate;
   final String labelText;
   final Function selectedDate;
+  final TextEditingController dateController;
 
   DatePicker({
-    this.firstDate,
-    this.lastDate,
-    this.labelText,
-    this.selectedDate,
+    @required this.firstDate,
+    @required this.lastDate,
+    @required this.labelText,
+    @required this.selectedDate,
+    this.dateController,
   });
   @override
   _DatePickerState createState() => _DatePickerState();
@@ -43,6 +45,9 @@ class _DatePickerState extends State<DatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.dateController != null) {
+      _dateController.text = widget.dateController.text;
+    }
     return TextField(
       readOnly: true,
       controller: _dateController,

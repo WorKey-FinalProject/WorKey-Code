@@ -132,8 +132,10 @@ class CompanyGroups with ChangeNotifier {
         Map<dynamic, dynamic> map = dataSnapshot.value;
         if (map != null) {
           map.forEach((key, value) {
-            GroupEmployeeModel emp =
-                GroupEmployeeModel(id: null, workGroupId: null);
+            GroupEmployeeModel emp = GroupEmployeeModel(
+              id: null,
+              workGroupId: null,
+            );
             emp.fromJsonToObject(value, key);
             list.add(emp);
           });
