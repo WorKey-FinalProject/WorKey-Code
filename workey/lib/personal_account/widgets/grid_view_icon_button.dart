@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workey/general/providers/auth.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
 import 'package:workey/personal_account/screens/members_list_screen.dart';
 
@@ -28,7 +29,9 @@ class GridViewIconButton extends StatelessWidget {
   final whatsAppGroupLink = TextEditingController();
 
   void _onSelected(BuildContext context) {
+    final companyGroups = Provider.of<CompanyGroups>(context, listen: false);
     final _auth = Provider.of<Auth>(context, listen: false);
+    whatsAppGroupLink.text = companyGroups.getCurrentWorkGroup.whatsAppUrl;
     final accountTypeChosen = _auth.getAccountTypeChosen;
 
     switch (buttonType) {
@@ -77,7 +80,7 @@ class GridViewIconButton extends StatelessWidget {
       case ButtonType.whatsApp:
         {
           if (accountTypeChosen == AccountTypeChosen.company) {
-            addWhatsAppLinkShowDialog(context, _formKey);
+            addWhatsAppLinkShowDialog(context, _formKey, companyGroups);
           } else {
             launchWhatsApp(whatsAppGroupLink: whatsAppGroupLink.text
                 //'https://chat.whatsapp.com/JE5j9myLjf9EfWCmnCnAZR',
@@ -143,6 +146,7 @@ class GridViewIconButton extends StatelessWidget {
   Future addWhatsAppLinkShowDialog(
     BuildContext context,
     GlobalKey<FormState> _formKey,
+    CompanyGroups companyGroupsProvider,
   ) {
     return showDialog(
       context: context,
@@ -168,6 +172,7 @@ class GridViewIconButton extends StatelessWidget {
                     keyboardType: TextInputType.multiline,
                     onSaved: (value) {
                       whatsAppGroupLink.text = value;
+                      companyGroupsProvider.setWhatsAppUrl(value);
                     },
                     validator: (value) {
                       if (value.isEmpty) {
