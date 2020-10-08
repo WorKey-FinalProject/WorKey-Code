@@ -69,14 +69,6 @@ class _HomeTopViewState extends State<HomeTopView> {
       await _shiftsProvider.fetchShiftCompanyIdAndEmployeeId(shiftModel);
     } else {
       final list = _shiftsProvider.getShiftList;
-      list.forEach((shift) {
-        print(shift.toJson());
-        print(shift.companyId);
-        print(shift.employeeId);
-        print(shift.hourlyWage);
-        print(shift.totalHours);
-        print(shift.totalWage);
-      });
       shiftModel.companyId = list[0].companyId;
       shiftModel.employeeId = list[0].employeeId;
     }
