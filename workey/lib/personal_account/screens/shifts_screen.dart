@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'package:workey/general/models/shift_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/providers/shifts.dart';
 
 class ShiftsScreen extends StatefulWidget {
   @override
@@ -9,26 +12,7 @@ class ShiftsScreen extends StatefulWidget {
 }
 
 class _ShiftsScreenState extends State<ShiftsScreen> {
-  List<ShiftModel> shiftsList = [
-    ShiftModel(
-      startTime: DateTime.now(),
-      endTime: DateTime.now(),
-      totalHours: null,
-      totalWage: 240,
-    ),
-    ShiftModel(
-      startTime: DateTime.now(),
-      endTime: DateTime.now(),
-      totalHours: null,
-      totalWage: 240,
-    ),
-    ShiftModel(
-      startTime: DateTime.now(),
-      endTime: DateTime.now(),
-      totalHours: null,
-      totalWage: 240,
-    ),
-  ];
+  List<ShiftModel> shiftsList = [];
 
   Color getDayColor(int day) {
     switch (day) {
@@ -76,6 +60,14 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final companyGroupsProvider = Provider.of<Shifts>(context, listen: false);
+
+    shiftsList = companyGroupsProvider.getShiftList;
+
+    shiftsList.forEach((element) {
+      print(element.toJson());
+    });
+
     return Scaffold(
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -161,12 +153,12 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
                   ),
                   DataCell(
                     FittedBox(
-                      child: Text('${shift.totalHours}'),
+                      child: Text('${shift.totalHours.toStringAsFixed(2)}'),
                     ),
                   ),
                   DataCell(
                     FittedBox(
-                      child: Text('${shift.totalWage}'),
+                      child: Text('${shift.totalWage.toStringAsFixed(2)}'),
                     ),
                   ),
                 ],

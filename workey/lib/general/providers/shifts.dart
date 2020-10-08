@@ -63,7 +63,8 @@ class Shifts with ChangeNotifier {
     notifyListeners();
   }
 
-  ShiftModel _buildShiftObject(DateTime start, DateTime end, int seconds) {
+  Future<ShiftModel> _buildShiftObject(
+      DateTime start, DateTime end, int seconds) async {
     ShiftModel shiftModel = ShiftModel(
       startTime:
           DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss').format(start)),
@@ -71,7 +72,7 @@ class Shifts with ChangeNotifier {
       totalHours: seconds / 3600,
     );
     if (_shiftList.isEmpty) {
-      fetchShiftCompanyIdAndEmployeeId(shiftModel);
+      await fetchShiftCompanyIdAndEmployeeId(shiftModel);
     } else {
       shiftModel.companyId = _shiftList[0].companyId;
       shiftModel.employeeId = _shiftList[0].employeeId;
@@ -82,7 +83,7 @@ class Shifts with ChangeNotifier {
 
   Future<void> addShiftToFirebaseAndList(
       DateTime start, DateTime end, int seconds) async {
-    ShiftModel shift = _buildShiftObject(start, end, seconds);
+    ShiftModel shift = await _buildShiftObject(start, end, seconds);
     try {
       var db = _dbRef
           .child('Company Groups')
