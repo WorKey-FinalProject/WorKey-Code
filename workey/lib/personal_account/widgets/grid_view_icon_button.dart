@@ -27,13 +27,13 @@ class GridViewIconButton extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 
   final whatsAppGroupLink = TextEditingController();
+  AccountTypeChosen accountTypeChosen;
 
-  void _onSelected(BuildContext context) {
-    final companyGroups = Provider.of<CompanyGroups>(context, listen: false);
-    final _auth = Provider.of<Auth>(context, listen: false);
-    whatsAppGroupLink.text = companyGroups.getCurrentWorkGroup.whatsAppUrl;
-    final accountTypeChosen = _auth.getAccountTypeChosen;
-
+  void _onSelected(
+    BuildContext context,
+    CompanyGroups companyGroups,
+    Auth auth,
+  ) {
     switch (buttonType) {
       case ButtonType.weeklyShifts:
         {
@@ -97,10 +97,15 @@ class GridViewIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final companyGroups = Provider.of<CompanyGroups>(context, listen: false);
+    final _auth = Provider.of<Auth>(context, listen: false);
+    whatsAppGroupLink.text = companyGroups.getCurrentWorkGroup.whatsAppUrl;
+    accountTypeChosen = _auth.getAccountTypeChosen;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(36),
       child: FlatButton(
-        onPressed: () => _onSelected(context),
+        onPressed: () => _onSelected(context, companyGroups, _auth),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
