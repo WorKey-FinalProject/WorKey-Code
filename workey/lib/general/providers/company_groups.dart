@@ -100,7 +100,7 @@ class CompanyGroups with ChangeNotifier {
     _employeeList = [];
   }
 
-  Future<void> fetchAndSetToListForPersonal() async {
+  Future<void> _fetchAndSetToListForPersonal() async {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();
@@ -111,7 +111,7 @@ class CompanyGroups with ChangeNotifier {
           .child(_userId)
           .once()
           .then((DataSnapshot dataSnapshot) {
-        _fetchAndSetToListForPersonal(dataSnapshot.value['companyId']);
+        _fetchAndSetToListForPersonalHandler(dataSnapshot.value['companyId']);
       });
     } on Exception {
       throw 'Error in fetchAndSetToListForPersonal';
@@ -119,7 +119,7 @@ class CompanyGroups with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _fetchAndSetToListForPersonal(String companyId) async {
+  Future<void> _fetchAndSetToListForPersonalHandler(String companyId) async {
     List<GroupEmployeeModel> list = [];
     try {
       await _dbRef
@@ -153,7 +153,15 @@ class CompanyGroups with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchAndSetToListsForCompany() async {
+  Future<void> fetchAndSetToLists(bool isCompany) async {
+    if (isCompany) {
+      await _fetchAndSetToListsForCompany();
+    } else {
+      await _fetchAndSetToListForPersonal();
+    }
+  }
+
+  Future<void> _fetchAndSetToListsForCompany() async {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearLists();

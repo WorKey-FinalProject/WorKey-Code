@@ -153,7 +153,6 @@ class _ProfileFormState extends State<ProfileForm> {
     dateOfBirthTextController.text = userAccount.dateOfBirth;
     addressTextController.text = userAccount.address;
     _userImage = userAccount.profilePicture;
-
     setState(() {
       _isLoading = false;
     });
