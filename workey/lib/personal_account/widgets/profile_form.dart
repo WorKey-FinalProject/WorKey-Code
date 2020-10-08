@@ -153,7 +153,6 @@ class _ProfileFormState extends State<ProfileForm> {
     dateOfBirthTextController.text = userAccount.dateOfBirth;
     addressTextController.text = userAccount.address;
     _userImage = userAccount.profilePicture;
-
     setState(() {
       _isLoading = false;
     });
@@ -242,7 +241,9 @@ class _ProfileFormState extends State<ProfileForm> {
                             Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: DatePicker(
+
                                 dateController: dateOfBirthTextController,
+
                                 firstDate: DateTime(DateTime.now().year - 100),
                                 lastDate: DateTime.now(),
                                 labelText: 'Date of Birth',
@@ -280,6 +281,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                                           TextFieldType
                                                               .password,
                                                           passwordTextController,
+
                                                         ),
                                                       ),
                                                       Flexible(
@@ -291,6 +293,7 @@ class _ProfileFormState extends State<ProfileForm> {
                                                         ),
                                                       ),
                                                       Flexible(
+
                                                         child: Container(
                                                           alignment: Alignment
                                                               .bottomRight,

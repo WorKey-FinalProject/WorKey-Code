@@ -7,6 +7,7 @@ class DatePicker extends StatefulWidget {
   final lastDate;
   final String labelText;
   final Function selectedDate;
+
   final TextEditingController dateController;
 
   DatePicker({
@@ -15,6 +16,7 @@ class DatePicker extends StatefulWidget {
     @required this.labelText,
     @required this.selectedDate,
     this.dateController,
+
   });
   @override
   _DatePickerState createState() => _DatePickerState();

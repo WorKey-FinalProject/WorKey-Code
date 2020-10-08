@@ -21,14 +21,14 @@ class FeedList with ChangeNotifier {
     _feedList = [];
   }
 
-  Future<void> fetchAndSetToList() async {
+  Future<void> fetchAndSetToList(String companyId) async {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;
     clearList();
     try {
       await _dbRef
           .child('Company Groups')
-          .child(_userId)
+          .child(companyId)
           .child('feedList')
           .orderByKey()
           .once()
