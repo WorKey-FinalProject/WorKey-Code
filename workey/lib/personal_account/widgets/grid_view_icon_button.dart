@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:workey/general/providers/auth.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
 import 'package:workey/personal_account/screens/members_list_screen.dart';
 
 import '../../personal_account/screens/weekly_shifts_screen.dart';
@@ -20,7 +23,14 @@ class GridViewIconButton extends StatelessWidget {
     this.ctx,
   );
 
-  void _onSelected() {
+  final _formKey = GlobalKey<FormState>();
+
+  final whatsAppGroupLink = TextEditingController();
+
+  void _onSelected(BuildContext context) {
+    final _auth = Provider.of<Auth>(context, listen: false);
+    final accountTypeChosen = _auth.getAccountTypeChosen;
+
     switch (buttonType) {
       case ButtonType.weeklyShifts:
         {
@@ -66,37 +76,20 @@ class GridViewIconButton extends StatelessWidget {
 
       case ButtonType.whatsApp:
         {
-          launchWhatsApp(
-              whatsAppGroupLink:
-                  'https://chat.whatsapp.com/JE5j9myLjf9EfWCmnCnAZR');
-          print('Selected whatsApp button');
+          if (accountTypeChosen == AccountTypeChosen.company) {
+            addWhatsAppLinkShowDialog(context, _formKey);
+          } else {
+            launchWhatsApp(whatsAppGroupLink: whatsAppGroupLink.text
+                //'https://chat.whatsapp.com/JE5j9myLjf9EfWCmnCnAZR',
+                );
+            print('Selected whatsApp button');
+          }
         }
         break;
 
       default:
         break;
     }
-    // if (buttonType == ButtonType.weeklyShifts) {
-    //   Navigator.push(
-    //     ctx,
-    //     MaterialPageRoute(
-    //       builder: (context) => WeeklyShiftsScreen(),
-    //     ),
-    //   );
-    //   print('Selected weeklyShifts button');
-    // }
-    // if (buttonType == ButtonType.groupMembers) {
-    //   print('Selected groupMembers button');
-    // }
-    // if (buttonType == ButtonType.mailBox) {
-    //   print('Selected mailBox button');
-    // }
-    // if (buttonType == ButtonType.location) {
-    //   print('Selected location button');
-    // }
-    // if (buttonType == ButtonType.codes) {
-    //   print('Selected codes button');
-    // }
   }
 
   @override
@@ -104,7 +97,7 @@ class GridViewIconButton extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(36),
       child: FlatButton(
-        onPressed: _onSelected,
+        onPressed: () => _onSelected(context),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -145,5 +138,95 @@ class GridViewIconButton extends StatelessWidget {
     } else {
       throw 'Could not launch $whatsAppGroupLink';
     }
+  }
+
+  Future addWhatsAppLinkShowDialog(
+    BuildContext context,
+    GlobalKey<FormState> _formKey,
+  ) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: TextFormField(
+                    controller: whatsAppGroupLink,
+                    decoration: InputDecoration(
+                      labelText: 'whatsApp group link',
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      border: const OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.multiline,
+                    onSaved: (value) {
+                      whatsAppGroupLink.text = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter a WhatsApp link';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8.0,
+                      right: 8.0,
+                      top: 8.0,
+                    ),
+                    child: RaisedButton(
+                      onPressed: () {
+                        final isValid = _formKey.currentState.validate();
+                        if (isValid) {
+                          Navigator.pop(context);
+                          _formKey.currentState.save();
+                        }
+                      },
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text("Save"),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                    child: RaisedButton(
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () {
+                        final isValid = _formKey.currentState.validate();
+                        if (isValid) {
+                          launchWhatsApp(
+                              whatsAppGroupLink: whatsAppGroupLink.text);
+                        }
+                      },
+                      padding: EdgeInsets.symmetric(horizontal: 50),
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text("Go to group"),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

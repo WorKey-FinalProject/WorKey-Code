@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/providers/auth.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
 import 'package:workey/personal_account/widgets/grid_view_icon_button.dart';
 
 enum ButtonType {
@@ -14,6 +17,8 @@ enum ButtonType {
 class IconsGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final _auth = Provider.of<Auth>(context, listen: false);
+    AccountTypeChosen accountTypeChosen = _auth.getAccountTypeChosen;
     final List<Widget> iconsList = [
       GridViewIconButton(
         Icons.calendar_today_outlined,
@@ -21,12 +26,13 @@ class IconsGridView extends StatelessWidget {
         ButtonType.weeklyShifts,
         context,
       ),
-      GridViewIconButton(
-        Icons.group,
-        'Members',
-        ButtonType.groupMembers,
-        context,
-      ),
+      if (accountTypeChosen == AccountTypeChosen.personal)
+        GridViewIconButton(
+          Icons.group,
+          'Members',
+          ButtonType.groupMembers,
+          context,
+        ),
       GridViewIconButton(
         Icons.mail,
         'Mail Box',
