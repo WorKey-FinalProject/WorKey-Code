@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:workey/general/models/shift_model.dart';
+import 'package:workey/general/providers/shifts.dart';
 
 class HomeTopView extends StatefulWidget {
   final double constraintsMaxHeight;
@@ -16,18 +19,18 @@ class HomeTopView extends StatefulWidget {
 class _HomeTopViewState extends State<HomeTopView> {
   bool _isRunning = false;
   String _timer = "00:00:00";
-  final duration = const Duration(seconds: 1);
+  final _duration = const Duration(seconds: 1);
   var _swatch = Stopwatch();
-  int seconds;
-  DateTime start;
-  DateTime end;
+  int _seconds;
+  DateTime _start;
+  DateTime _end;
 
   void timer() {
-    seconds++;
-    Timer(duration, keepRunning);
+    Timer(_duration, keepRunning);
   }
 
   void keepRunning() {
+    _seconds++;
     if (_swatch.isRunning) {
       startTimer();
     }
@@ -41,8 +44,6 @@ class _HomeTopViewState extends State<HomeTopView> {
   }
 
   void startTimer() {
-    seconds = 0;
-    start = DateTime.now();
     setState(() {
       _isRunning = true;
     });
@@ -50,17 +51,39 @@ class _HomeTopViewState extends State<HomeTopView> {
     timer();
   }
 
-  void stopTimer() {
+  void stopTimer() async {
+    final _shiftsProvider = Provider.of<Shifts>(context, listen: false);
     setState(() {
       _isRunning = false;
     });
     _swatch.stop();
     _swatch.reset();
-    end = DateTime.now();
+    _end = DateTime.parse(
+        DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()));
     ShiftModel shiftModel = ShiftModel(
-      startTime: start,
-      endTime: end,
+      startTime: _start,
+      endTime: _end,
+      totalHours: _seconds / 3600,
     );
+    if (_shiftsProvider.getShiftList.isEmpty) {
+      await _shiftsProvider.fetchShiftCompanyIdAndEmployeeId(shiftModel);
+    } else {
+      final list = _shiftsProvider.getShiftList;
+      list.forEach((shift) {
+        print(shift.toJson());
+        print(shift.companyId);
+        print(shift.employeeId);
+        print(shift.hourlyWage);
+        print(shift.totalHours);
+        print(shift.totalWage);
+      });
+      shiftModel.companyId = list[0].companyId;
+      shiftModel.employeeId = list[0].employeeId;
+    }
+    await _shiftsProvider.shiftSummary(shiftModel);
+
+    await Provider.of<Shifts>(context, listen: false)
+        .addToFirebaseAndList(shiftModel);
   }
 
   Widget timerWidget() {
@@ -136,6 +159,9 @@ class _HomeTopViewState extends State<HomeTopView> {
                   icon: Icon(MdiIcons.faceRecognition),
                   onPressed: () {
                     if (!_isRunning) {
+                      _seconds = 0;
+                      _start = DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss')
+                          .format(DateTime.now()));
                       startTimer();
                     } else if (_isRunning) {
                       stopTimer();
