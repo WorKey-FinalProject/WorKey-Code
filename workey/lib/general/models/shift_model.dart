@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class ShiftModel {
   String id;
+  String companyId;
   String employeeId;
   DateTime startTime;
   DateTime endTime;
@@ -13,10 +14,11 @@ class ShiftModel {
   ShiftModel({
     this.id,
     this.employeeId,
+    this.companyId,
     @required this.startTime,
     @required this.endTime,
     this.hourlyWage,
-    @required this.totalHours,
+    this.totalHours,
     this.totalWage,
     this.location,
   });

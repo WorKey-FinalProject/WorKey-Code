@@ -1,16 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
+import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/models/shift_model.dart';
 
 class Shifts with ChangeNotifier {
   final _dbRef = FirebaseDatabase.instance.reference();
-  String _userId = FirebaseAuth.instance.currentUser.uid;
+  String _userId;
 
   List<ShiftModel> _shiftList = [];
 
   List<ShiftModel> get getShiftList {
     return [..._shiftList];
+  }
+
+  String get getUserId {
+    return _userId;
   }
 
   ShiftModel findFeedById(String id) {
@@ -21,29 +27,83 @@ class Shifts with ChangeNotifier {
     _shiftList = [];
   }
 
-  Future<void> addToFirebaseAndList(
-      ShiftModel shiftModel, String companyId) async {
+  Future<void> fetchAndSetToListForPersonal(String companyId) async {
+    User user = FirebaseAuth.instance.currentUser;
+    _userId = user.uid;
+    clearList();
     try {
-      var db = _dbRef
+      await _dbRef
           .child('Company Groups')
           .child(companyId)
           .child('shiftList')
+          .child(_userId)
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> map = dataSnapshot.value;
+        if (map != null) {
+          map.forEach((key, value) {
+            ShiftModel shift = ShiftModel(startTime: null, endTime: null);
+            shift.fromJsonToObject(value, key);
+            shift.companyId = companyId;
+            shift.employeeId = _userId;
+            shift.totalHours = (shift.endTime
+                    .difference(shift.startTime)
+                    .inSeconds
+                    .toDouble()) /
+                3600;
+            shiftSummary(shift);
+            _shiftList.add(shift);
+          });
+        }
+      });
+    } on Exception {
+      throw 'Error in fetchAndSetToListForPersonal() of shifts';
+    }
+    notifyListeners();
+  }
+
+  ShiftModel _buildShiftObject(DateTime start, DateTime end, int seconds) {
+    ShiftModel shiftModel = ShiftModel(
+      startTime:
+          DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss').format(start)),
+      endTime: DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss').format(end)),
+      totalHours: seconds / 3600,
+    );
+    if (_shiftList.isEmpty) {
+      fetchShiftCompanyIdAndEmployeeId(shiftModel);
+    } else {
+      shiftModel.companyId = _shiftList[0].companyId;
+      shiftModel.employeeId = _shiftList[0].employeeId;
+    }
+    shiftSummary(shiftModel);
+    return shiftModel;
+  }
+
+  Future<void> addShiftToFirebaseAndList(
+      DateTime start, DateTime end, int seconds) async {
+    ShiftModel shift = _buildShiftObject(start, end, seconds);
+    try {
+      var db = _dbRef
+          .child('Company Groups')
+          .child(shift.companyId)
+          .child('shiftList')
           .child(_userId);
       String newKey = db.push().key;
-      await db.child(newKey).set(shiftModel.toJson());
-      shiftModel.id = newKey;
-      _shiftList.add(shiftModel);
+      await db.child(newKey).set(shift.toJson());
+      shift.id = newKey;
+      _shiftList.add(shift);
       notifyListeners();
     } on Exception {
       throw ErrorHint;
     }
   }
 
-  Future<void> shiftSummary(ShiftModel shiftModel, String companyId) async {
+  Future<void> shiftSummary(ShiftModel shiftModel) async {
     try {
       _dbRef
           .child('Company Groups')
-          .child(companyId)
+          .child(shiftModel.companyId)
           .child('employeeList')
           .child(shiftModel.employeeId)
           .once()
@@ -55,6 +115,26 @@ class Shifts with ChangeNotifier {
       throw 'Error in _getHourlyWage(String id)';
     }
   }
+
+  Future<void> fetchShiftCompanyIdAndEmployeeId(ShiftModel shiftModel) async {
+    try {
+      shiftModel.employeeId = _userId;
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child(shiftModel.employeeId)
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        PersonalAccountModel p = PersonalAccountModel(
+            email: null, firstName: null, lastName: null, dateOfCreation: null);
+        p.fromJsonToObject(dataSnapshot.value, _userId);
+        shiftModel.companyId = p.companyId;
+      });
+    } on Exception {
+      throw 'Error in _fetchShiftCompanyId function of Shifts';
+    }
+  }
+
   /*
   Future<void> updateInFirebaseAndList(ShiftModel shiftModel, String companyId) async {
     try {

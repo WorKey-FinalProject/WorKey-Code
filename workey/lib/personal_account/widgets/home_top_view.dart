@@ -1,8 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:workey/general/models/shift_model.dart';
+import 'package:workey/general/providers/shifts.dart';
 
 class HomeTopView extends StatefulWidget {
   final double constraintsMaxHeight;
@@ -16,18 +19,18 @@ class HomeTopView extends StatefulWidget {
 class _HomeTopViewState extends State<HomeTopView> {
   bool _isRunning = false;
   String _timer = "00:00:00";
-  final duration = const Duration(seconds: 1);
+  final _duration = const Duration(seconds: 1);
   var _swatch = Stopwatch();
-  int seconds;
-  DateTime start;
-  DateTime end;
+  int _seconds;
+  DateTime _start;
+  DateTime _end;
 
   void timer() {
-    seconds++;
-    Timer(duration, keepRunning);
+    Timer(_duration, keepRunning);
   }
 
   void keepRunning() {
+    _seconds++;
     if (_swatch.isRunning) {
       startTimer();
     }
@@ -41,8 +44,6 @@ class _HomeTopViewState extends State<HomeTopView> {
   }
 
   void startTimer() {
-    seconds = 0;
-    start = DateTime.now();
     setState(() {
       _isRunning = true;
     });
@@ -50,34 +51,15 @@ class _HomeTopViewState extends State<HomeTopView> {
     timer();
   }
 
-  void stopTimer() {
+  void stopTimer() async {
     setState(() {
       _isRunning = false;
     });
     _swatch.stop();
     _swatch.reset();
-    end = DateTime.now();
-    ShiftModel shiftModel = ShiftModel(
-      startTime: start,
-      endTime: end,
-    );
-  }
-
-  Widget timerWidget() {
-    return Positioned(
-      top: 5,
-      right: 0,
-      left: 0,
-      child: Center(
-        child: Text(
-          _timer,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
+    _end = DateTime.now();
+    await Provider.of<Shifts>(context, listen: false)
+        .addShiftToFirebaseAndList(_start, _end, _seconds);
   }
 
   @override
@@ -123,7 +105,20 @@ class _HomeTopViewState extends State<HomeTopView> {
             //   // ),Icon
             // ),
           ),
-          timerWidget(),
+          Positioned(
+            top: 5,
+            right: 0,
+            left: 0,
+            child: Center(
+              child: Text(
+                _timer,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
           Positioned(
             bottom: -10,
             left: 0,
@@ -138,6 +133,8 @@ class _HomeTopViewState extends State<HomeTopView> {
                   icon: Icon(MdiIcons.faceRecognition),
                   onPressed: () {
                     if (!_isRunning) {
+                      _seconds = 0;
+                      _start = DateTime.now();
                       startTimer();
                     } else if (_isRunning) {
                       stopTimer();
