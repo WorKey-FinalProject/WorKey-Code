@@ -11,7 +11,7 @@ class WorkGroupModel {
   String dateOfCreation;
   String location;
   String logo;
-  String whatsAppUrl;
+  String whatsAppUrl = '';
   List<GroupEmployeeModel> employeeList;
 
   File imageFile;

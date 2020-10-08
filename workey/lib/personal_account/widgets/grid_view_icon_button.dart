@@ -1,12 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:workey/general/providers/auth.dart';
-import 'package:workey/general/providers/company_groups.dart';
-import 'package:workey/general/widgets/auth/signup_type.dart';
-import 'package:workey/personal_account/screens/members_list_screen.dart';
+
+import '../../general/providers/auth.dart';
+import '../../general/providers/company_groups.dart';
+import '../../general/widgets/auth/signup_type.dart';
+import '../../personal_account/screens/members_list_screen.dart';
 
 import '../../personal_account/screens/weekly_shifts_screen.dart';
 import 'icons_grid_view.dart';
@@ -100,6 +99,7 @@ class GridViewIconButton extends StatelessWidget {
     final companyGroups = Provider.of<CompanyGroups>(context, listen: false);
     final _auth = Provider.of<Auth>(context, listen: false);
     whatsAppGroupLink.text = companyGroups.getCurrentWorkGroup.whatsAppUrl;
+    print(whatsAppGroupLink.text);
     accountTypeChosen = _auth.getAccountTypeChosen;
 
     return ClipRRect(
