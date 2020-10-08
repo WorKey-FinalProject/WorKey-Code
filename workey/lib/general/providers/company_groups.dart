@@ -70,6 +70,7 @@ class CompanyGroups with ChangeNotifier {
     } on Exception {
       throw 'Error in setWhatsAppUrl fonction';
     }
+    notifyListeners();
   }
 
   Future<void> setPersonalCompanyIdInFirebase(
