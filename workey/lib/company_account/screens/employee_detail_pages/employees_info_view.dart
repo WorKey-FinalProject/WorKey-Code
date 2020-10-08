@@ -55,7 +55,6 @@ class _EmployeesInfoViewState extends State<EmployeesInfoView> {
   @override
   Widget build(BuildContext context) {
     final currentWorkGroup = Provider.of<CompanyGroups>(context);
-    print(currentWorkGroup);
     Widget textView(
       String title,
     ) {
