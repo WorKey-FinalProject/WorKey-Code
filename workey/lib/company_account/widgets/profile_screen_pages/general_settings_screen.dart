@@ -27,11 +27,12 @@ class _GeneralSettingsScreenState extends State<GeneralSettingsScreen> {
               Text("Notifications"),
               Expanded(
                 child: new Container(
-                    margin: const EdgeInsets.only(left: 20.0, right: 10.0),
-                    child: Divider(
-                      color: Colors.black,
-                      height: 36,
-                    )),
+                  margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+                  child: Divider(
+                    color: Colors.black,
+                    height: 36,
+                  ),
+                ),
               ),
             ],
           ),
