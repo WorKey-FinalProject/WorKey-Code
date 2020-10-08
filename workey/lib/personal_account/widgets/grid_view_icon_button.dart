@@ -99,6 +99,7 @@ class GridViewIconButton extends StatelessWidget {
     final companyGroups = Provider.of<CompanyGroups>(context, listen: false);
     final _auth = Provider.of<Auth>(context, listen: false);
     whatsAppGroupLink.text = companyGroups.getCurrentWorkGroup.whatsAppUrl;
+    print(whatsAppGroupLink.text);
     accountTypeChosen = _auth.getAccountTypeChosen;
 
     return ClipRRect(

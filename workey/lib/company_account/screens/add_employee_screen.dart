@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/screens/add_employee_confirm_screen.dart';
+import 'package:workey/general/models/group_employee_model.dart';
 
 import '../../general/providers/company_groups.dart';
 
@@ -14,13 +16,23 @@ class AddEmployeeScreen extends StatefulWidget {
 }
 
 class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
+  GroupEmployeeModel _selectedEmployee;
+
+  void _selectedEmp(GroupEmployeeModel employeeModel) {
+    setState(() {
+      _selectedEmployee = employeeModel;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Employee'),
       ),
-      body: AddEmployeeForm(widget.provider),
+      body: _selectedEmployee == null
+          ? AddEmployeeForm(widget.provider)
+          : AddEmployeeConfirmScreen(provider, newEmployeeId),
     );
   }
 }
