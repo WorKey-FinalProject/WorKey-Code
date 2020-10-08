@@ -59,14 +59,6 @@ class IconsGridView extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         return GridTile(
-          // child: Container(
-          //   margin: EdgeInsets.all(10),
-          //   decoration: BoxDecoration(
-          //     color: Theme.of(context).accentColor.withOpacity(0.2),
-          //     borderRadius: BorderRadius.circular(36),
-          //   ),
-          //   child: iconsList[index],
-          // ),
           child: Card(
             margin: EdgeInsets.all(10),
             elevation: 5,
