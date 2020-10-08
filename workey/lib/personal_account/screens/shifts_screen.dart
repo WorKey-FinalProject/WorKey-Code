@@ -86,6 +86,11 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
             columns: [
               DataColumn(
                 label: FittedBox(
+                  child: Text('Date'),
+                ),
+              ),
+              DataColumn(
+                label: FittedBox(
                   child: Text('Start'),
                 ),
               ),

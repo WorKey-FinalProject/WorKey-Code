@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/personal_account/widgets/employee_list_item.dart';
 
 class MembersListScreen extends StatefulWidget {
   @override
@@ -56,21 +57,9 @@ class _MembersListScreenState extends State<MembersListScreen> {
       body: ListView.builder(
         itemCount: employeeList.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            onTap: null,
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundColor: Colors.black,
-              backgroundImage: NetworkImage(
-                employeeList[index].picture,
-              ),
-            ),
-            title: Text(
-                '${employeeList[index].firstName} ${employeeList[index].lastName}'),
-            isThreeLine: true,
-            subtitle: Text(
-              '${employeeList[index].email} \n${employeeList[index].role}',
-            ),
+          return EmployeeListItem(
+            groupEmployeeModel: employeeList[index],
+            isDropDownItem: false,
           );
         },
       ),

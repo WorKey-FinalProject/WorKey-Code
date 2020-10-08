@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -9,13 +8,11 @@ import 'package:workey/general/models/shift_model.dart';
 import 'package:workey/general/providers/shifts.dart';
 
 class HomeTopView extends StatefulWidget {
-
   final double constraintsMaxHeight;
 
   HomeTopView(this.constraintsMaxHeight);
 
   @override
-
   _HomeTopViewState createState() => _HomeTopViewState();
 }
 
@@ -150,7 +147,6 @@ class _HomeTopViewState extends State<HomeTopView> {
             // ),
           ),
           timerWidget(),
-
           Positioned(
             bottom: -10,
             left: 0,
@@ -164,7 +160,6 @@ class _HomeTopViewState extends State<HomeTopView> {
                 child: IconButton(
                   icon: Icon(MdiIcons.faceRecognition),
                   onPressed: () {
-
                     if (!_isRunning) {
                       _seconds = 0;
                       _start = DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss')
@@ -173,7 +168,6 @@ class _HomeTopViewState extends State<HomeTopView> {
                     } else if (_isRunning) {
                       stopTimer();
                     }
-
                   },
                   iconSize: 40,
                 ),
