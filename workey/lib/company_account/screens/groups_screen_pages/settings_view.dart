@@ -14,15 +14,6 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   TextEditingController groupNewNameController;
 
-  String _getCompanysEmployeeCount(workGroupsProvider) {
-    int count = 0;
-    List<WorkGroupModel> list = workGroupsProvider.getWorkGroupsList;
-    list.forEach((element) {
-      count += element.employeeList.length;
-    });
-    return count.toString();
-  }
-
   @override
   void dispose() {
     groupNewNameController.dispose();
@@ -34,8 +25,7 @@ class _SettingsViewState extends State<SettingsView> {
     final companyAccount = Provider.of<Auth>(context).companyAccountModel;
     final workGroupsProvider = Provider.of<CompanyGroups>(context);
 
-    var employeesCount = _getCompanysEmployeeCount(workGroupsProvider);
-
+    final employeesList = workGroupsProvider.getEmployeeList;
     Widget textView(
       String title,
     ) {
@@ -58,13 +48,7 @@ class _SettingsViewState extends State<SettingsView> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               title == 'Number Of Employees'
-                  ? workGroupsProvider.getCurrentWorkGroup == null
-                      ? Text(employeesCount)
-                      : workGroupsProvider.getCurrentWorkGroup.employeeList ==
-                              null
-                          ? Text('0')
-                          : Text(
-                              '${workGroupsProvider.getCurrentWorkGroup.employeeList.length}')
+                  ? Text('${employeesList.length}')
                   : Text('no data')
             ],
           ),
