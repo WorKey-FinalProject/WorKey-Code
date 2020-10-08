@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/models/shift_model.dart';
 
@@ -62,17 +63,36 @@ class Shifts with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addToFirebaseAndList(ShiftModel shiftModel) async {
+  ShiftModel _buildShiftObject(DateTime start, DateTime end, int seconds) {
+    ShiftModel shiftModel = ShiftModel(
+      startTime:
+          DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss').format(start)),
+      endTime: DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss').format(end)),
+      totalHours: seconds / 3600,
+    );
+    if (_shiftList.isEmpty) {
+      fetchShiftCompanyIdAndEmployeeId(shiftModel);
+    } else {
+      shiftModel.companyId = _shiftList[0].companyId;
+      shiftModel.employeeId = _shiftList[0].employeeId;
+    }
+    shiftSummary(shiftModel);
+    return shiftModel;
+  }
+
+  Future<void> addShiftToFirebaseAndList(
+      DateTime start, DateTime end, int seconds) async {
+    ShiftModel shift = _buildShiftObject(start, end, seconds);
     try {
       var db = _dbRef
           .child('Company Groups')
-          .child(shiftModel.companyId)
+          .child(shift.companyId)
           .child('shiftList')
           .child(_userId);
       String newKey = db.push().key;
-      await db.child(newKey).set(shiftModel.toJson());
-      shiftModel.id = newKey;
-      _shiftList.add(shiftModel);
+      await db.child(newKey).set(shift.toJson());
+      shift.id = newKey;
+      _shiftList.add(shift);
       notifyListeners();
     } on Exception {
       throw ErrorHint;

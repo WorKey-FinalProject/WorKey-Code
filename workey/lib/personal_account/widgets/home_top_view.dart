@@ -52,47 +52,14 @@ class _HomeTopViewState extends State<HomeTopView> {
   }
 
   void stopTimer() async {
-    final _shiftsProvider = Provider.of<Shifts>(context, listen: false);
     setState(() {
       _isRunning = false;
     });
     _swatch.stop();
     _swatch.reset();
-    _end = DateTime.parse(
-        DateFormat('yyyy-MM-dd kk:mm:ss').format(DateTime.now()));
-    ShiftModel shiftModel = ShiftModel(
-      startTime: _start,
-      endTime: _end,
-      totalHours: _seconds / 3600,
-    );
-    if (_shiftsProvider.getShiftList.isEmpty) {
-      await _shiftsProvider.fetchShiftCompanyIdAndEmployeeId(shiftModel);
-    } else {
-      final list = _shiftsProvider.getShiftList;
-      shiftModel.companyId = list[0].companyId;
-      shiftModel.employeeId = list[0].employeeId;
-    }
-    await _shiftsProvider.shiftSummary(shiftModel);
-
+    _end = DateTime.now();
     await Provider.of<Shifts>(context, listen: false)
-        .addToFirebaseAndList(shiftModel);
-  }
-
-  Widget timerWidget() {
-    return Positioned(
-      top: 5,
-      right: 0,
-      left: 0,
-      child: Center(
-        child: Text(
-          _timer,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
+        .addShiftToFirebaseAndList(_start, _end, _seconds);
   }
 
   @override
@@ -138,7 +105,20 @@ class _HomeTopViewState extends State<HomeTopView> {
             //   // ),Icon
             // ),
           ),
-          timerWidget(),
+          Positioned(
+            top: 5,
+            right: 0,
+            left: 0,
+            child: Center(
+              child: Text(
+                _timer,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
           Positioned(
             bottom: -10,
             left: 0,
@@ -154,8 +134,7 @@ class _HomeTopViewState extends State<HomeTopView> {
                   onPressed: () {
                     if (!_isRunning) {
                       _seconds = 0;
-                      _start = DateTime.parse(DateFormat('yyyy-MM-dd kk:mm:ss')
-                          .format(DateTime.now()));
+                      _start = DateTime.now();
                       startTimer();
                     } else if (_isRunning) {
                       stopTimer();
