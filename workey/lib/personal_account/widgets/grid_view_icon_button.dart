@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -81,10 +82,15 @@ class GridViewIconButton extends StatelessWidget {
           if (accountTypeChosen == AccountTypeChosen.company) {
             addWhatsAppLinkShowDialog(context, _formKey, companyGroups);
           } else {
-            launchWhatsApp(whatsAppGroupLink: whatsAppGroupLink.text
-                //'https://chat.whatsapp.com/JE5j9myLjf9EfWCmnCnAZR',
-                );
-            print('Selected whatsApp button');
+            if (whatsAppGroupLink.text == null ||
+                whatsAppGroupLink.text.isEmpty) {
+              Fluttertoast.showToast(msg: "No link defined for WhatsApp group");
+            } else {
+              launchWhatsApp(
+                whatsAppGroupLink: whatsAppGroupLink.text,
+              );
+              print('Selected whatsApp button');
+            }
           }
         }
         break;

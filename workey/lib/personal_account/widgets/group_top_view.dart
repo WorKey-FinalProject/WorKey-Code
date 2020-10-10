@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/widgets/profile_picture.dart';
 
 class GroupTopView extends StatefulWidget {
@@ -12,8 +15,11 @@ class GroupTopView extends StatefulWidget {
 }
 
 class _GroupTopViewState extends State<GroupTopView> {
+  WorkGroupModel workGroup;
   @override
   Widget build(BuildContext context) {
+    final companyGroupsProvider = Provider.of<CompanyGroups>(context);
+    workGroup = companyGroupsProvider.getCurrentWorkGroup;
     return Container(
       height: widget.constraintsMaxHeight,
       child: Stack(
@@ -64,7 +70,7 @@ class _GroupTopViewState extends State<GroupTopView> {
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  'Work-Group Name',
+                  '${workGroup.workGroupName}',
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,

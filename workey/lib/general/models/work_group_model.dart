@@ -26,7 +26,7 @@ class WorkGroupModel {
     @required this.logo,
     this.employeeList,
     this.location,
-    this.whatsAppUrl,
+    this.whatsAppUrl = '',
   });
 
   void setImageFile(File file) {

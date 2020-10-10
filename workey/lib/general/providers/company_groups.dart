@@ -150,13 +150,18 @@ class CompanyGroups with ChangeNotifier {
           .then((DataSnapshot dataSnapshot) {
         Map<dynamic, dynamic> map = dataSnapshot.value;
         if (map != null) {
-          map.forEach((key, value) {
+          map.forEach((key, value) async {
             GroupEmployeeModel emp = GroupEmployeeModel(
               id: null,
               workGroupId: null,
             );
             emp.fromJsonToObject(value, key);
             list.add(emp);
+
+            ///Yotam - set currentWorkGroup for employee account
+            if (key == _userId) {
+              _updateCurrentWorkGroup(emp, companyId);
+            }
           });
         }
       });
@@ -172,6 +177,28 @@ class CompanyGroups with ChangeNotifier {
       throw 'Error in _fetchAndSetToListForPersonal';
     }
     notifyListeners();
+  }
+
+  /// Yotam - set currentWorkGroup for employee account
+  Future<void> _updateCurrentWorkGroup(
+      GroupEmployeeModel emp, String companyId) async {
+    await _dbRef
+        .child('Company Groups')
+        .child(companyId)
+        .child('workGroupList')
+        .child(emp.workGroupId)
+        .orderByKey()
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      WorkGroupModel workGroupModel = WorkGroupModel(
+        workGroupName: null,
+        dateOfCreation: null,
+        logo: null,
+      );
+      workGroupModel.fromJson(dataSnapshot.value, dataSnapshot.key);
+      _currentWorkGroup = workGroupModel;
+      print(emp.workGroupId);
+    });
   }
 
   Future<void> fetchAndSetToLists(bool isCompany) async {
@@ -213,10 +240,11 @@ class CompanyGroups with ChangeNotifier {
             } else if (name == 'workGroupList') {
               list.forEach((key, value) {
                 WorkGroupModel wg = WorkGroupModel(
-                    workGroupName: null,
-                    managerId: null,
-                    dateOfCreation: null,
-                    logo: null);
+                  workGroupName: null,
+                  managerId: null,
+                  dateOfCreation: null,
+                  logo: null,
+                );
                 wg.fromJson(value, key);
                 _workGroupList.add(wg);
               });
