@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../screens/add_employee_confirm_screen.dart';
+import 'add_employee_confirm.dart';
 import '../../general/models/personal_account_model.dart';
 import '../../general/providers/company_groups.dart';
 
-class AddEmployeeForm extends StatefulWidget {
+class AddEmployeeSearch extends StatefulWidget {
   final CompanyGroups provider;
+  final Function selectEmp;
 
-  AddEmployeeForm(this.provider);
+  AddEmployeeSearch(this.provider, this.selectEmp);
   @override
   _AddEmployeeForm createState() => _AddEmployeeForm();
 }
 
-class _AddEmployeeForm extends State<AddEmployeeForm> {
-  // final workGroupLocationController = GoogleMapController;
+class _AddEmployeeForm extends State<AddEmployeeSearch> {
   List<PersonalAccountModel> personalAccountList = [];
   List<PersonalAccountModel> tempSearchList = [];
 
@@ -78,15 +78,7 @@ class _AddEmployeeForm extends State<AddEmployeeForm> {
                   print(tempSearchList[index].id);
 
                   return GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddEmployeeConfirmScreen(
-                          widget.provider,
-                          tempSearchList[index].id,
-                        ),
-                      ),
-                    ),
+                    onTap: () => widget.selectEmp(tempSearchList[index]),
                     child: Card(
                       elevation: 5,
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
