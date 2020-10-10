@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:timetable/timetable.dart';
 import 'package:time_machine/time_machine.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
 import 'package:workey/general/widgets/date_picker.dart';
 import 'package:workey/personal_account/widgets/employee_list_item.dart';
 
@@ -21,6 +23,8 @@ class WeeklyShiftsScreen extends StatefulWidget {
 }
 
 class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
+  AccountTypeChosen _accountTypeChosen;
+
   List<BasicEvent> _list = [];
   TimeOfDay _timeOfDay_start;
   TimeOfDay _timeOfDay_end;
@@ -83,6 +87,10 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
     });
   }
 
+  void changeShifts() {
+    print('changeShifts function for employee account');
+  }
+
   void deleteBasicEvent(BasicEvent basicEvent) {
     showDialog(
       context: context,
@@ -137,8 +145,11 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _auth = Provider.of<Auth>(context);
     final companyGroupsProvider =
         Provider.of<CompanyGroups>(context, listen: false);
+
+    _accountTypeChosen = _auth.getAccountTypeChosen;
     _dropdownItems = companyGroupsProvider.getEmployeeList;
 
     fillDropDownList();
@@ -147,112 +158,121 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
       appBar: AppBar(
         title: Text('Weekly Shifts'),
       ),
-      body: TimeTable(_list, deleteBasicEvent),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return StatefulBuilder(
-                builder: (context, setModalState) {
-                  _setModalState = setModalState;
-                  return ListView(
-                    padding: const EdgeInsets.all(16.0),
-                    children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: DatePicker(
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(DateTime.now().year + 1),
-                              labelText: 'Date',
-                              selectedDate: _selectedDateStart,
-                            ),
-                          ),
-                          VerticalDivider(
-                            width: 30,
-                          ),
-                          Flexible(
-                            child: TextField(
-                              enabled: _dateTimeStart == null ? false : true,
-                              readOnly: true,
-                              controller: _startTimeController,
-                              onTap: () => _pickTime(ShiftTime.start),
-                              decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.timer),
-                                labelText: 'Start',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: DatePicker(
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(DateTime.now().year + 1),
-                              labelText: 'Date',
-                              selectedDate: _selectedDateEnd,
-                            ),
-                          ),
-                          VerticalDivider(
-                            width: 30,
-                          ),
-                          Flexible(
-                            child: TextField(
-                              enabled: _startTimeController.text.isEmpty ||
-                                      _dateTimeEnd == null
-                                  ? false
-                                  : true,
-                              readOnly: true,
-                              controller: _endTimeController,
-                              onTap: () => _pickTime(ShiftTime.end),
-                              decoration: InputDecoration(
-                                suffixIcon: Icon(Icons.timer),
-                                labelText: 'End',
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(20.0),
-                        child: DropdownButton<GroupEmployeeModel>(
-                            value: _selectedEmployee,
-                            items: _dropdownMenuItems,
-                            onChanged: (value) {
-                              setModalState(() {
-                                _selectedEmployee = value;
-                              });
-                            }),
-                      ),
-                      SizedBox(
-                        height: 40,
-                      ),
-                      FlatButton(
-                        onPressed: () {
-                          _addBasicEvent();
-                          Navigator.pop(context);
-                        },
-                        color: Theme.of(context).accentColor,
-                        child: Text(
-                          'Add shift',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          );
-        },
+      body: TimeTable(
+        _list,
+        _accountTypeChosen == AccountTypeChosen.company
+            ? deleteBasicEvent
+            : changeShifts,
       ),
+      floatingActionButton: _accountTypeChosen == AccountTypeChosen.personal
+          ? null
+          : FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: Theme.of(context).primaryColor,
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return StatefulBuilder(
+                      builder: (context, setModalState) {
+                        _setModalState = setModalState;
+                        return ListView(
+                          padding: const EdgeInsets.all(16.0),
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: DatePicker(
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(DateTime.now().year + 1),
+                                    labelText: 'Date',
+                                    selectedDate: _selectedDateStart,
+                                  ),
+                                ),
+                                VerticalDivider(
+                                  width: 30,
+                                ),
+                                Flexible(
+                                  child: TextField(
+                                    enabled:
+                                        _dateTimeStart == null ? false : true,
+                                    readOnly: true,
+                                    controller: _startTimeController,
+                                    onTap: () => _pickTime(ShiftTime.start),
+                                    decoration: InputDecoration(
+                                      suffixIcon: Icon(Icons.timer),
+                                      labelText: 'Start',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: DatePicker(
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(DateTime.now().year + 1),
+                                    labelText: 'Date',
+                                    selectedDate: _selectedDateEnd,
+                                  ),
+                                ),
+                                VerticalDivider(
+                                  width: 30,
+                                ),
+                                Flexible(
+                                  child: TextField(
+                                    enabled:
+                                        _startTimeController.text.isEmpty ||
+                                                _dateTimeEnd == null
+                                            ? false
+                                            : true,
+                                    readOnly: true,
+                                    controller: _endTimeController,
+                                    onTap: () => _pickTime(ShiftTime.end),
+                                    decoration: InputDecoration(
+                                      suffixIcon: Icon(Icons.timer),
+                                      labelText: 'End',
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(20.0),
+                              child: DropdownButton<GroupEmployeeModel>(
+                                  value: _selectedEmployee,
+                                  items: _dropdownMenuItems,
+                                  onChanged: (value) {
+                                    setModalState(() {
+                                      _selectedEmployee = value;
+                                    });
+                                  }),
+                            ),
+                            SizedBox(
+                              height: 40,
+                            ),
+                            FlatButton(
+                              onPressed: () {
+                                _addBasicEvent();
+                                Navigator.pop(context);
+                              },
+                              color: Theme.of(context).accentColor,
+                              child: Text(
+                                'Add shift',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 

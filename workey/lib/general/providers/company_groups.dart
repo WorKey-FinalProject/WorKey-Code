@@ -197,7 +197,6 @@ class CompanyGroups with ChangeNotifier {
       );
       workGroupModel.fromJson(dataSnapshot.value, dataSnapshot.key);
       _currentWorkGroup = workGroupModel;
-      print(emp.workGroupId);
     });
   }
 

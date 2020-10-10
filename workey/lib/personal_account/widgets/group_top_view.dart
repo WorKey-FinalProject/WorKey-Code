@@ -42,7 +42,7 @@ class _GroupTopViewState extends State<GroupTopView> {
               child: ProfilePicture(
                 size: MediaQuery.of(context).size.height * 0.2,
                 isEditable: false,
-                imageUrl: '',
+                imageUrl: workGroup.logo,
               ),
             ),
           ),
