@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
-import 'package:workey/company_account/widgets/payment_screen_widgets/credit_card_format.dart';
 import 'package:workey/company_account/widgets/payment_screen_widgets/credit_card_handler.dart';
 
 import '../../widgets/payment_screen_widgets/credit_card.dart';
-import '../../widgets/payment_screen_widgets/credit_card_type.dart';
 import '../../widgets/payment_screen_widgets/credit_card_background.dart';
 
 enum TextFieldType {

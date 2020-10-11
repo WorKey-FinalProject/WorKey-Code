@@ -12,6 +12,7 @@ class GroupEmployeeModel {
   String address;
   String picture;
   String email;
+  bool isWorking;
 
   GroupEmployeeModel({
     @required this.id,
@@ -25,6 +26,7 @@ class GroupEmployeeModel {
     this.address,
     this.picture = '',
     this.email,
+    this.isWorking = false,
   });
 
   Map<String, Object> toJson() {
@@ -37,6 +39,7 @@ class GroupEmployeeModel {
       'salary': this.salary,
       'role': this.role,
       'entryDate': entryDate ?? this.entryDate,
+      'isWorking': isWorking,
     };
   }
 
@@ -46,6 +49,7 @@ class GroupEmployeeModel {
     salary = snapshot['salary'] ?? '';
     role = snapshot['role'] ?? '';
     entryDate = DateTime.parse(snapshot['entryDate']) ?? '';
+    isWorking = snapshot['isWorking'] ?? false;
   }
 
   void updateGroupEmployee(GroupEmployeeModel groupEmployeeModel) {

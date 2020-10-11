@@ -315,6 +315,20 @@ class CompanyGroups with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> setIsWorkingForPersonal(bool isWorking, String companyId) async {
+    try {
+      await _dbRef
+          .child('Company Groups')
+          .child(companyId)
+          .child('employeeList')
+          .child(_userId)
+          .child('isWorking')
+          .set(isWorking);
+    } catch (err) {
+      print(err);
+    }
+  }
+
   Future<void> addToFirebaseAndList(dynamic model) async {
     User user = FirebaseAuth.instance.currentUser;
     try {
