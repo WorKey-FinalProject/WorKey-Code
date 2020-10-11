@@ -12,8 +12,12 @@ class LocationInput extends StatefulWidget {
 
 class _LocationInputState extends State<LocationInput> {
   String _previewImageUrl;
+  var _isLoading = false;
 
   Future<void> _getCurrentUserLocation() async {
+    setState(() {
+      _isLoading = true;
+    });
     final locData = await Location().getLocation();
     final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
       latitude: locData.latitude,
@@ -21,6 +25,7 @@ class _LocationInputState extends State<LocationInput> {
     );
     setState(() {
       _previewImageUrl = staticMapImageUrl;
+      _isLoading = false;
     });
   }
 
@@ -39,30 +44,63 @@ class _LocationInputState extends State<LocationInput> {
   }
 
   @override
+  void initState() {
+    _getCurrentUserLocation();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            height: 170,
-            width: double.infinity,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              border: Border.all(width: 1, color: Colors.grey),
+    return Stack(
+      //mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: Theme.of(context).primaryColor,
             ),
-            child: _previewImageUrl == null
-                ? Text(
-                    'No Location Chosen',
-                    textAlign: TextAlign.center,
-                  )
-                : Image.network(
-                    _previewImageUrl,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(36),
+              topRight: Radius.circular(36),
+            ),
           ),
-          Row(
+          child: _isLoading
+              ? CircularProgressIndicator()
+              : _previewImageUrl == null
+                  ? Text(
+                      'No Location Chosen',
+                      textAlign: TextAlign.center,
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(36),
+                        topRight: Radius.circular(36),
+                      ),
+                      child: Image.network(
+                        _previewImageUrl,
+                        fit: BoxFit.cover,
+                        height: double.infinity,
+                        width: double.infinity,
+                      ),
+                    ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            height: 50,
+            color: Colors.white.withOpacity(0.5),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               FlatButton.icon(
@@ -82,9 +120,9 @@ class _LocationInputState extends State<LocationInput> {
                 onPressed: _selectOnMap,
               ),
             ],
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }
