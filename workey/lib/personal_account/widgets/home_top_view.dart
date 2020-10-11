@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -60,6 +61,27 @@ class _HomeTopViewState extends State<HomeTopView> {
     _end = DateTime.now();
     await Provider.of<Shifts>(context, listen: false)
         .addShiftToFirebaseAndList(_start, _end, _seconds);
+  }
+
+  @override
+  void initState() {
+    final fbm = FirebaseMessaging();
+    fbm.requestNotificationPermissions();
+    fbm.configure(
+      onMessage: (message) {
+        print(message);
+        return;
+      },
+      onLaunch: (message) {
+        print(message);
+        return;
+      },
+      onResume: (message) {
+        print(message);
+        return;
+      },
+    );
+    super.initState();
   }
 
   @override
