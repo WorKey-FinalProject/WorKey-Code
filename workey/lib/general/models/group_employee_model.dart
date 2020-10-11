@@ -12,7 +12,7 @@ class GroupEmployeeModel {
   String address;
   String picture;
   String email;
-  bool isWorking = false;
+  bool isWorking;
 
   GroupEmployeeModel({
     @required this.id,
@@ -26,7 +26,7 @@ class GroupEmployeeModel {
     this.address,
     this.picture = '',
     this.email,
-    this.isWorking,
+    this.isWorking = false,
   });
 
   Map<String, Object> toJson() {
