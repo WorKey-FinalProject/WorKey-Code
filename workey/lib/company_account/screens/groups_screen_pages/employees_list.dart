@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/snackbar_result.dart';
@@ -39,10 +40,17 @@ class _State extends State<EmployeesList> {
           employeesList.isEmpty ? Alignment.center : Alignment.bottomRight,
       child: RawMaterialButton(
         onPressed: () {
-          _showSnackBarResult(context);
+          if (companyGroupsProvider.getCurrentWorkGroup != null) {
+            _showSnackBarResult(context);
+          } else {
+            Fluttertoast.showToast(
+                msg: 'In order to add employees you must select a workgroup');
+          }
         },
         elevation: 2.0,
-        fillColor: Theme.of(context).accentColor,
+        fillColor: companyGroupsProvider.getCurrentWorkGroup == null
+            ? Colors.grey
+            : Theme.of(context).accentColor,
         child: Icon(
           Icons.add,
           size: 35.0,
@@ -145,9 +153,10 @@ class _State extends State<EmployeesList> {
                         },
                         itemCount: employeesList.length,
                       ),
-                      companyGroupsProvider.getCurrentWorkGroup != null
-                          ? addEmployeeButton
-                          : Container(),
+                      // companyGroupsProvider.getCurrentWorkGroup != null
+                      //     ? addEmployeeButton
+                      //    : Container(),
+                      addEmployeeButton
                     ],
                   );
   }

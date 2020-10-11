@@ -146,17 +146,12 @@ class _HomeTopViewState extends State<HomeTopView> {
                       size: 50,
                     ),
                   ),
-                  back: Positioned(
-                    top: 5,
-                    right: 0,
-                    left: 0,
-                    child: Center(
-                      child: Text(
-                        _timer,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
+                  back: Center(
+                    child: Text(
+                      _timer,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
