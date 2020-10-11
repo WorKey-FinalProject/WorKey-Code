@@ -13,6 +13,7 @@ enum TextFieldType {
   email,
   password,
   verifyPassword,
+  oldPassword,
   firstName,
   lastName,
   phoneNumber,
@@ -38,6 +39,7 @@ class _ProfileFormState extends State<ProfileForm> {
   final emailTextController = TextEditingController();
   final firstNameTextController = TextEditingController();
   final lastNameTextController = TextEditingController();
+  final oldPasswordTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final verifyPasswordTextController = TextEditingController();
   final phoneNumberTextController = TextEditingController();
@@ -48,6 +50,7 @@ class _ProfileFormState extends State<ProfileForm> {
 
   var showPassword = true;
   var showVerifyPassword = true;
+  var showOldPassword = true;
 
   final _formKey = GlobalKey<FormState>();
   final _formKeyForPassword = GlobalKey<FormState>();
@@ -107,7 +110,9 @@ class _ProfileFormState extends State<ProfileForm> {
       _formKeyForPassword.currentState.save();
       try {
         await widget.auth.updateCurrUserPassword(
-            'oldPassword', passwordTextController.text.trim());
+          oldPasswordTextController.text.trim(),
+          passwordTextController.text.trim(),
+        );
       } on PlatformException catch (err) {
         var message = 'An error occurred';
 
@@ -169,6 +174,7 @@ class _ProfileFormState extends State<ProfileForm> {
     lastNameTextController.dispose();
     passwordTextController.dispose();
     verifyPasswordTextController.dispose();
+    oldPasswordTextController.dispose();
     phoneNumberTextController.dispose();
     dateOfBirthTextController.dispose();
     addressTextController.dispose();
@@ -273,6 +279,14 @@ class _ProfileFormState extends State<ProfileForm> {
                                                   key: _formKeyForPassword,
                                                   child: Column(
                                                     children: [
+                                                      Flexible(
+                                                        child: buildTextField(
+                                                          'Old Password',
+                                                          TextFieldType
+                                                              .oldPassword,
+                                                          oldPasswordTextController,
+                                                        ),
+                                                      ),
                                                       Flexible(
                                                         child: buildTextField(
                                                           'New Password',
@@ -388,27 +402,33 @@ class _ProfileFormState extends State<ProfileForm> {
                     ? (value) {
                         verifyPasswordTextController.text = value;
                       }
-                    : textFieldType == TextFieldType.firstName
+                    : textFieldType == TextFieldType.oldPassword
                         ? (value) {
-                            firstNameTextController.text = value;
+                            oldPasswordTextController.text = value;
                           }
-                        : textFieldType == TextFieldType.lastName
+                        : textFieldType == TextFieldType.firstName
                             ? (value) {
-                                lastNameTextController.text = value;
+                                firstNameTextController.text = value;
                               }
-                            : textFieldType == TextFieldType.phoneNumber
+                            : textFieldType == TextFieldType.lastName
                                 ? (value) {
-                                    phoneNumberTextController.text = value;
+                                    lastNameTextController.text = value;
                                   }
-                                : textFieldType == TextFieldType.dateOfBirth
+                                : textFieldType == TextFieldType.phoneNumber
                                     ? (value) {
-                                        dateOfBirthTextController.text = value;
+                                        phoneNumberTextController.text = value;
                                       }
-                                    : textFieldType == TextFieldType.address
+                                    : textFieldType == TextFieldType.dateOfBirth
                                         ? (value) {
-                                            addressTextController.text = value;
+                                            dateOfBirthTextController.text =
+                                                value;
                                           }
-                                        : null,
+                                        : textFieldType == TextFieldType.address
+                                            ? (value) {
+                                                addressTextController.text =
+                                                    value;
+                                              }
+                                            : null,
         validator: textFieldType == TextFieldType.email
             ? (value) {
                 if (value.isEmpty || !value.contains('@')) {
@@ -433,46 +453,59 @@ class _ProfileFormState extends State<ProfileForm> {
                         }
                         return null;
                       }
-                    : textFieldType == TextFieldType.firstName
+                    : textFieldType == TextFieldType.oldPassword
                         ? (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter your First name.';
+                            if (value.isEmpty || value.length < 7) {
+                              return 'Please enter at least 7 characters';
                             }
+
                             return null;
                           }
-                        : textFieldType == TextFieldType.lastName
+                        : textFieldType == TextFieldType.firstName
                             ? (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter your Last name.';
+                                  return 'Please enter your First name.';
                                 }
                                 return null;
                               }
-                            : null,
+                            : textFieldType == TextFieldType.lastName
+                                ? (value) {
+                                    if (value.isEmpty) {
+                                      return 'Please enter your Last name.';
+                                    }
+                                    return null;
+                                  }
+                                : null,
         obscureText: textFieldType == TextFieldType.password
             ? showPassword
             : textFieldType == TextFieldType.verifyPassword
                 ? showVerifyPassword
-                : false,
+                : textFieldType == TextFieldType.oldPassword
+                    ? showOldPassword
+                    : false,
         keyboardType: textFieldType == TextFieldType.email
             ? TextInputType.emailAddress
             : textFieldType == TextFieldType.password
                 ? TextInputType.visiblePassword
                 : textFieldType == TextFieldType.verifyPassword
                     ? TextInputType.visiblePassword
-                    : textFieldType == TextFieldType.firstName
-                        ? TextInputType.name
-                        : textFieldType == TextFieldType.lastName
+                    : textFieldType == TextFieldType.oldPassword
+                        ? TextInputType.visiblePassword
+                        : textFieldType == TextFieldType.firstName
                             ? TextInputType.name
-                            : textFieldType == TextFieldType.phoneNumber
-                                ? TextInputType.phone
-                                : textFieldType == TextFieldType.dateOfBirth
-                                    ? TextInputType.datetime
-                                    : textFieldType == TextFieldType.address
-                                        ? TextInputType.streetAddress
-                                        : null,
+                            : textFieldType == TextFieldType.lastName
+                                ? TextInputType.name
+                                : textFieldType == TextFieldType.phoneNumber
+                                    ? TextInputType.phone
+                                    : textFieldType == TextFieldType.dateOfBirth
+                                        ? TextInputType.datetime
+                                        : textFieldType == TextFieldType.address
+                                            ? TextInputType.streetAddress
+                                            : null,
         decoration: InputDecoration(
           suffixIcon: (textFieldType == TextFieldType.password ||
-                  textFieldType == TextFieldType.verifyPassword)
+                  textFieldType == TextFieldType.verifyPassword ||
+                  textFieldType == TextFieldType.oldPassword)
               ? IconButton(
                   onPressed: () {
                     _setModalState(() {
@@ -481,6 +514,9 @@ class _ProfileFormState extends State<ProfileForm> {
                       }
                       if (textFieldType == TextFieldType.verifyPassword) {
                         showVerifyPassword = !showVerifyPassword;
+                      }
+                      if (textFieldType == TextFieldType.oldPassword) {
+                        showOldPassword = !showOldPassword;
                       }
                     });
                   },

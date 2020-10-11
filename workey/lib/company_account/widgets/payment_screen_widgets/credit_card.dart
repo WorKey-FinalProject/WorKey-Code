@@ -9,11 +9,11 @@ import 'credit_card_handler.dart';
 import 'credit_card_type.dart';
 
 class CreditCard extends StatefulWidget {
-  final String cardNumber;
-  final String cardExpiry;
-  final String cardHolderName;
+  final TextEditingController cardNumber;
+  final TextEditingController cardExpiry;
+  final TextEditingController cardHolderName;
   final String bankName;
-  final String cvv;
+  final TextEditingController cvv;
   final Color frontTextColor;
   final Color backTextColor;
   bool showBackSide;
@@ -171,7 +171,7 @@ class _CreditCardState extends State<CreditCard>
                         cardHolderName: widget.cardHolderName,
                         cardTypeIcon: getCardTypeIcon(
                             cardType: widget.cardType,
-                            cardNumber: widget.cardNumber),
+                            cardNumber: widget.cardNumber.text),
                         cardHeight: cardHeight,
                         cardWidth: cardWidth,
                         textColor: widget.frontTextColor)

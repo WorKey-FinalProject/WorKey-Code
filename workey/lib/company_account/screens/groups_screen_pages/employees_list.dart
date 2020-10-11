@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:workey/general/models/snackbar_result.dart';
 
 import '../../../general/models/group_employee_model.dart';
@@ -9,10 +10,6 @@ import '../../screens/employee_detail_screen.dart';
 import '../add_employee_screen.dart';
 
 class EmployeesList extends StatefulWidget {
-  final CompanyGroups subWorkGroupsProvider;
-
-  EmployeesList(this.subWorkGroupsProvider);
-
   @override
   _State createState() => _State();
 }
@@ -20,15 +17,17 @@ class EmployeesList extends StatefulWidget {
 class _State extends State<EmployeesList> {
   var _isLoading = false;
   WorkGroupModel currentWorkGroup;
+  CompanyGroups companyGroupsProvider;
 
   List<GroupEmployeeModel> employeesList = [];
 
   _getEmployeesList() {
-    employeesList = widget.subWorkGroupsProvider.getEmployeeList;
+    employeesList = companyGroupsProvider.getEmployeeList;
   }
 
   @override
   Widget build(BuildContext context) {
+    companyGroupsProvider = Provider.of<CompanyGroups>(context);
     _getEmployeesList();
 
     var addEmployeeButton = Container(
@@ -57,7 +56,7 @@ class _State extends State<EmployeesList> {
             child: CircularProgressIndicator(),
           )
         : employeesList.isEmpty &&
-                widget.subWorkGroupsProvider.getCurrentWorkGroup == null
+                companyGroupsProvider.getCurrentWorkGroup == null
             ? Center(
                 child: Text('Choose a work group to add employyes'),
               )
@@ -146,7 +145,7 @@ class _State extends State<EmployeesList> {
                         },
                         itemCount: employeesList.length,
                       ),
-                      widget.subWorkGroupsProvider.getCurrentWorkGroup != null
+                      companyGroupsProvider.getCurrentWorkGroup != null
                           ? addEmployeeButton
                           : Container(),
                     ],
@@ -157,7 +156,7 @@ class _State extends State<EmployeesList> {
     final SnackBarResult snackBarResult = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AddEmployeeScreen(widget.subWorkGroupsProvider),
+        builder: (context) => AddEmployeeScreen(companyGroupsProvider),
       ),
     );
 

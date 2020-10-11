@@ -28,10 +28,10 @@ class Logo extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  offset: Offset(0, 10),
+                  offset: Offset(0, 5),
                   blurRadius: 50,
-                  color: Theme.of(context).primaryColor.withOpacity(0.23),
-                ),
+                  color: Color(0xFF12153D).withOpacity(0.2),
+                )
               ],
             ),
             child: Center(
@@ -44,62 +44,6 @@ class Logo extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //   bottom: 0,
-          //   left: 0,
-          //   right: 0,
-          //   child: Container(
-          //     alignment: Alignment.center,
-          //     margin: EdgeInsets.symmetric(horizontal: 20),
-          //     height: 54,
-          //     decoration: BoxDecoration(
-          //       color: Colors.white,
-          //       borderRadius: BorderRadius.circular(20),
-          //       boxShadow: [
-          //         BoxShadow(
-          //           offset: Offset(0, 10),
-          //           blurRadius: 50,
-          //           color: Theme.of(context).primaryColor.withOpacity(0.23),
-          //         ),
-          //       ],
-          //     ),
-          //     child: Container(
-          //       height: double.infinity,
-          //       width: double.infinity,
-          //       child: RaisedButton(
-          //         onPressed: () {
-          //   Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => EditFeedsScreen(),
-          //     ),
-          //   );
-          // },
-          //         elevation: 2,
-          //         color: Colors.white,
-          //         shape: RoundedRectangleBorder(
-          //           borderRadius: BorderRadius.circular(20),
-          //         ),
-          //         child: Row(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           children: [
-          //             Padding(
-          //               padding: EdgeInsets.only(right: 5),
-          //               child: Icon(
-          //                 Icons.edit,
-          //                 color: Colors.blue,
-          //                 //size: 35,
-          //               ),
-          //             ),
-          //             Padding(
-          //               padding: EdgeInsets.only(left: 5),
-          //               child: Text('Edit Feeds'),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
           Positioned(
             bottom: -20,
             left: 0,
