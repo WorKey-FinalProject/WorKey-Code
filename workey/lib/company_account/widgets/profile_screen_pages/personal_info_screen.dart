@@ -12,6 +12,7 @@ enum TextFieldType {
   email,
   password,
   verifyPassword,
+  oldPassword,
   firstName,
   lastName,
 }
@@ -37,10 +38,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final verifyPasswordTextController = TextEditingController();
+  final oldPasswordTextController = TextEditingController();
+
   String _userImage;
 
   var showPassword = true;
   var showVerifyPassword = true;
+  var showOldPassword = true;
 
   final _formKey = GlobalKey<FormState>();
   final _formKeyForPassword = GlobalKey<FormState>();
@@ -98,7 +102,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
       _formKeyForPassword.currentState.save();
       try {
         await widget.auth.updateCurrUserPassword(
-            'oldPassword', passwordTextController.text.trim());
+          oldPasswordTextController.text.trim(),
+          passwordTextController.text.trim(),
+        );
       } on PlatformException catch (err) {
         var message = 'An error occurred';
 
@@ -160,6 +166,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     emailTextController.dispose();
     passwordTextController.dispose();
     verifyPasswordTextController.dispose();
+    oldPasswordTextController.dispose();
     super.dispose();
   }
 
@@ -241,6 +248,14 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                                   key: _formKeyForPassword,
                                                   child: Column(
                                                     children: [
+                                                      Flexible(
+                                                        child: buildTextField(
+                                                          'Old Password',
+                                                          TextFieldType
+                                                              .oldPassword,
+                                                          oldPasswordTextController,
+                                                        ),
+                                                      ),
                                                       Flexible(
                                                         child: buildTextField(
                                                           'New Password',
@@ -356,15 +371,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     ? (value) {
                         verifyPasswordTextController.text = value;
                       }
-                    : textFieldType == TextFieldType.firstName
+                    : textFieldType == TextFieldType.oldPassword
                         ? (value) {
-                            firstNameTextController.text = value;
+                            oldPasswordTextController.text = value;
                           }
-                        : textFieldType == TextFieldType.lastName
+                        : textFieldType == TextFieldType.firstName
                             ? (value) {
-                                lastNameTextController.text = value;
+                                firstNameTextController.text = value;
                               }
-                            : null,
+                            : textFieldType == TextFieldType.lastName
+                                ? (value) {
+                                    lastNameTextController.text = value;
+                                  }
+                                : null,
         validator: textFieldType == TextFieldType.email
             ? (value) {
                 if (value.isEmpty || !value.contains('@')) {
@@ -389,40 +408,52 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         }
                         return null;
                       }
-                    : textFieldType == TextFieldType.firstName
+                    : textFieldType == TextFieldType.oldPassword
                         ? (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter your First name.';
+                            if (value.isEmpty || value.length < 7) {
+                              return 'Please enter at least 7 characters';
                             }
                             return null;
                           }
-                        : textFieldType == TextFieldType.lastName
+                        : textFieldType == TextFieldType.firstName
                             ? (value) {
                                 if (value.isEmpty) {
-                                  return 'Please enter your Last name.';
+                                  return 'Please enter your First name.';
                                 }
                                 return null;
                               }
-                            : null,
+                            : textFieldType == TextFieldType.lastName
+                                ? (value) {
+                                    if (value.isEmpty) {
+                                      return 'Please enter your Last name.';
+                                    }
+                                    return null;
+                                  }
+                                : null,
         obscureText: textFieldType == TextFieldType.password
             ? showPassword
             : textFieldType == TextFieldType.verifyPassword
                 ? showVerifyPassword
-                : false,
+                : textFieldType == TextFieldType.oldPassword
+                    ? showOldPassword
+                    : false,
         keyboardType: textFieldType == TextFieldType.email
             ? TextInputType.emailAddress
             : textFieldType == TextFieldType.password
                 ? TextInputType.visiblePassword
                 : textFieldType == TextFieldType.verifyPassword
                     ? TextInputType.visiblePassword
-                    : textFieldType == TextFieldType.firstName
-                        ? TextInputType.name
-                        : textFieldType == TextFieldType.lastName
+                    : textFieldType == TextFieldType.oldPassword
+                        ? TextInputType.visiblePassword
+                        : textFieldType == TextFieldType.firstName
                             ? TextInputType.name
-                            : null,
+                            : textFieldType == TextFieldType.lastName
+                                ? TextInputType.name
+                                : null,
         decoration: InputDecoration(
           suffixIcon: (textFieldType == TextFieldType.password ||
-                  textFieldType == TextFieldType.verifyPassword)
+                  textFieldType == TextFieldType.verifyPassword ||
+                  textFieldType == TextFieldType.oldPassword)
               ? IconButton(
                   onPressed: () {
                     _setModalState(() {
@@ -431,6 +462,9 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                       }
                       if (textFieldType == TextFieldType.verifyPassword) {
                         showVerifyPassword = !showVerifyPassword;
+                      }
+                      if (textFieldType == TextFieldType.oldPassword) {
+                        showOldPassword = !showOldPassword;
                       }
                     });
                   },
