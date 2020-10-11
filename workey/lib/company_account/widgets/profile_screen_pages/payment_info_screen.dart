@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:workey/company_account/widgets/payment_screen_widgets/credit_card_format.dart';
 import 'package:workey/company_account/widgets/payment_screen_widgets/credit_card_handler.dart';
 
@@ -86,7 +87,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                   cardHolderName: cardHolderNameController,
                   cardType: getCardType(cardNumberController.text),
                   cvv: cvvController,
-                  bankName: 'Test',
+                  bankName: 'Bank Of Israel',
                   showBackSide: showBack,
                   frontBackground: CreditCardBackground.black,
                   backBackground: CreditCardBackground.white,
@@ -162,11 +163,15 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: TextFormField(
-        // inputFormatters: [
-        //   textFieldType == TextFieldType.cardNumber
-        //       ? CardNumberInputFormatter()
-        //       : null
-        // ],
+        inputFormatters: [
+          textFieldType == TextFieldType.cardNumber
+              ? MaskedInputFormater('#### #### #### ####')
+              : textFieldType == TextFieldType.expiryDate
+                  ? CreditCardExpirationDateFormatter()
+                  : textFieldType == TextFieldType.cvv
+                      ? MaskedInputFormater('###')
+                      : MaskedInputFormater(null)
+        ],
         controller: textEditingController,
         keyboardType: textFieldType == TextFieldType.cardHolderName
             ? TextInputType.text
@@ -174,11 +179,7 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                 ? TextInputType.text
                 : TextInputType.number,
         focusNode: textFieldType == TextFieldType.cvv ? _focusNode : null,
-        maxLength: textFieldType == TextFieldType.cvv
-            ? 3
-            : textFieldType == TextFieldType.expiryDate
-                ? 5
-                : null,
+        onChanged: (_) => getCardType(cardNumberController.text),
         onSaved: textFieldType == TextFieldType.cardNumber
             ? (value) {
                 cardNumberController.text = value;
