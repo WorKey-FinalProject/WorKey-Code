@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:workey/company_account/screens/groups_screen_pages/employees_list.dart';
 import 'package:workey/company_account/screens/groups_screen_pages/settings_view.dart';
 import 'package:workey/company_account/screens/groups_screen_pages/sub_groups_list.dart';
@@ -18,13 +19,18 @@ class _GroupsTabBarState extends State<GroupsTabBar> {
           preferredSize: Size.fromHeight(50),
           child: Container(
             decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(70),
               ),
-              color: Theme.of(context).accentColor,
+              // boxShadow: [
+              //   BoxShadow(
+              //     offset: Offset(0, 5),
+              //     blurRadius: 50,
+              //     color: Color(0xFF12153D).withOpacity(0.2),
+              //   )
+              // ],
             ),
-            // color: Colors.grey.withOpacity(0.01),
-
             child: Padding(
               padding: const EdgeInsets.only(left: 40),
               child: TabBar(
@@ -40,8 +46,8 @@ class _GroupsTabBarState extends State<GroupsTabBar> {
                 // ),
 
                 tabs: [
-                  Tab(icon: Icon(Icons.person_outline)),
-                  Tab(icon: Icon(Icons.payment)),
+                  Tab(icon: Icon(Icons.group_work)),
+                  Tab(icon: Icon(Icons.list)),
                   Tab(icon: Icon(Icons.settings)),
                 ],
               ),
