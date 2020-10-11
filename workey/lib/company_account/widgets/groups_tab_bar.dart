@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:workey/company_account/screens/groups_screen_pages/employees_list.dart';
 import 'package:workey/company_account/screens/groups_screen_pages/settings_view.dart';
 import 'package:workey/company_account/screens/groups_screen_pages/sub_groups_list.dart';
