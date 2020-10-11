@@ -81,24 +81,26 @@ class _SettingsViewState extends State<SettingsView> {
             ),
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            ProfilePicture(
-              size: 80,
-              isEditable: true,
-              imageUrl: workGroupsProvider.getCurrentWorkGroup == null
-                  ? companyAccount.imageFile.toString()
-                  : workGroupsProvider.getCurrentWorkGroup.imageFile.toString(),
-            ),
-            textEditaleView(
-                workGroupsProvider.getCurrentWorkGroup == null
-                    ? companyAccount.companyName
-                    : workGroupsProvider.getCurrentWorkGroup.workGroupName,
-                groupNewNameController),
-          ],
-        ),
+        workGroupsProvider.getCurrentWorkGroup != null
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  ProfilePicture(
+                    size: 80,
+                    isEditable: true,
+                    imageUrl: workGroupsProvider.getCurrentWorkGroup.imageFile
+                        .toString(),
+                  ),
+                  textEditaleView(
+                      workGroupsProvider.getCurrentWorkGroup == null
+                          ? companyAccount.companyName
+                          : workGroupsProvider
+                              .getCurrentWorkGroup.workGroupName,
+                      groupNewNameController),
+                ],
+              )
+            : Container(),
         textView('Number Of Employees'),
         workGroupsProvider.getCurrentWorkGroup == null
             ? Container()
