@@ -30,7 +30,7 @@ dependencies:
   firebase_auth: ^0.18.0+1
   firebase_auth_web: ^0.3.0+1
   firebase_database: ^4.0.0
-  firebase_messaging: ^6.0.16
+  firebase_messaging: ^7.0.3
   firebase_storage: ^4.0.0
   firebase_ml_vision: ^0.9.6+2
   google_sign_in: ^4.5.4
