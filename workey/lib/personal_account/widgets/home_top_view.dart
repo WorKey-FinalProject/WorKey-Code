@@ -1,11 +1,10 @@
 import 'dart:async';
 
+import 'package:flip_card/flip_card.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/shift_model.dart';
 import 'package:workey/general/providers/shifts.dart';
 
 class HomeTopView extends StatefulWidget {
@@ -92,7 +91,6 @@ class _HomeTopViewState extends State<HomeTopView> {
         children: <Widget>[
           Container(
             height: widget.constraintsMaxHeight * 0.75,
-
             padding: EdgeInsets.only(
               top: 20,
               left: 20,
@@ -113,33 +111,6 @@ class _HomeTopViewState extends State<HomeTopView> {
                 ),
               ],
             ),
-
-            // child: Center(
-            //   child:
-            //       IconButton(icon: Icon(MdiIcons.faceRecognition), onPressed: null),
-            //   // child: GestureDetector(
-            //   //   onTap: () => null,
-            //   //   child: Icon(
-            //   //     MdiIcons.faceRecognition,
-            //   //     color: Colors.white,
-            //   //     size: 70,
-            //   //   ),
-            //   // ),Icon
-            // ),
-          ),
-          Positioned(
-            top: 5,
-            right: 0,
-            left: 0,
-            child: Center(
-              child: Text(
-                _timer,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
           ),
           Positioned(
             bottom: -10,
@@ -151,9 +122,8 @@ class _HomeTopViewState extends State<HomeTopView> {
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 maxRadius: 50,
-                child: IconButton(
-                  icon: Icon(MdiIcons.faceRecognition),
-                  onPressed: () {
+                child: FlipCard(
+                  onFlip: () {
                     if (!_isRunning) {
                       _seconds = 0;
                       _start = DateTime.now();
@@ -162,8 +132,40 @@ class _HomeTopViewState extends State<HomeTopView> {
                       stopTimer();
                     }
                   },
-                  iconSize: 40,
+                  front: Center(
+                    child: Icon(
+                      MdiIcons.faceRecognition,
+                      size: 50,
+                    ),
+                  ),
+                  back: Positioned(
+                    top: 5,
+                    right: 0,
+                    left: 0,
+                    child: Center(
+                      child: Text(
+                        _timer,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
+                // child: IconButton(
+                //   icon: Icon(MdiIcons.faceRecognition),
+                // onPressed: () {
+                //   if (!_isRunning) {
+                //     _seconds = 0;
+                //     _start = DateTime.now();
+                //     startTimer();
+                //   } else if (_isRunning) {
+                //     stopTimer();
+                //   }
+                // },
+                //   iconSize: 40,
+                // ),
               ),
             ),
           ),

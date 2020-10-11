@@ -249,8 +249,6 @@ class Auth with ChangeNotifier {
     return dynamicUser;
   }
 
-  Future<void> checkIfPasswordIsCorrect(String password) async {}
-
   /// updateCurrUserPassword
   Future<void> updateCurrUserPassword(
       String oldPassword, String newPassword) async {
