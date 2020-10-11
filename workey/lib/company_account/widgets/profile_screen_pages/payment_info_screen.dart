@@ -170,7 +170,8 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                   ? CreditCardExpirationDateFormatter()
                   : textFieldType == TextFieldType.cvv
                       ? MaskedInputFormater('###')
-                      : MaskedInputFormater(null)
+                      : MaskedInputFormater(
+                          '########################################################')
         ],
         controller: textEditingController,
         keyboardType: textFieldType == TextFieldType.cardHolderName
