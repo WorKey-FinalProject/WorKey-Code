@@ -6,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
-import 'package:workey/personal_account/screens/add_location_screen.dart';
 import 'package:workey/personal_account/screens/members_list_screen.dart';
 import 'package:workey/personal_account/screens/weekly_shifts_screen.dart';
 import 'package:workey/personal_account/widgets/grid_view_icon_button.dart';

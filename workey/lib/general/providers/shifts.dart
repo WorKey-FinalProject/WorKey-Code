@@ -27,6 +27,19 @@ class Shifts with ChangeNotifier {
     _shiftList = [];
   }
 
+  Future<void> setIsWorkingForPersonal(bool isWorking) async {
+    try {
+      await _dbRef
+          .child('Users')
+          .child('Personal Accounts')
+          .child(_userId)
+          .child('isWorking')
+          .set(isWorking);
+    } catch (err) {
+      print(err);
+    }
+  }
+
   Future<void> fetchAndSetToListForPersonal(String companyId) async {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;

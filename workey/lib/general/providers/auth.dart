@@ -252,16 +252,21 @@ class Auth with ChangeNotifier {
   /// updateCurrUserPassword
   Future<void> updateCurrUserPassword(
       String oldPassword, String newPassword) async {
+    print(oldPassword);
+    print(newPassword);
     try {
       AuthCredential authCredential = EmailAuthProvider.credential(
           email: user.email, password: oldPassword);
       user.reauthenticateWithCredential(authCredential).then((result) async {
         await user.updatePassword(newPassword);
       }).catchError((error) {
+        print("lol");
         print(error);
+        return error;
       });
     } catch (error) {
-      throw error;
+      print("bb");
+      return error;
     }
   }
 

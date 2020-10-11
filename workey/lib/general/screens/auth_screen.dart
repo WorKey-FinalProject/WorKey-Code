@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/shift_model.dart';
 import 'package:workey/general/providers/company_groups.dart';
-import 'package:workey/general/providers/shifts.dart';
 
 import '../widgets/auth/auth_form.dart';
 import '../providers/auth.dart';
@@ -24,6 +22,8 @@ class _AuthScreenState extends State<AuthScreen> {
     BuildContext ctx,
   ) async {
     updateLoadingStatus(true);
+    var message = 'An error occurred, please check your credentials!';
+    ;
     try {
       await Provider.of<Auth>(context, listen: false).signin(
         email,
@@ -31,23 +31,31 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       await Provider.of<CompanyGroups>(context, listen: false).getUserId();
     } on PlatformException catch (err) {
-      var message = 'An error occurred, please check your credentials!';
-
       if (err.message != null) {
         updateLoadingStatus(false);
+        print(err.message.toString());
         message = err.message;
+        print("aa");
       }
-
-      Scaffold.of(ctx).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor: Theme.of(ctx).errorColor,
-        ),
-      );
     } catch (err) {
       updateLoadingStatus(false);
-      print(err);
+      print(err.toString());
+      print("nn");
+      if (err.toString().contains('The password is invalid')) {
+        message = 'Invalid Password';
+      } else if (err.toString().contains('There is no user record')) {
+        message = 'Invalid Email';
+      }
     }
+    Scaffold.of(ctx).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Theme.of(ctx).errorColor,
+      ),
+    );
     updateLoadingStatus(false);
   }
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flip_card/flip_card.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -127,9 +126,13 @@ class _HomeTopViewState extends State<HomeTopView> {
                     if (!_isRunning) {
                       _seconds = 0;
                       _start = DateTime.now();
+                      Provider.of<Shifts>(context, listen: false)
+                          .setIsWorkingForPersonal(true);
                       startTimer();
                     } else if (_isRunning) {
                       stopTimer();
+                      Provider.of<Shifts>(context, listen: false)
+                          .setIsWorkingForPersonal(false);
                     }
                   },
                   front: Center(
