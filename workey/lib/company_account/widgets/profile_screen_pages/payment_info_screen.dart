@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workey/company_account/widgets/payment_screen_widgets/credit_card_format.dart';
 import 'package:workey/company_account/widgets/payment_screen_widgets/credit_card_handler.dart';
 
 import '../../widgets/payment_screen_widgets/credit_card.dart';
@@ -33,49 +34,6 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
   final _formKeyForCvv = GlobalKey<FormState>();
 
   FocusNode _focusNode;
-
-  //  Future<void> _trySubmit() async {
-  //   final isValid = _formKey.currentState.validate();
-  //   FocusScope.of(context).unfocus();
-
-  //   if (isValid) {
-  //     _formKey.currentState.save();
-  //     // TODO: tomer add credit card details to Firebase.
-  //     // database cardNumber = cardNumberController.text.trim();
-  //     // database expiryDate = expiryDateController.text.trim();
-  //     // database cardHolderName = cardHolderNameController.text.trim();
-  //     // database cvv = cvvController.text.trim();
-  //     try {
-  //       await widget.auth.updateCurrUserData(userAccount);
-  //     } on PlatformException catch (err) {
-  //       var message = 'An error occurred';
-
-  //       if (err.message != null) {
-  //         message = err.message;
-  //       }
-
-  //       Scaffold.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text(message),
-  //           backgroundColor: Theme.of(context).errorColor,
-  //         ),
-  //       );
-  //     } catch (err) {
-  //       print(err);
-  //     }
-  //     Navigator.pop(context);
-  //     Scaffold.of(context).showSnackBar(
-  //       SnackBar(
-  //         duration: Duration(seconds: 2),
-  //         content: Text(
-  //           'Changes saved successfully',
-  //           textAlign: TextAlign.center,
-  //         ),
-  //         backgroundColor: Colors.blue,
-  //       ),
-  //     );
-  //   }
-  // }
 
   void _trySubmit() {
     final isValid = _formKey.currentState.validate();
@@ -123,12 +81,12 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
                   height: 40,
                 ),
                 CreditCard(
-                  cardNumber: cardNumberController.text,
-                  cardExpiry: expiryDateController.text,
-                  cardHolderName: cardHolderNameController.text,
+                  cardNumber: cardNumberController,
+                  cardExpiry: expiryDateController,
+                  cardHolderName: cardHolderNameController,
                   cardType: getCardType(cardNumberController.text),
-                  cvv: cvvController.text,
-                  bankName: 'Axis Bank',
+                  cvv: cvvController,
+                  bankName: 'Test',
                   showBackSide: showBack,
                   frontBackground: CreditCardBackground.black,
                   backBackground: CreditCardBackground.white,
@@ -204,32 +162,12 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: TextFormField(
+        // inputFormatters: [
+        //   textFieldType == TextFieldType.cardNumber
+        //       ? CardNumberInputFormatter()
+        //       : null
+        // ],
         controller: textEditingController,
-        onChanged: textFieldType == TextFieldType.cardNumber
-            ? (value) {
-                setState(() {
-                  cardNumberController.text = value;
-                });
-              }
-            : textFieldType == TextFieldType.expiryDate
-                ? (value) {
-                    setState(() {
-                      expiryDateController.text = value;
-                    });
-                  }
-                : textFieldType == TextFieldType.cardHolderName
-                    ? (value) {
-                        setState(() {
-                          cardHolderNameController.text = value;
-                        });
-                      }
-                    : textFieldType == TextFieldType.cvv
-                        ? (value) {
-                            setState(() {
-                              cvvController.text = value;
-                            });
-                          }
-                        : null,
         keyboardType: textFieldType == TextFieldType.cardHolderName
             ? TextInputType.text
             : textFieldType == TextFieldType.expiryDate
@@ -238,7 +176,9 @@ class _PaymentInfoScreenState extends State<PaymentInfoScreen> {
         focusNode: textFieldType == TextFieldType.cvv ? _focusNode : null,
         maxLength: textFieldType == TextFieldType.cvv
             ? 3
-            : textFieldType == TextFieldType.expiryDate ? 5 : null,
+            : textFieldType == TextFieldType.expiryDate
+                ? 5
+                : null,
         onSaved: textFieldType == TextFieldType.cardNumber
             ? (value) {
                 cardNumberController.text = value;

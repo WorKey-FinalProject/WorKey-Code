@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class CreditCardFront {
   String bankName;
-  String cardNumber;
-  String cardExpiry;
-  String cardHolderName;
+  TextEditingController cardNumber;
+  TextEditingController cardExpiry;
+  TextEditingController cardHolderName;
   Widget cardTypeIcon;
   double cardWidth;
   double cardHeight;
@@ -12,9 +12,9 @@ class CreditCardFront {
 
   CreditCardFront(
       {this.bankName = '',
-      this.cardNumber = '',
-      this.cardExpiry = '',
-      this.cardHolderName = '',
+      this.cardNumber,
+      this.cardExpiry,
+      this.cardHolderName,
       this.cardTypeIcon,
       this.cardWidth = 0,
       this.cardHeight = 0,
@@ -68,67 +68,130 @@ class CreditCardFront {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          cardNumber == null || cardNumber.isEmpty
-                              ? 'XXXX XXXX XXXX XXXX'
-                              : cardNumber,
-                          style: TextStyle(
-                              package: 'awesome_card',
-                              color: textColor,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'MavenPro',
-                              fontSize: 22),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "Exp. Date",
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Flexible(
+                            child: TextFormField(
+                              controller: cardNumber,
+                              decoration: InputDecoration(
+                                hintText: 'XXXX XXXX XXXX XXXX',
+                                hintStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 22,
+                                ),
+                                disabledBorder: InputBorder.none,
+                                enabledBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                              ),
                               style: TextStyle(
-                                  package: 'awesome_card',
-                                  color: textColor,
-                                  fontFamily: 'MavenPro',
-                                  fontSize: 15),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              cardExpiry == null || cardExpiry.isEmpty
-                                  ? 'MM/YY'
-                                  : cardExpiry,
-                              style: TextStyle(
-                                  package: 'awesome_card',
                                   color: textColor,
                                   fontWeight: FontWeight.w500,
                                   fontFamily: 'MavenPro',
-                                  fontSize: 16),
+                                  fontSize: 22),
                             ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          cardHolderName == null || cardHolderName.isEmpty
-                              ? 'Card Holder'
-                              : cardHolderName,
-                          style: TextStyle(
-                              color: textColor,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: 'MavenPro',
-                              fontSize: 17),
-                        ),
-                      ],
+                          ),
+                          // Text(
+                          //   cardNumber == null || cardNumber.isEmpty
+                          //       ? 'XXXX XXXX XXXX XXXX'
+                          //       : cardNumber,
+                          //   style: TextStyle(
+                          //       package: 'awesome_card',
+                          //       color: textColor,
+                          //       fontWeight: FontWeight.w500,
+                          //       fontFamily: 'MavenPro',
+                          //       fontSize: 22),
+                          // ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Exp. Date",
+                                style: TextStyle(
+                                    color: textColor,
+                                    fontFamily: 'MavenPro',
+                                    fontSize: 15),
+                              ),
+                              SizedBox(
+                                width: 7,
+                              ),
+                              Flexible(
+                                child: TextFormField(
+                                  controller: cardExpiry,
+                                  decoration: InputDecoration(
+                                      hintText: 'MM/YY',
+                                      hintStyle: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                      disabledBorder: InputBorder.none,
+                                      enabledBorder: InputBorder.none,
+                                      errorBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none),
+                                  style: TextStyle(
+                                      color: textColor,
+                                      fontWeight: FontWeight.w500,
+                                      fontFamily: 'MavenPro',
+                                      fontSize: 16),
+                                ),
+                              ),
+                              // Text(
+                              //   cardExpiry == null || cardExpiry.isEmpty
+                              //       ? 'MM/YY'
+                              //       : cardExpiry,
+                              //   style: TextStyle(
+                              //       package: 'awesome_card',
+                              //       color: textColor,
+                              //       fontWeight: FontWeight.w500,
+                              //       fontFamily: 'MavenPro',
+                              //       fontSize: 16),
+                              // ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          // Text(
+                          //   cardHolderName == null || cardHolderName.isEmpty
+                          //       ? 'Card Holder'
+                          //       : cardHolderName,
+                          //   style: TextStyle(
+                          //       color: textColor,
+                          //       fontWeight: FontWeight.w500,
+                          //       fontFamily: 'MavenPro',
+                          //       fontSize: 17),
+                          // ),
+                          Flexible(
+                            child: TextFormField(
+                              controller: cardHolderName,
+                              decoration: InputDecoration(
+                                  hintText: 'CARD HOLDER',
+                                  hintStyle: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                  disabledBorder: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  errorBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none),
+                              style: TextStyle(
+                                  color: textColor,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'MavenPro',
+                                  fontSize: 17),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     cardTypeIcon
                   ],
