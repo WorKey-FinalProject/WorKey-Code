@@ -3,10 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import 'package:workey/general/models/shift_model.dart';
-import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/providers/shifts.dart';
 
 class ShiftsScreen extends StatefulWidget {
+  final String name = 'Shifts';
+
+  String get getName {
+    return this.name;
+  }
+
   @override
   _ShiftsScreenState createState() => _ShiftsScreenState();
 }
@@ -141,14 +146,12 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
                   ),
                   DataCell(
                     FittedBox(
-                      child: Text(
-                          '${shift.startTime.hour}:${shift.startTime.minute}'),
+                      child: Text('${DateFormat.Hm().format(shift.startTime)}'),
                     ),
                   ),
                   DataCell(
                     FittedBox(
-                      child:
-                          Text('${shift.endTime.hour}:${shift.endTime.minute}'),
+                      child: Text('${DateFormat.Hm().format(shift.endTime)}'),
                     ),
                   ),
                   DataCell(

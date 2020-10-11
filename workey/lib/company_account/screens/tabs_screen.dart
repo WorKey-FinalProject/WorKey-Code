@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
+
 import 'package:workey/company_account/screens/groups_screen.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/global_sizes.dart';
@@ -34,7 +35,7 @@ class _TabsScreenState extends State<TabsScreen> {
         'title': 'Home',
       },
       {
-        'page': GroupsScreen(_auth),
+        'page': GroupsScreen(),
         'title': 'Groups',
       },
       {

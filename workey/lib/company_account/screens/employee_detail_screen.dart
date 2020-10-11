@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/personal_account/screens/shifts_screen.dart';
 
 import '../widgets/employee_sliver.dart';
 import '../../general/models/group_employee_model.dart';
@@ -27,7 +28,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
 
     final List _tabs = [
       EmployeesInfoView(currentEmployee),
-      EmployeesShiftsView(),
+      ShiftsScreen(),
     ];
 
     return DefaultTabController(
@@ -116,7 +117,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 130.0),
-                child: EmployeesShiftsView(),
+                child: ShiftsScreen(),
               ),
             ],
           ),
