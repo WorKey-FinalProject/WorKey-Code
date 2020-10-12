@@ -6,6 +6,7 @@ import 'package:workey/company_account/widgets/groups_top_view.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
 import 'package:workey/general/providers/auth.dart';
+import 'package:workey/general/providers/company_groups.dart';
 
 class GroupsScreen extends StatefulWidget {
   @override
@@ -15,7 +16,6 @@ class GroupsScreen extends StatefulWidget {
 class _GroupsScreenState extends State<GroupsScreen> {
   bool _isLoading = false;
   CompanyAccountModel _companyAccount;
-  WorkGroupModel _currentWorkGroup;
   var _loadOnce = false;
 
   void getUserData(auth) async {
@@ -25,11 +25,6 @@ class _GroupsScreenState extends State<GroupsScreen> {
     });
 
     _companyAccount = await auth.getCurrUserData() as CompanyAccountModel;
-    _currentWorkGroup = WorkGroupModel(
-      workGroupName: _companyAccount.companyName,
-      dateOfCreation: _companyAccount.dateOfCreation,
-      logo: _companyAccount.companyLogo,
-    );
 
     setState(() {
       _isLoading = false;
@@ -38,7 +33,8 @@ class _GroupsScreenState extends State<GroupsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _auth = Provider.of<Auth>(context);
+    final _auth = Provider.of<Auth>(context, listen: false);
+
     if (!_loadOnce) {
       getUserData(_auth);
     }
@@ -59,7 +55,6 @@ class _GroupsScreenState extends State<GroupsScreen> {
                         constraints.maxHeight * 0.25,
                         constraints.maxWidth,
                         _companyAccount,
-                        _currentWorkGroup,
                       ),
                     ),
                     Container(

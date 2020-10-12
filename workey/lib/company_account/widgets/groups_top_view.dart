@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/work_group_model.dart';
@@ -9,13 +10,11 @@ class GroupsTopView extends StatefulWidget {
   final double constraintsMaxHeight;
   final double constraintsMaxWidth;
   final CompanyAccountModel companyAccount;
-  final WorkGroupModel currentWorkGroup;
 
   GroupsTopView(
     this.constraintsMaxHeight,
     this.constraintsMaxWidth,
     this.companyAccount,
-    this.currentWorkGroup,
   );
 
   @override
@@ -25,6 +24,8 @@ class GroupsTopView extends StatefulWidget {
 class _GroupsTopViewState extends State<GroupsTopView> {
   @override
   Widget build(BuildContext context) {
+    final companyGroupsProvider = Provider.of<CompanyGroups>(context);
+    final _currentWorkGroup = companyGroupsProvider.getCurrentWorkGroup;
     return Container(
       height: widget.constraintsMaxHeight,
       color: Theme.of(context).accentColor,
@@ -48,9 +49,9 @@ class _GroupsTopViewState extends State<GroupsTopView> {
               child: ProfilePicture(
                 size: MediaQuery.of(context).size.height * 0.2,
                 isEditable: false,
-                imageUrl: widget.currentWorkGroup == null
+                imageUrl: _currentWorkGroup == null
                     ? widget.companyAccount.companyLogo
-                    : widget.currentWorkGroup.logo,
+                    : _currentWorkGroup.logo,
               ),
             ),
           ),
@@ -79,9 +80,9 @@ class _GroupsTopViewState extends State<GroupsTopView> {
                 padding: EdgeInsets.only(left: 10),
                 child: FittedBox(
                   child: Text(
-                    widget.currentWorkGroup == null
+                    _currentWorkGroup == null
                         ? widget.companyAccount.companyName
-                        : widget.currentWorkGroup.workGroupName,
+                        : _currentWorkGroup.workGroupName,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold,
