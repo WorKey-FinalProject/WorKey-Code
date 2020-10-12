@@ -48,6 +48,7 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
                 .fetchAndSetToList(personalAccountModel.companyId);
             await _shiftsProvider
                 .fetchAndSetToListForPersonal(personalAccountModel.companyId);
+            await _companyGroupsProvider.fetchAndSetToLists(false);
           }
           setState(() {
             _isLoading = false;

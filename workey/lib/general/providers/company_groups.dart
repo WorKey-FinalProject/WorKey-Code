@@ -5,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/personal_account_model.dart';
-import 'package:workey/general/models/place_location.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -273,6 +272,7 @@ class CompanyGroups with ChangeNotifier {
         firstName: null,
         lastName: null,
         dateOfCreation: null,
+        token: '',
       );
       p.fromJsonToObject(dataSnapshot.value, groupEmployeeModel.id);
       groupEmployeeModel.address = p.address;
@@ -300,6 +300,7 @@ class CompanyGroups with ChangeNotifier {
               firstName: null,
               lastName: null,
               dateOfCreation: null,
+              token: '',
             );
             p.fromJsonToObject(map[employee.id], employee.id);
             employee.firstName = p.firstName;
@@ -469,6 +470,7 @@ class CompanyGroups with ChangeNotifier {
           firstName: null,
           lastName: null,
           dateOfCreation: null,
+          token: '',
         );
         personalAccountModel.fromJsonToObject(
             dataSnapshot.value, dataSnapshot.key);
@@ -511,6 +513,7 @@ class CompanyGroups with ChangeNotifier {
           .once()
           .then((DataSnapshot dataSnapshot) {
         CompanyAccountModel companyAccountModel = CompanyAccountModel(
+            token: '',
             companyEmail: null,
             companyName: null,
             owenrFirstName: null,
@@ -575,6 +578,7 @@ class CompanyGroups with ChangeNotifier {
         Map<dynamic, dynamic> map = dataSnapshot.value;
         map.forEach((key, value) {
           PersonalAccountModel p = PersonalAccountModel(
+              token: '',
               email: null,
               firstName: null,
               lastName: null,
