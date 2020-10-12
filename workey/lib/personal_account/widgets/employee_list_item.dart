@@ -4,10 +4,11 @@ import 'package:workey/general/models/group_employee_model.dart';
 class EmployeeListItem extends StatelessWidget {
   final GroupEmployeeModel groupEmployeeModel;
   final bool isDropDownItem;
-
+  final double imageRadius;
   EmployeeListItem({
-    this.groupEmployeeModel,
-    this.isDropDownItem,
+    @required this.groupEmployeeModel,
+    @required this.isDropDownItem,
+    this.imageRadius,
   });
 
   @override
@@ -18,7 +19,7 @@ class EmployeeListItem extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 15,
+                  radius: imageRadius == null ? 15 : imageRadius,
                   backgroundColor: Colors.black,
                   backgroundImage: groupEmployeeModel.picture.isEmpty
                       ? AssetImage(
