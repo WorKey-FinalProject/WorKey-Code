@@ -250,18 +250,18 @@ class _MailBoxState extends State<MailBox> {
                             isRead: documents[index].get('isRead'),
                           );
 
-                          //if (_dropdownItems[index].id == mail.sentTo) {
-                          if (mail.isRead == false) {
-                            tempUnReadMails.add(mail);
+                          if (_dropdownItems[index].id == mail.sentTo) {
+                            if (mail.isRead == false) {
+                              tempUnReadMails.add(mail);
+                            }
+                            mailsAmount++;
+                            return MailItem(
+                              mail,
+                              _dropdownItems[index],
+                            );
                           }
-                          mailsAmount++;
-                          return MailItem(
-                            mail,
-                            _dropdownItems[index],
-                          );
-                        }
-                        //  },
-                        );
+                        },
+                      );
               },
             ),
           ),
