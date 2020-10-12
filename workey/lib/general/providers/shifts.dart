@@ -165,11 +165,13 @@ class Shifts with ChangeNotifier {
           .once()
           .then((DataSnapshot dataSnapshot) {
         PersonalAccountModel p = PersonalAccountModel(
+
             email: null,
             firstName: null,
             lastName: null,
             dateOfCreation: null,
-            token: '');
+            token: '',);
+
         p.fromJsonToObject(dataSnapshot.value, _userId);
         shiftModel.companyId = p.companyId;
       });

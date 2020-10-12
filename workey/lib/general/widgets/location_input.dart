@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:workey/general/screens/map_screen.dart';
-import 'package:workey/helpers/location_helper.dart';
+import 'package:provider/provider.dart';
 
+import '../../general/models/work_group_model.dart';
+import '../../general/providers/company_groups.dart';
+import '../../general/screens/map_screen.dart';
 import '../../helpers/location_helper.dart';
 
 class LocationInput extends StatefulWidget {
@@ -12,8 +14,10 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
+  WorkGroupModel _workGroupModel;
   String _previewImageUrl;
   var _isLoading = false;
+  var _loadOnce = false;
 
   Future<void> _getCurrentUserLocation() async {
     setState(() {
@@ -31,25 +35,25 @@ class _LocationInputState extends State<LocationInput> {
   }
 
   Future<void> _getWorkGroupLocation() async {
-    // setState(() {
-    //   _isLoading = true;
-    // });
-    // final locData = await Location().getLocation();
-    // final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
-    //   latitude: locData.latitude,
-    //   longitude: locData.longitude,
-    // );
-    // setState(() {
-    //   _previewImageUrl = staticMapImageUrl;
-    //   _isLoading = false;
-    // });
+    setState(() {
+      _isLoading = true;
+    });
+    final locData = _workGroupModel.location;
+    final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
+      latitude: locData.latitude,
+      longitude: locData.longitude,
+    );
+    setState(() {
+      _previewImageUrl = staticMapImageUrl;
+      _isLoading = false;
+    });
   }
 
   Future<void> _selectOnMap() async {
     final selectedLocation = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MapScreen(
-          isSelecting: true,
+          initialLocation: _workGroupModel.location,
         ),
       ),
     );
@@ -59,15 +63,25 @@ class _LocationInputState extends State<LocationInput> {
     // ...
   }
 
-  @override
-  void initState() {
-    // _getWorkGroupLocation();
-    _getCurrentUserLocation();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // _getCurrentUserLocation();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
+    _workGroupModel = Provider.of<CompanyGroups>(context).getCurrentWorkGroup;
+    if (!_loadOnce) {
+      if (_workGroupModel != null) {
+        _getWorkGroupLocation();
+      } else {
+        Fluttertoast.showToast(msg: 'No location defined for workgroup');
+        _getCurrentUserLocation();
+      }
+      _loadOnce = true;
+    }
+
     return Stack(
       children: <Widget>[
         Container(
@@ -140,7 +154,7 @@ class _LocationInputState extends State<LocationInput> {
                     ),
                     label: Text('Work Location'),
                     textColor: Theme.of(context).primaryColor,
-                    onPressed: _getCurrentUserLocation,
+                    onPressed: _getWorkGroupLocation,
                   ),
                 ),
               ),
