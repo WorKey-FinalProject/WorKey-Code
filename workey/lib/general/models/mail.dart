@@ -3,21 +3,22 @@ class Mail {
   String sentTo; // ID
   String title;
   String content;
-  var _isRead = false;
+  bool isRead;
 
   Mail({
     this.sentFrom,
     this.sentTo,
     this.title,
     this.content,
+    this.isRead = false,
   });
 
   set setReadStatus(bool isRead) {
-    this._isRead = isRead;
+    this.isRead = isRead;
   }
 
   get getReadStatus {
-    return _isRead;
+    return isRead;
   }
 
   Map<String, Object> toJson() {
@@ -26,15 +27,15 @@ class Mail {
       'sentTo': this.sentTo,
       'title': this.title,
       'content': this.content,
-      'isRead': this._isRead,
+      'isRead': this.isRead,
     };
   }
 
-  void fromJsonToObject(Map snapshot) {
+  void fromJsonToObject(dynamic snapshot) {
     this.sentFrom = snapshot['sentFrom'] ?? '';
     this.sentTo = snapshot['sentTo'] ?? '';
     this.title = snapshot['title'] ?? '';
     this.content = snapshot['content'] ?? '';
-    this._isRead = snapshot['isRead'] ?? '';
+    this.isRead = snapshot['isRead'] ?? '';
   }
 }

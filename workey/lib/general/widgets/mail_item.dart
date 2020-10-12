@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:workey/general/models/group_employee_model.dart';
+
+import 'package:workey/general/models/mail.dart';
 
 class MailItem extends StatelessWidget {
+  final Mail mail;
+  final GroupEmployeeModel groupMember;
+
+  MailItem(this.mail, this.groupMember);
+
   @override
   Widget build(BuildContext context) {
+    // PersonalAccountModel user =
+
     return Container(
       height: 95.0,
       width: 350.0,
@@ -20,11 +30,21 @@ class MailItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0)),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: Image.asset(
-                  'assets/images/google-icon.png',
-                  height: 60.0,
-                  width: 60.0,
-                ),
+                child: groupMember.picture.isEmpty
+                    ? Container(
+                        alignment: Alignment.center,
+                        height: 60.0,
+                        width: 60.0,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                        ),
+                      )
+                    : Image.network(
+                        groupMember.picture,
+                        height: 60.0,
+                        width: 60.0,
+                      ),
               ),
             ),
             Expanded(
