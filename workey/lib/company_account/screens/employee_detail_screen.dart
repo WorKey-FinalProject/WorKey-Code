@@ -6,7 +6,6 @@ import '../widgets/employee_sliver.dart';
 import '../../general/models/group_employee_model.dart';
 import '../../general/providers/company_groups.dart';
 import '../widgets/group_screen_widgets/opaque_image.dart';
-import 'employee_detail_pages/employees_shifts_view.dart';
 import 'employee_detail_pages/employees_info_view.dart';
 
 class EmployeeDetailScreen extends StatefulWidget {
