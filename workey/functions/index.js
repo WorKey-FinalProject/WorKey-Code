@@ -14,14 +14,45 @@ if(change.after.val()){
     const getWorkGroupId = admin.database()
     .ref(`/Company Groups/${companyId}/employeeList/${employeeId}/workGroupId`)
     .once('value');
+
+    const getToken = admin.auth.getUser(companyId);
     
-   const workGroupId = await Promise.all([getWorkGroupId]);
+   const promiseList = await Promise.all([getWorkGroupId,getToken]);
+
+   let workGroupId = promiseList[0];
+   let tempToken = promiseList[1];
+
+   const token = tempToken.val();
 
 //    if (!workGroupId[0].hasChildren()) {
 //     return console.log('There are no id.');
 //   }
+    const getEmployeeName = admin.database().ref(`/Users/Personal Accounts/${employeeId}`).once('value')
+    .then(data => {
+        if(data.val()){
+            var employeeName = data.val();
+            console.log(employeeName);
+        }
+        const payload = {
+            notification: {
+                title: `${workGroupId[0].val()}`,
+                body:`${employeeName.firstname} ${employeeName.lastName} entered a shift `,
+            }
+        };
+        const message = admin.messaging().sendToDevice(token, payload);
+        return console.log(payload);
+
+    });
+
+   // const employeeName = await Promise.all(getEmployeeName);
+
+// const payload = {
+//     notification: {
+//         title: ''
+//     }
+// }
   
-    return console.log('company', companyId, 'employee enter', employeeId,'id', workGroupId[0].val());
+    return console.log('company', companyId, 'employee enter', employeeId,'id', workGroupId.val());
   
 }
 
