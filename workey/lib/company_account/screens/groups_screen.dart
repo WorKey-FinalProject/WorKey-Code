@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,27 @@ class _GroupsScreenState extends State<GroupsScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  @override
+  void initState() {
+    final fbm = FirebaseMessaging();
+    fbm.requestNotificationPermissions();
+    fbm.configure(
+      onMessage: (message) {
+        print(message);
+        return;
+      },
+      onLaunch: (message) {
+        print(message);
+        return;
+      },
+      onResume: (message) {
+        print(message);
+        return;
+      },
+    );
+    super.initState();
   }
 
   @override
