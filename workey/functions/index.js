@@ -26,14 +26,22 @@ exports.shitfNotifiction = functions.database.ref('/Company Groups/{companyId}/e
         let workGroupId = promiseList[0];
         let token = promiseList[1];
 
+        const getWorkGroupName = admin.database()
+        .ref(`Compamy Groups/${companyId}/workGroupList/${workGroupId.val()}`)
+        .once('value');
+
+        const workGroupNamePromise = await Promise.all(workGroupName);
+
+        let workGroupName = workGroupNamePromise;
+
         const payload = admin.messaging.MessagingPayload = {
             notification: {
-                title: 'test',
+                title: `${workGroupName.val()}`,
                 body: 'test',
                 click_action: 'FLUTTER_NOTIFICATION_CLICK',
             }
         };
-        console.log(token.val(), 'work', workGroupId.val());
+        console.log(workGroupNamePromise, 'name', workGroupName.val());
         return admin.messaging().sendToDevice(token.val(), payload);
 
     }
