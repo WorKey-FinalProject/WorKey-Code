@@ -20,6 +20,7 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  var _isLoading = false;
   LatLng _pickedLocation;
 
   void _selectLocation(LatLng position) {
@@ -37,14 +38,25 @@ class _MapScreenState extends State<MapScreen> {
         title: Text('Map'),
         actions: [
           if (widget.isSelecting)
-            IconButton(
-              icon: Icon(Icons.check),
-              onPressed: () async {
-                // await companyGroupsProvider
-                //     .setLocationToWorkGroup(_pickedLocation);
-                Navigator.of(context).pop();
-              },
-            ),
+            _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : IconButton(
+                    color: Theme.of(context).accentColor,
+                    iconSize: 34,
+                    icon: Icon(Icons.check),
+                    onPressed: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      await companyGroupsProvider
+                          .setLocationToWorkGroup(_pickedLocation);
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                  ),
         ],
       ),
       body: GoogleMap(
