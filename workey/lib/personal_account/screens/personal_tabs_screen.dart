@@ -30,7 +30,7 @@ class _PersonalTabsScreenState extends State<PersonalTabsScreen> {
       'title': 'My WorkGroup',
     },
     {
-      'page': ShiftsScreen(),
+      'page': ShiftsScreen(null),
       'title': 'Shifts',
     },
     {
