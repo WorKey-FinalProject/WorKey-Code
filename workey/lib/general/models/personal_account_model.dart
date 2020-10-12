@@ -14,6 +14,7 @@ class PersonalAccountModel {
   String companyId;
   String faceRecognitionPicture;
   String fingerPrint;
+  //String token;
   String profilePicture;
 
   File imageFile;
@@ -31,6 +32,7 @@ class PersonalAccountModel {
     this.faceRecognitionPicture,
     this.fingerPrint,
     this.profilePicture,
+    //@required this.token,
   });
 
   void addId(String id) {
@@ -58,6 +60,7 @@ class PersonalAccountModel {
       'fingerPrint': this.fingerPrint,
       'profilePicture': this.profilePicture,
       'companyId': this.companyId,
+      //'token': this.token,
     };
   }
 
@@ -66,6 +69,7 @@ class PersonalAccountModel {
     email = snapshot['email'];
     firstName = snapshot['firstName'];
     lastName = snapshot['lastName'];
+    //token = snapshot['token'];
     dateOfCreation = snapshot['dateOfCreation'];
     address = snapshot['address'] ?? '';
     dateOfBirth = snapshot['dateOfBirth'] ?? '';

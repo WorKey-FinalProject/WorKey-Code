@@ -332,6 +332,8 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> setLocationToWorkGroup(LatLng location) async {
+    print(location.latitude);
+    print(location.longitude);
     PlaceLocation placeLocation = PlaceLocation(
       latitude: location.latitude,
       longitude: location.longitude,

@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 
 import '../../general/models/company_group_model.dart';
 
@@ -16,6 +17,7 @@ import '../models/personal_account_model.dart';
 class Auth with ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   final dbRef = FirebaseDatabase.instance.reference();
+  final _fcm = FirebaseMessaging();
 
   AccountTypeChosen accountType;
   User user;
@@ -31,6 +33,7 @@ class Auth with ChangeNotifier {
     owenrFirstName: null,
     owenrLastName: null,
     dateOfCreation: null,
+    //token: '',
   );
 
   PersonalAccountModel personalAccountModel = PersonalAccountModel(
@@ -38,6 +41,7 @@ class Auth with ChangeNotifier {
     dateOfCreation: null,
     firstName: null,
     lastName: null,
+    //token: '',
   );
 
   get getAccountTypeChosen {
@@ -99,6 +103,7 @@ class Auth with ChangeNotifier {
         fingerPrint: fingerPrint,
         dateOfCreation: DateTime.now().toString(),
         companyId: '',
+        //token: '',
       );
       await dbRef
           .child('Users')
@@ -153,6 +158,7 @@ class Auth with ChangeNotifier {
         owenrLastName: owenrLastName,
         dateOfCreation: DateTime.now().toString(),
         companyLogo: companyLogo,
+        //token: '',
       );
 
       CompanyGroupModel companyGroupModel = CompanyGroupModel(
@@ -183,8 +189,9 @@ class Auth with ChangeNotifier {
       password: password,
     )
         .then(
-      (authResult) {
+      (authResult) async {
         user = authResult.user;
+        //await _saveDeviceToken();
       },
     );
   }
@@ -213,6 +220,7 @@ class Auth with ChangeNotifier {
 
   /// getCurrUserData
   Future<dynamic> getCurrUserData() async {
+    print(accountType);
     dynamic dynamicUser;
     try {
       if (accountType == AccountTypeChosen.company) {
@@ -333,6 +341,30 @@ class Auth with ChangeNotifier {
       firebaseUser.delete();
     } on Exception {
       throw ErrorHint;
+    }
+  }
+
+  Future<void> _saveDeviceToken() async {
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
+    String path;
+    if (accountType == AccountTypeChosen.company) {
+      path = 'Company Accounts';
+    } else if (accountType == AccountTypeChosen.personal) {
+      path = 'Personal Accounts';
+    }
+    // Save it to Firestore
+    try {
+      if (fcmToken != null) {
+        await dbRef
+            .child('Users')
+            .child(path)
+            .child(user.uid)
+            .child('token')
+            .set(fcmToken);
+      }
+    } catch (err) {
+      throw err;
     }
   }
 
