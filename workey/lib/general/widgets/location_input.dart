@@ -61,8 +61,8 @@ class _LocationInputState extends State<LocationInput> {
 
   @override
   void initState() {
-    _getWorkGroupLocation();
-    //_getCurrentUserLocation();
+    // _getWorkGroupLocation();
+    _getCurrentUserLocation();
     super.initState();
   }
 

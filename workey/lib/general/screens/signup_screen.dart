@@ -34,7 +34,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           owenrLastName: lastName,
           companyName: companyName,
           companyLogo: '',
-          location: '',
           imageFile: imageFile,
         );
       } on PlatformException catch (err) {

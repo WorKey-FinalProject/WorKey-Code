@@ -64,7 +64,8 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        title: 'Workey',
         theme: ThemeData(
           //primaryColor: Color(hexColor('#27AE60')),
           primaryColor: Color(hexColor('#27AE60')),
@@ -83,7 +84,6 @@ class MyApp extends StatelessWidget {
               return SplashScreen();
             }
             if (userSnapshot.hasData) {
-              //return TabsScreen();
               return SignInAccountType();
             }
             return AuthScreen();
