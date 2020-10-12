@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 
 class WorkGroupModel {
@@ -9,7 +10,7 @@ class WorkGroupModel {
   String workGroupName;
   String managerId;
   String dateOfCreation;
-  String location;
+  LatLng location;
   String logo;
   String whatsAppUrl = '';
   List<GroupEmployeeModel> employeeList;
@@ -57,5 +58,12 @@ class WorkGroupModel {
     dateOfCreation = snapshot['dateOfCreation'];
     employeeList = snapshot['employeeList'] ?? null;
     whatsAppUrl = snapshot['whatsAppUrl'] ?? '';
+    if (snapshot['location'] != null) {
+      LatLng tempLocation = LatLng(
+        double.parse(snapshot['location']['latitude'].toString()),
+        double.parse(snapshot['location']['longitude'].toString()),
+      );
+      location = tempLocation;
+    }
   }
 }

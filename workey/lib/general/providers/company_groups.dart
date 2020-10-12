@@ -333,14 +333,15 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> setLocationToWorkGroup(LatLng location) async {
-    _dbRef
+    var db = _dbRef
         .child('Company Groups')
         .child(_userId)
         .child('workGroupList')
-        .child(_currentWorkGroup.id);
+        .child(_currentWorkGroup.id)
+        .reference();
     try {
-      await _dbRef.child('location').child('latitude').set(location.latitude);
-      await _dbRef.child('location').child('longitude').set(location.longitude);
+      await db.child('location').child('latitude').set(location.latitude);
+      await db.child('location').child('longitude').set(location.longitude);
     } on Exception {
       throw ErrorHint;
     }
