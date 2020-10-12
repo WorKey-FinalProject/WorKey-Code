@@ -37,22 +37,18 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
         (accountType) async {
           accountTypeChosen = accountType;
           await _auth.getCurrUserData();
-          String userCompanyId;
-          bool isCompany;
           if (accountTypeChosen == AccountTypeChosen.company) {
-            isCompany = true;
-            userCompanyId = _auth.user.uid;
             await _shiftsProvider.fetchAndSetToListForCompany();
+            await _companyGroupsProvider.fetchAndSetToLists(true);
+            await _feedProvider.fetchAndSetToList(_auth.user.uid);
           } else if (accountTypeChosen == AccountTypeChosen.personal) {
             final personalAccountModel =
                 _auth.getDynamicUser as PersonalAccountModel;
-            userCompanyId = personalAccountModel.companyId;
-            isCompany = false;
+            await _feedProvider
+                .fetchAndSetToList(personalAccountModel.companyId);
             await _shiftsProvider
                 .fetchAndSetToListForPersonal(personalAccountModel.companyId);
           }
-          await _companyGroupsProvider.fetchAndSetToLists(isCompany);
-          await _feedProvider.fetchAndSetToList(userCompanyId);
           setState(() {
             _isLoading = false;
           });

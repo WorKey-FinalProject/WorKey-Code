@@ -33,7 +33,7 @@ class Auth with ChangeNotifier {
     owenrFirstName: null,
     owenrLastName: null,
     dateOfCreation: null,
-    //token: '',
+    token: '',
   );
 
   PersonalAccountModel personalAccountModel = PersonalAccountModel(
@@ -41,7 +41,7 @@ class Auth with ChangeNotifier {
     dateOfCreation: null,
     firstName: null,
     lastName: null,
-    //token: '',
+    token: '',
   );
 
   get getAccountTypeChosen {
@@ -103,7 +103,7 @@ class Auth with ChangeNotifier {
         fingerPrint: fingerPrint,
         dateOfCreation: DateTime.now().toString(),
         companyId: '',
-        //token: '',
+        token: '',
       );
       await dbRef
           .child('Users')
@@ -158,7 +158,7 @@ class Auth with ChangeNotifier {
         owenrLastName: owenrLastName,
         dateOfCreation: DateTime.now().toString(),
         companyLogo: companyLogo,
-        //token: '',
+        token: '',
       );
 
       CompanyGroupModel companyGroupModel = CompanyGroupModel(
@@ -191,7 +191,7 @@ class Auth with ChangeNotifier {
         .then(
       (authResult) async {
         user = authResult.user;
-        //await _saveDeviceToken();
+        await _saveDeviceToken();
       },
     );
   }
@@ -220,7 +220,6 @@ class Auth with ChangeNotifier {
 
   /// getCurrUserData
   Future<dynamic> getCurrUserData() async {
-    print(accountType);
     dynamic dynamicUser;
     try {
       if (accountType == AccountTypeChosen.company) {
@@ -246,7 +245,7 @@ class Auth with ChangeNotifier {
           dynamicUser.id = user.uid;
         });
       } else {
-        throw 'failed to get user data: error - accountType == nothing.';
+        print('failed to get user data: error - accountType == nothing.');
       }
     } on Exception {
       throw ErrorHint;

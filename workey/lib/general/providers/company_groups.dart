@@ -332,20 +332,14 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> setLocationToWorkGroup(LatLng location) async {
-    print(location.latitude);
-    print(location.longitude);
-    PlaceLocation placeLocation = PlaceLocation(
-      latitude: location.latitude,
-      longitude: location.longitude,
-    );
+    _dbRef
+        .child('Company Groups')
+        .child(_userId)
+        .child('workGroupList')
+        .child(_currentWorkGroup.id);
     try {
-      await _dbRef
-          .child('Company Groups')
-          .child(_userId)
-          .child('workGroupList')
-          .child(_currentWorkGroup.id)
-          .child('location')
-          .set(placeLocation);
+      await _dbRef.child('location').child('latitude').set(location.latitude);
+      await _dbRef.child('location').child('longitude').set(location.longitude);
     } on Exception {
       throw ErrorHint;
     }

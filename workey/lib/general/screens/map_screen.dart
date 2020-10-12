@@ -40,8 +40,8 @@ class _MapScreenState extends State<MapScreen> {
             IconButton(
               icon: Icon(Icons.check),
               onPressed: () async {
-                // await companyGroupsProvider
-                //     .setLocationToWorkGroup(_pickedLocation);
+                await companyGroupsProvider
+                    .setLocationToWorkGroup(_pickedLocation);
                 Navigator.of(context).pop();
               },
             ),
