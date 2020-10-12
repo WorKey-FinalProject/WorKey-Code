@@ -342,6 +342,11 @@ class CompanyGroups with ChangeNotifier {
     try {
       await db.child('location').child('latitude').set(location.latitude);
       await db.child('location').child('longitude').set(location.longitude);
+      _currentWorkGroup.location = location;
+      _workGroupList[_workGroupList
+              .indexWhere((workGroup) => workGroup.id == _currentWorkGroup.id)]
+          .location = location;
+      notifyListeners();
     } on Exception {
       throw ErrorHint;
     }
