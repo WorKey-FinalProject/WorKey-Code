@@ -3,13 +3,14 @@ import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:workey/general/models/group_employee_model.dart';
+import 'package:workey/general/models/place_location.dart';
 
 class WorkGroupModel {
   String id;
   String workGroupName;
   String managerId;
   String dateOfCreation;
-  String location;
+  PlaceLocation location;
   String logo;
   String whatsAppUrl = '';
   List<GroupEmployeeModel> employeeList;
@@ -46,6 +47,7 @@ class WorkGroupModel {
       'workGroupLocation': this.location,
       'employeeList': this.employeeList,
       'whatsAppUrl': this.whatsAppUrl,
+      'location': this.location,
     };
   }
 
@@ -56,7 +58,7 @@ class WorkGroupModel {
     logo = snapshot['workGroupLogo'];
     dateOfCreation = snapshot['dateOfCreation'];
     employeeList = snapshot['employeeList'] ?? null;
-    location = snapshot['workGroupLocation'] ?? '';
     whatsAppUrl = snapshot['whatsAppUrl'] ?? '';
+    location = snapshot['location'] ?? null;
   }
 }
