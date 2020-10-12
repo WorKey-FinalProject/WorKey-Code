@@ -5,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/personal_account_model.dart';
-import 'package:workey/general/models/place_location.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
