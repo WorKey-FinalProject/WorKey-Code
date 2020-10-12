@@ -19,6 +19,9 @@ class _MailBoxState extends State<MailBox> {
   String userId = FirebaseAuth.instance.currentUser.uid;
   final titleTextController = TextEditingController();
   final contentTextController = TextEditingController();
+  var mailsAmount = 0;
+
+  List<Mail> unReadMails = [];
 
   GroupEmployeeModel _selectedEmployee;
   List<GroupEmployeeModel> _dropdownItems = [];
@@ -54,176 +57,208 @@ class _MailBoxState extends State<MailBox> {
     final _companyGroupsProvider =
         Provider.of<CompanyGroups>(context, listen: false);
 
-    final _auth = Provider.of<Auth>(context);
-    var userDetails = _auth.getDynamicUser;
+    final _auth = Provider.of<Auth>(context, listen: false);
+
+    fillDropDownList();
 
     if (_auth.getAccountTypeChosen == AccountTypeChosen.company) {
       _dropdownItems = _companyGroupsProvider.getEmployeeList;
     } else {
       _dropdownItems = _companyGroupsProvider.getEmployeeList
-          .where((emp) => emp.id != userDetails.id)
+          .where((emp) => emp.id != userId)
           .toList();
     }
 
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 300.0,
-              decoration: BoxDecoration(
-                  color: Colors.blue[600],
-                  // color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(40.0),
-                    bottomLeft: Radius.circular(40.0),
-                  )),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 30.0, right: 30.0, top: 70.0),
-                    child: Row(
-                      children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              "All Mails",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 26.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10.0,
-                            ),
-                            Text(
-                              "You have got 3 new mails",
-                              style: TextStyle(
-                                  color: Colors.blue[50], fontSize: 14.0),
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        InkWell(
-                          onTap: () {
-                            openNewMailBottomSheet();
-                          },
-                          child: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Icon(Icons.add),
-                          ),
-                        )
-                      ],
-                    ),
+      body: Column(
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.blue[600],
+                // color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(40.0),
+                  bottomLeft: Radius.circular(40.0),
+                )),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 30.0,
+                    right: 30.0,
+                    top: 70.0,
                   ),
-                  SizedBox(
-                    height: 70.0,
-                  ),
-                  Stack(
-                    alignment: Alignment.center,
-                    overflow: Overflow.visible,
+                  child: Row(
                     children: <Widget>[
-                      Container(
-                        height: 70.0,
-                        width: 300.0,
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            // color: Theme.of(context).primaryColor,
-                            borderRadius: BorderRadius.circular(15.0)),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "All Mails",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 26.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            "You have got ${unReadMails.length} unread mails",
+                            style: TextStyle(
+                                color: Colors.blue[50], fontSize: 14.0),
+                          )
+                        ],
                       ),
-                      Positioned(
-                        bottom: 10.0,
-                        child: Container(
-                          height: 70.0,
-                          width: 330.0,
-                          decoration: BoxDecoration(
-                              color: Colors.white70,
-                              borderRadius: BorderRadius.circular(15.0)),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 20.0,
-                        child: InkWell(
-                          onTap: () {
-                            openBottomSheet();
-                          },
-                          child: MailItem(),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          openNewMailBottomSheet();
+                        },
+                        child: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.add),
                         ),
                       )
                     ],
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30.0),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    "RECENTS",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0),
                   ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Text(
-                    "(634 mails)",
-                    style: TextStyle(
-                      color: Colors.grey,
+                ),
+                SizedBox(
+                  height: 70.0,
+                ),
+                Stack(
+                  alignment: Alignment.center,
+                  overflow: Overflow.visible,
+                  children: <Widget>[
+                    Container(
+                      height: 70.0,
+                      width: 300.0,
+                      decoration: BoxDecoration(
+                          color: Colors.blue,
+                          // color: Theme.of(context).primaryColor,
+                          borderRadius: BorderRadius.circular(15.0)),
                     ),
+                    Positioned(
+                      bottom: 10.0,
+                      child: Container(
+                        height: 70.0,
+                        width: 330.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white70,
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 20.0,
+                      child: InkWell(
+                        onTap: () {
+                          openBottomSheet();
+                        },
+                        child: unReadMails.isEmpty
+                            ? Text('No new E-mails')
+                            : MailItem(
+                                unReadMails[0],
+                                _dropdownItems.firstWhere(
+                                  (groupMember) =>
+                                      groupMember.id == unReadMails[0].sentFrom,
+                                )),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 30.0,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 30.0),
+            child: Row(
+              children: <Widget>[
+                Text(
+                  "RECENTS",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0),
+                ),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Text(
+                  "($mailsAmount)",
+                  style: TextStyle(
+                    color: Colors.grey,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 20.0,
-            ),
-            Container(
-              height: 500,
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection('users/$userId/mails')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      return MailItem();
-                    },
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          Container(
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('users/$userId/mails')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
                   );
-                },
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                openBottomSheet();
+                }
+                final documents = snapshot.data.documents;
+
+                Mail mail;
+                return documents.length == 0
+                    ? Center(child: Text('no mails'))
+                    : ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: documents.length,
+                        itemBuilder: (context, index) {
+                          mail = Mail(
+                            sentFrom: documents[index].get('sentFrom'),
+                            sentTo: documents[index].get('sentTo'),
+                            content: documents[index].get('content'),
+                            title: documents[index].get('title'),
+                            isRead: documents[index].get('isRead'),
+                          );
+
+                          // print(mail.toJson());
+                          if (_dropdownItems
+                                  .where((groupMember) =>
+                                      groupMember.id == mail.sentFrom)
+                                  .toList()
+                                  .length ==
+                              0) {
+                            return Center(
+                              child: Text('no mails'),
+                            );
+                          }
+                          if (_dropdownItems[index].id == mail.sentFrom) {
+                            if (mail.isRead == false) {
+                              unReadMails.add(mail);
+                            }
+                            mailsAmount++;
+                            return MailItem(
+                              mail,
+                              _dropdownItems[index],
+                            );
+                          } else {
+                            return null;
+                          }
+                        },
+                      );
               },
-              child: MailItem(),
             ),
-            SizedBox(
-              height: 10.0,
-            ),
-            SizedBox(
-              height: 100.0,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -493,6 +528,9 @@ class _MailBoxState extends State<MailBox> {
                               );
                               await FirebaseFirestore.instance
                                   .collection('users/$userId/mails')
+                                  .add(mail.toJson());
+                              await FirebaseFirestore.instance
+                                  .collection('users/${mail.sentTo}/mails')
                                   .add(mail.toJson());
                               Navigator.of(context).pop();
                             },
