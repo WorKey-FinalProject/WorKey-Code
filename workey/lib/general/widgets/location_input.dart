@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/models/company_group_model.dart';
+import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/screens/map_screen.dart';
 import 'package:workey/helpers/location_helper.dart';
 
@@ -12,6 +16,7 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
+  WorkGroupModel _companyGroupModel;
   String _previewImageUrl;
   var _isLoading = false;
 
@@ -34,7 +39,7 @@ class _LocationInputState extends State<LocationInput> {
     // setState(() {
     //   _isLoading = true;
     // });
-    // final locData = await Location().getLocation();
+    // final locData = _companyGroupModel.location;
     // final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
     //   latitude: locData.latitude,
     //   longitude: locData.longitude,
@@ -61,13 +66,15 @@ class _LocationInputState extends State<LocationInput> {
 
   @override
   void initState() {
-    // _getWorkGroupLocation();
-    _getCurrentUserLocation();
+    _getWorkGroupLocation();
+    // _getCurrentUserLocation();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    _companyGroupModel =
+        Provider.of<CompanyGroups>(context, listen: false).getCurrentWorkGroup;
     return Stack(
       children: <Widget>[
         Container(
@@ -140,7 +147,7 @@ class _LocationInputState extends State<LocationInput> {
                     ),
                     label: Text('Work Location'),
                     textColor: Theme.of(context).primaryColor,
-                    onPressed: _getCurrentUserLocation,
+                    onPressed: _getWorkGroupLocation,
                   ),
                 ),
               ),
