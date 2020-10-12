@@ -82,7 +82,9 @@ class _IconsGridViewState extends State<IconsGridView> {
 
       case ButtonType.location:
         {
+
           showModalBottomSheet(
+
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(36.0)),

@@ -39,9 +39,11 @@ class _MapScreenState extends State<MapScreen> {
           if (widget.isSelecting)
             IconButton(
               icon: Icon(Icons.check),
+
               onPressed: () async {
                 // await companyGroupsProvider
                 //     .setLocationToWorkGroup(_pickedLocation);
+
                 Navigator.of(context).pop();
               },
             ),
