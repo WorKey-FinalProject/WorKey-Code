@@ -25,6 +25,7 @@ class ShiftModel {
 
   Map<String, Object> toJson() {
     return {
+      'hourlyWage': this.hourlyWage.toString(),
       'startTime': this.startTime.toString(),
       'endTime': this.endTime.toString(),
     };
@@ -32,6 +33,7 @@ class ShiftModel {
 
   void fromJsonToObject(Map snapshot, String uid) {
     id = uid;
+    hourlyWage = double.parse(snapshot['hourlyWage']);
     startTime = DateTime.parse(snapshot['startTime']);
     endTime = DateTime.parse(snapshot['endTime']);
   }

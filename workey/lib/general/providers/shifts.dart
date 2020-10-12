@@ -40,25 +40,28 @@ class Shifts with ChangeNotifier {
           .once()
           .then((DataSnapshot dataSnapshot) {
         Map<dynamic, dynamic> map = dataSnapshot.value;
-        map.forEach((key, value) {
-          Map<dynamic, dynamic> map2 = value;
-          map2.forEach((key2, value2) {
-            ShiftModel shiftModel = ShiftModel(startTime: null, endTime: null);
-            shiftModel.fromJsonToObject(value2, key2);
-            shiftModel.companyId = _userId;
-            shiftModel.employeeId = key;
-            shiftModel.totalHours = (shiftModel.endTime
-                    .difference(shiftModel.startTime)
-                    .inSeconds
-                    .toDouble()) /
-                3600;
-            shiftSummary(shiftModel);
-            _shiftList.add(shiftModel);
+        if (map != null) {
+          map.forEach((key, value) {
+            Map<dynamic, dynamic> map2 = value;
+            map2.forEach((key2, value2) {
+              ShiftModel shiftModel =
+                  ShiftModel(startTime: null, endTime: null);
+              shiftModel.fromJsonToObject(value2, key2);
+              shiftModel.companyId = _userId;
+              shiftModel.employeeId = key;
+              shiftModel.totalHours = (shiftModel.endTime
+                      .difference(shiftModel.startTime)
+                      .inSeconds
+                      .toDouble()) /
+                  3600;
+              shiftSummary(shiftModel);
+              _shiftList.add(shiftModel);
+            });
           });
-        });
+        }
       });
     } catch (err) {
-      print('Error in fetchAndSetToListForCompany() of shifts');
+      throw 'Error in fetchAndSetToListForCompany() of shifts';
     }
   }
 
@@ -176,6 +179,4 @@ class Shifts with ChangeNotifier {
       throw 'Error in _fetchShiftCompanyId function of Shifts';
     }
   }
-
-  //Future<ShiftModel> getSummeryForMonth()
 }
