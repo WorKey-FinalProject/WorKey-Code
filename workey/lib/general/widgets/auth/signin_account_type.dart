@@ -42,7 +42,6 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
 
             await _companyGroupsProvider.fetchAndSetToLists(true);
             await _feedProvider.fetchAndSetToList(_auth.user.uid);
-
           } else if (accountTypeChosen == AccountTypeChosen.personal) {
             final personalAccountModel =
                 _auth.getDynamicUser as PersonalAccountModel;
@@ -50,7 +49,6 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
                 .fetchAndSetToList(personalAccountModel.companyId);
             await _shiftsProvider
                 .fetchAndSetToListForPersonal(personalAccountModel.companyId);
-            await _feedProvider.fetchAndSetToList(userCompanyId);
           }
           setState(() {
             _isLoading = false;
