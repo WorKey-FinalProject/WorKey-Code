@@ -191,7 +191,7 @@ class Auth with ChangeNotifier {
         .then(
       (authResult) async {
         user = authResult.user;
-        _saveDeviceToken();
+        _saveDeviceToken(user);
       },
     );
   }
@@ -281,7 +281,6 @@ class Auth with ChangeNotifier {
       String imagePathFolder;
       if (accountType == AccountTypeChosen.company) {
         type = 'Company Accounts';
-
         imagePathFolder = companyAccountImagePath;
         await user.updateEmail(userNewData.companyEmail);
       } else if (accountType == AccountTypeChosen.personal) {
@@ -343,17 +342,17 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future<void> _saveDeviceToken() async {
-    // Get the token for this device
+  Future<void> _saveDeviceToken(User user) async {
     String fcmToken = await _fcm.getToken();
     String path;
-
-    if (accountType == AccountTypeChosen.company) {
+    final accType = await findCurrAccountType(user);
+    if (accType == AccountTypeChosen.company) {
       path = 'Company Accounts';
-    } else if (accountType == AccountTypeChosen.personal) {
+    } else if (accType == AccountTypeChosen.personal) {
       path = 'Personal Accounts';
     }
-    // Save it to Firestore
+    print(accType);
+    print(user.uid);
     try {
       if (fcmToken != null) {
         await dbRef
