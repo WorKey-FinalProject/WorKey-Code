@@ -191,7 +191,7 @@ class Auth with ChangeNotifier {
         .then(
       (authResult) async {
         user = authResult.user;
-        await _saveDeviceToken();
+        _saveDeviceToken();
       },
     );
   }
@@ -347,6 +347,7 @@ class Auth with ChangeNotifier {
     // Get the token for this device
     String fcmToken = await _fcm.getToken();
     String path;
+
     if (accountType == AccountTypeChosen.company) {
       path = 'Company Accounts';
     } else if (accountType == AccountTypeChosen.personal) {
