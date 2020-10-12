@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/work_group_model.dart';
+import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/widgets/profile_picture.dart';
@@ -12,12 +12,37 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  TextEditingController groupNewNameController;
+  String groupNewName;
 
-  @override
-  void dispose() {
-    groupNewNameController.dispose();
-    super.dispose();
+  Widget textView(
+    String title,
+    List<GroupEmployeeModel> employeesList,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
+        height: 50,
+        width: MediaQuery.of(context).size.width * 0.8,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(17.0),
+          color: Colors.grey.withOpacity(0.1),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            title == 'Number Of Employees'
+                ? Text('${employeesList.length}')
+                : Text('no data')
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -26,119 +51,86 @@ class _SettingsViewState extends State<SettingsView> {
     final workGroupsProvider = Provider.of<CompanyGroups>(context);
 
     final employeesList = workGroupsProvider.getEmployeeList;
-    Widget textView(
-      String title,
-    ) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
-          height: 50,
-          width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(17.0),
-            color: Colors.grey.withOpacity(0.1),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              title == 'Number Of Employees'
-                  ? Text('${employeesList.length}')
-                  : Text('no data')
-            ],
-          ),
-        ),
-      );
-    }
 
-    return Column(
+    return ListView(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
       children: <Widget>[
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Expanded(
-              child: new Container(
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              margin: const EdgeInsets.only(left: 10.0, right: 20.0),
+              child: Divider(
+                color: Colors.black,
+                height: 36,
+              ),
+            ),
+            Text("Group\'s Info"),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.3,
+              margin: const EdgeInsets.only(left: 20.0, right: 10.0),
+              child: Divider(
+                color: Colors.black,
+                height: 36,
+              ),
+            ),
+          ],
+        ),
+        if (workGroupsProvider.getCurrentWorkGroup != null)
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ProfilePicture(
+                size: 100,
+                isEditable: true,
+                imageUrl: workGroupsProvider.getCurrentWorkGroup.logo,
+              ),
+              textEditaleView(
+                workGroupsProvider.getCurrentWorkGroup == null
+                    ? companyAccount.companyName
+                    : workGroupsProvider.getCurrentWorkGroup.workGroupName,
+                groupNewName,
+              ),
+            ],
+          ),
+        textView('Number Of Employees', employeesList),
+        if (workGroupsProvider.getCurrentWorkGroup != null)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 0.3,
                 margin: const EdgeInsets.only(left: 10.0, right: 20.0),
                 child: Divider(
                   color: Colors.black,
                   height: 36,
                 ),
               ),
-            ),
-            Text("Group\'s Info"),
-            Expanded(
-              child: new Container(
+              Text("Icons"),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.3,
                 margin: const EdgeInsets.only(left: 20.0, right: 10.0),
                 child: Divider(
                   color: Colors.black,
                   height: 36,
                 ),
               ),
-            ),
-          ],
-        ),
-        workGroupsProvider.getCurrentWorkGroup != null
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  ProfilePicture(
-                    size: 80,
-                    isEditable: true,
-                    imageUrl: workGroupsProvider.getCurrentWorkGroup.imageFile
-                        .toString(),
-                  ),
-                  textEditaleView(
-                      workGroupsProvider.getCurrentWorkGroup == null
-                          ? companyAccount.companyName
-                          : workGroupsProvider
-                              .getCurrentWorkGroup.workGroupName,
-                      groupNewNameController),
-                ],
-              )
-            : Container(),
-        textView('Number Of Employees'),
-        workGroupsProvider.getCurrentWorkGroup == null
-            ? Container()
-            : Row(
-                children: <Widget>[
-                  Expanded(
-                    child: new Container(
-                      margin: const EdgeInsets.only(left: 10.0, right: 20.0),
-                      child: Divider(
-                        color: Colors.black,
-                        height: 36,
-                      ),
-                    ),
-                  ),
-                  Text("Icons"),
-                  Expanded(
-                    child: new Container(
-                      margin: const EdgeInsets.only(left: 20.0, right: 10.0),
-                      child: Divider(
-                        color: Colors.black,
-                        height: 36,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-        workGroupsProvider.getCurrentWorkGroup == null
-            ? Container()
-            : Expanded(
-                child: IconsGridView(),
-              ),
+            ],
+          ),
+        if (workGroupsProvider.getCurrentWorkGroup != null) IconsGridView(),
       ],
     );
   }
 
   Widget textEditaleView(
     String title,
-    TextEditingController controller,
+    String groupNewName,
   ) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -151,10 +143,9 @@ class _SettingsViewState extends State<SettingsView> {
           color: Colors.grey.withOpacity(0.2),
         ),
         child: TextFormField(
-          controller: controller,
           onSaved: (value) {
             setState(() {
-              controller.text = value;
+              groupNewName = value;
             });
           },
           decoration: InputDecoration(

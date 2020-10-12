@@ -187,6 +187,11 @@ class _IconsGridViewState extends State<IconsGridView> {
     ];
 
     return GridView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      physics: accountTypeChosen == AccountTypeChosen.company
+          ? NeverScrollableScrollPhysics()
+          : null,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
       ),
