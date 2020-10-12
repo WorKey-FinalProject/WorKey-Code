@@ -14,9 +14,9 @@ The application is built for two Sides:
 
 Company side - the App helps the company to manage their employees with features such as:
 
-* Employee payroll management - incomplete.
+* Employees payroll management - incomplete.
 
-* Employee shift management - incomplete.
+* Employees shift management - incomplete.
 
 * Show general messages to all employees ("feeds").
 
@@ -35,21 +35,21 @@ Company side - the App helps the company to manage their employees with features
 
 employee side - The app helps the employee to manage himself in working with features such as:
 
-* Wage management at work - incomplete.
+* Get wage details at work - incomplete.
 
-* Managing shifts at work.
+* Get shifts details at work.
 
-* Entry to the shift using the app - incomplete.
+* Entry the shift using the app - incomplete.
 
-* get messages from employer ("feeds").
+* Get messages from employer ("feeds").
 
-* get Weekly shifts schedule from employer - incomplete.
+* Get Weekly shifts schedule from employer - incomplete.
 
 * Send/get messages in mail box with employer - incomplete.
 
 * Get self location - incomplete
 
-* get Tasks/notes to employees - incomplete.
+* Get tasks/notes to employees - incomplete.
 
 * Link to the group in WhatsApp.
 
