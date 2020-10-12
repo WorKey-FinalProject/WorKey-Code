@@ -9,6 +9,7 @@ class CompanyAccountModel {
   String companyLogo;
   String owenrFirstName;
   String owenrLastName;
+  String token;
   String dateOfCreation;
 
   File imageFile;
@@ -21,6 +22,7 @@ class CompanyAccountModel {
     @required this.owenrFirstName,
     @required this.owenrLastName,
     @required this.dateOfCreation,
+    @required this.token,
   });
 
   void setImageFile(File file) {
@@ -39,6 +41,7 @@ class CompanyAccountModel {
       'owenrFirstName': this.owenrFirstName,
       'owenrLastName': this.owenrLastName,
       'dateOfCreation': this.dateOfCreation,
+      'token': this.token,
     };
   }
 
@@ -50,6 +53,7 @@ class CompanyAccountModel {
     owenrLastName = snapshot['owenrLastName'];
     dateOfCreation = snapshot['dateOfCreation'];
     companyLogo = snapshot['companyLogo'] ?? '';
+    token = snapshot['token'];
   }
 
   void updateUser(CompanyAccountModel companyAccountModel) {

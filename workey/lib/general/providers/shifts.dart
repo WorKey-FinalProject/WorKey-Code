@@ -58,7 +58,7 @@ class Shifts with ChangeNotifier {
         });
       });
     } catch (err) {
-      throw 'Error in fetchAndSetToListForCompany() of shifts';
+      print('Error in fetchAndSetToListForCompany() of shifts');
     }
   }
 

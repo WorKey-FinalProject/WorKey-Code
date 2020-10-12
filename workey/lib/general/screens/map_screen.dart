@@ -39,6 +39,7 @@ class _MapScreenState extends State<MapScreen> {
         actions: [
           if (widget.isSelecting)
 
+
             _isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -58,6 +59,7 @@ class _MapScreenState extends State<MapScreen> {
                       });
                     },
                   ),
+
 
         ],
       ),
