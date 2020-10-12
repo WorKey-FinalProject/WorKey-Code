@@ -3,16 +3,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
-import 'package:workey/helpers/location_helper.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
 
 class MapScreen extends StatefulWidget {
   final LatLng initialLocation;
-  final bool isSelecting;
 
   MapScreen({
     this.initialLocation,
-    this.isSelecting = false,
   });
   @override
   _MapScreenState createState() => _MapScreenState();
@@ -21,12 +20,16 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   var _isLoadingSave = false;
   var _isLoadingLocation = false;
+  var _isLocationSelected = false;
+
+  AccountTypeChosen _accountTypeChosen;
 
   LatLng _pickedLocation;
   LatLng _initialLocation;
 
   void _selectLocation(LatLng position) {
     setState(() {
+      _isLocationSelected = true;
       _pickedLocation = position;
     });
   }
@@ -50,6 +53,9 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _auth = Provider.of<Auth>(context, listen: false);
+    _accountTypeChosen = _auth.accountType;
+
     if (widget.initialLocation != null) {
       _initialLocation = widget.initialLocation;
     }
@@ -60,7 +66,7 @@ class _MapScreenState extends State<MapScreen> {
       appBar: AppBar(
         title: Text('Map'),
         actions: [
-          if (widget.isSelecting)
+          if (_isLocationSelected)
             _isLoadingSave
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -103,9 +109,18 @@ class _MapScreenState extends State<MapScreen> {
                 target: _initialLocation,
                 zoom: 16,
               ),
-              onTap: widget.isSelecting ? _selectLocation : null,
+              onTap: _accountTypeChosen == AccountTypeChosen.company
+                  ? _selectLocation
+                  : null,
               markers: _pickedLocation == null
-                  ? null
+                  ? widget.initialLocation == null
+                      ? null
+                      : {
+                          Marker(
+                            markerId: MarkerId('work'),
+                            position: widget.initialLocation,
+                          ),
+                        }
                   : {
                       Marker(
                         markerId: MarkerId('work'),

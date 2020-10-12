@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:location/location.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/company_group_model.dart';
-import 'package:workey/general/models/work_group_model.dart';
-import 'package:workey/general/providers/company_groups.dart';
-import 'package:workey/general/screens/map_screen.dart';
-import 'package:workey/helpers/location_helper.dart';
 
+import '../../general/models/work_group_model.dart';
+import '../../general/providers/company_groups.dart';
+import '../../general/screens/map_screen.dart';
 import '../../helpers/location_helper.dart';
 
 class LocationInput extends StatefulWidget {
@@ -16,9 +14,10 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  WorkGroupModel _companyGroupModel;
+  WorkGroupModel _workGroupModel;
   String _previewImageUrl;
   var _isLoading = false;
+  var _loadOnce = false;
 
   Future<void> _getCurrentUserLocation() async {
     setState(() {
@@ -39,7 +38,7 @@ class _LocationInputState extends State<LocationInput> {
     setState(() {
       _isLoading = true;
     });
-    final locData = _companyGroupModel.location;
+    final locData = _workGroupModel.location;
     final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
       latitude: locData.latitude,
       longitude: locData.longitude,
@@ -54,7 +53,7 @@ class _LocationInputState extends State<LocationInput> {
     final selectedLocation = await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MapScreen(
-          isSelecting: true,
+          initialLocation: _workGroupModel.location,
         ),
       ),
     );
@@ -64,17 +63,25 @@ class _LocationInputState extends State<LocationInput> {
     // ...
   }
 
-  @override
-  void initState() {
-    _getWorkGroupLocation();
-    // _getCurrentUserLocation();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // _getCurrentUserLocation();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    _companyGroupModel =
-        Provider.of<CompanyGroups>(context, listen: false).getCurrentWorkGroup;
+    _workGroupModel = Provider.of<CompanyGroups>(context).getCurrentWorkGroup;
+    if (!_loadOnce) {
+      if (_workGroupModel != null) {
+        _getWorkGroupLocation();
+      } else {
+        Fluttertoast.showToast(msg: 'No location defined for workgroup');
+        _getCurrentUserLocation();
+      }
+      _loadOnce = true;
+    }
+
     return Stack(
       children: <Widget>[
         Container(

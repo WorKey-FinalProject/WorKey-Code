@@ -35,7 +35,7 @@ class _GroupsScreenState extends State<GroupsScreen> {
   @override
   void initState() {
     final fbm = FirebaseMessaging();
-    fbm.requestNotificationPermissions();
+    ;
     fbm.configure(
       onMessage: (message) {
         print(message);
