@@ -241,6 +241,7 @@ class _WeeklyShiftsScreenState extends State<WeeklyShiftsScreen> {
                             Container(
                               padding: EdgeInsets.all(20.0),
                               child: DropdownButton<GroupEmployeeModel>(
+                                  isExpanded: true,
                                   value: _selectedEmployee,
                                   items: _dropdownMenuItems,
                                   onChanged: (value) {
