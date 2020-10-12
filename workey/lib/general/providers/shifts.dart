@@ -177,40 +177,5 @@ class Shifts with ChangeNotifier {
     }
   }
 
-  /*
-  Future<void> updateInFirebaseAndList(ShiftModel shiftModel, String companyId) async {
-    try {
-      await _dbRef
-          .child('Company Groups')
-          .child(companyId)
-          .child('shiftList')
-          .child(_userId)
-          .child(shiftModel.id)
-          .update(shiftModel.toJson());
-      _shiftList[_shiftList.indexWhere((shift) => shift.id == shiftModel.id)] =
-          shiftModel;
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-  */
-
-  /*
-  Future<void> deleteShiftById(String shiftId) async {
-    try {
-      await _dbRef
-          .child("Shifts")
-          .child(_userId)
-          .child('shiftList')
-          .child(shiftId)
-          .remove();
-      _shiftList.removeWhere((shift) => shift.id == shiftId);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
-  }
-  */
-
+  //Future<ShiftModel> getSummeryForMonth()
 }
