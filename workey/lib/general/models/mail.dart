@@ -3,14 +3,14 @@ class Mail {
   String sentTo; // ID
   String title;
   String content;
-  var isRead = false;
+  bool isRead;
 
   Mail({
     this.sentFrom,
     this.sentTo,
     this.title,
     this.content,
-    this.isRead,
+    this.isRead = false,
   });
 
   set setReadStatus(bool isRead) {

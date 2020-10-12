@@ -85,15 +85,29 @@ class _MailBoxState extends State<MailBox> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(
-                    left: 30.0,
-                    right: 30.0,
-                    top: 70.0,
+                    left: 10.0,
+                    right: 10.0,
+                    top: 50.0,
                   ),
                   child: Row(
                     children: <Widget>[
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          Row(
+                            children: [
+                              IconButton(
+                                padding: EdgeInsets.only(bottom: 20),
+                                icon: Icon(
+                                  Icons.arrow_back_ios_outlined,
+                                  color: Colors.white,
+                                ),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          ),
                           Text(
                             "All Mails",
                             style: TextStyle(
