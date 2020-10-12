@@ -83,25 +83,42 @@ class _IconsGridViewState extends State<IconsGridView> {
       case ButtonType.location:
         {
 
+          var _isExpanded = false;
+          var _height = MediaQuery.of(context).size.height * 0.4;
+
           showModalBottomSheet(
 
             elevation: 5,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(36.0)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
             ),
             context: context,
             builder: (_) {
               return StatefulBuilder(
                 builder: (context, setLocationModalState) {
-                  return Container(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(36),
-                        topRight: Radius.circular(36),
+                  return GestureDetector(
+                    onTap: () {
+                      setLocationModalState(() {
+                        _isExpanded = !_isExpanded;
+                        if (_isExpanded) {
+                          _height = MediaQuery.of(context).size.height;
+                        } else {
+                          _height = MediaQuery.of(context).size.height * 0.4;
+                        }
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 600),
+                      curve: Curves.fastOutSlowIn,
+                      height: _height,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16.0),
+                          topRight: Radius.circular(16.0),
+                        ),
                       ),
+                      child: LocationInput(),
                     ),
-                    child: LocationInput(),
                   );
                 },
               );

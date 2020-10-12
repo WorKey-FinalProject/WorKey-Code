@@ -80,8 +80,8 @@ class _LocationInputState extends State<LocationInput> {
               // color: Colors.white,
             ),
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(36),
-              topRight: Radius.circular(36),
+              topLeft: Radius.circular(16.0),
+              topRight: Radius.circular(16.0),
             ),
           ),
           child: _isLoading
