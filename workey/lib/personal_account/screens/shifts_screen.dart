@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/models/group_employee_model.dart';
 
 import 'package:workey/general/models/shift_model.dart';
+import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/shifts.dart';
+import 'package:workey/general/widgets/auth/signup_type.dart';
 
 class ShiftsScreen extends StatefulWidget {
+  final GroupEmployeeModel pickedEmployee;
+
+  ShiftsScreen(this.pickedEmployee);
+
   final String name = 'Shifts';
 
   String get getName {
@@ -65,9 +72,15 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final companyGroupsProvider = Provider.of<Shifts>(context, listen: false);
+    final _companyGroupsProvider = Provider.of<Shifts>(context, listen: false);
 
-    shiftsList = companyGroupsProvider.getShiftList;
+    if (widget.pickedEmployee == null) {
+      shiftsList = _companyGroupsProvider.getShiftList;
+    } else {
+      shiftsList = _companyGroupsProvider.getShiftList
+          .where((shift) => shift.employeeId == widget.pickedEmployee.id)
+          .toList();
+    }
 
     shiftsList.forEach((element) {
       print(element.toJson());
