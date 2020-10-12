@@ -36,18 +36,18 @@ class _LocationInputState extends State<LocationInput> {
   }
 
   Future<void> _getWorkGroupLocation() async {
-    // setState(() {
-    //   _isLoading = true;
-    // });
-    // final locData = _companyGroupModel.location;
-    // final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
-    //   latitude: locData.latitude,
-    //   longitude: locData.longitude,
-    // );
-    // setState(() {
-    //   _previewImageUrl = staticMapImageUrl;
-    //   _isLoading = false;
-    // });
+    setState(() {
+      _isLoading = true;
+    });
+    final locData = _companyGroupModel.location;
+    final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
+      latitude: locData.latitude,
+      longitude: locData.longitude,
+    );
+    setState(() {
+      _previewImageUrl = staticMapImageUrl;
+      _isLoading = false;
+    });
   }
 
   Future<void> _selectOnMap() async {
