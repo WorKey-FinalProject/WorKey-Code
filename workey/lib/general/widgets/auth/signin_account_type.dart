@@ -53,6 +53,7 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
                 .fetchAndSetToListForPersonal(personalAccountModel.companyId);
             await _feedProvider.fetchAndSetToList(userCompanyId);
           }
+
           setState(() {
             _isLoading = false;
           });
