@@ -39,7 +39,6 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
           await _auth.getCurrUserData();
           if (accountTypeChosen == AccountTypeChosen.company) {
             await _shiftsProvider.fetchAndSetToListForCompany();
-
             await _companyGroupsProvider.fetchAndSetToLists(true);
             await _feedProvider.fetchAndSetToList(_auth.user.uid);
           } else if (accountTypeChosen == AccountTypeChosen.personal) {
