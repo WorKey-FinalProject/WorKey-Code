@@ -202,7 +202,6 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> fetchAndSetToLists(bool isCompany) async {
-    await setLocationToWorkGroup(123123, 12441);
     if (isCompany) {
       await _fetchAndSetToListsForCompany();
     } else {
