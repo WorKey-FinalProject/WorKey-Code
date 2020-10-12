@@ -23,12 +23,12 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentEmployee = Provider.of<CompanyGroups>(context)
+    final currentEmployee = Provider.of<CompanyGroups>(context, listen: false)
         .findEmployeeById(widget.employeesId);
 
     final List _tabs = [
       EmployeesInfoView(currentEmployee),
-      ShiftsScreen(),
+      ShiftsScreen(currentEmployee),
     ];
 
     return DefaultTabController(
@@ -47,12 +47,13 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
                   flexibleSpace: FlexibleSpaceBar(
                     centerTitle: true,
                     background: currentEmployee.picture.isEmpty
-                        ? Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/no_image_available.png',
-                                ),
+                        ? Center(
+                            child: Text(
+                              '${currentEmployee.firstName} ${currentEmployee.lastName}',
+                              style: TextStyle(
+                                color: Theme.of(context).accentColor,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           )
@@ -117,7 +118,7 @@ class _EmployeeDetailScreenState extends State<EmployeeDetailScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 130.0),
-                child: ShiftsScreen(),
+                child: ShiftsScreen(currentEmployee),
               ),
             ],
           ),
