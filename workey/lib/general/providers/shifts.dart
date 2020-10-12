@@ -110,32 +110,42 @@ class Shifts with ChangeNotifier {
       totalHours: seconds / 3600,
     );
     if (_shiftList.isEmpty) {
-      await fetchShiftCompanyIdAndEmployeeId(shiftModel);
+      await fetchShiftCompanyIdAndEmployeeId(shiftModel).then((_) {});
     } else {
       shiftModel.companyId = _shiftList[0].companyId;
       shiftModel.employeeId = _shiftList[0].employeeId;
     }
-    shiftSummary(shiftModel);
     return shiftModel;
   }
 
   Future<void> addShiftToFirebaseAndList(
       DateTime start, DateTime end, int seconds) async {
-    ShiftModel shift = await _buildShiftObject(start, end, seconds);
-    try {
-      var db = _dbRef
-          .child('Company Groups')
-          .child(shift.companyId)
-          .child('shiftList')
-          .child(_userId);
-      String newKey = db.push().key;
-      await db.child(newKey).set(shift.toJson());
-      shift.id = newKey;
-      _shiftList.add(shift);
-      notifyListeners();
-    } on Exception {
-      throw ErrorHint;
-    }
+    await _buildShiftObject(start, end, seconds).then((shiftModel) async {
+      try {
+        _dbRef
+            .child('Company Groups')
+            .child(shiftModel.companyId)
+            .child('employeeList')
+            .child(shiftModel.employeeId)
+            .once()
+            .then((DataSnapshot dataSnapshot) {
+          shiftModel.hourlyWage = double.parse(dataSnapshot.value['salary']);
+          shiftModel.totalWage = shiftModel.totalHours * shiftModel.hourlyWage;
+          var db = _dbRef
+              .child('Company Groups')
+              .child(shiftModel.companyId)
+              .child('shiftList')
+              .child(_userId);
+          String newKey = db.push().key;
+          db.child(newKey).set(shiftModel.toJson());
+          shiftModel.id = newKey;
+          _shiftList.add(shiftModel);
+          notifyListeners();
+        });
+      } on Exception {
+        throw 'Error in _getHourlyWage(String id)';
+      }
+    });
   }
 
   Future<void> shiftSummary(ShiftModel shiftModel) async {
@@ -165,12 +175,12 @@ class Shifts with ChangeNotifier {
           .once()
           .then((DataSnapshot dataSnapshot) {
         PersonalAccountModel p = PersonalAccountModel(
-
-            email: null,
-            firstName: null,
-            lastName: null,
-            dateOfCreation: null,
-            token: '',);
+          email: null,
+          firstName: null,
+          lastName: null,
+          dateOfCreation: null,
+          token: '',
+        );
 
         p.fromJsonToObject(dataSnapshot.value, _userId);
         shiftModel.companyId = p.companyId;

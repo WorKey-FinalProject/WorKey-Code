@@ -350,8 +350,6 @@ class Auth with ChangeNotifier {
     } else if (accType == AccountTypeChosen.personal) {
       path = 'Personal Accounts';
     }
-    print(accType);
-    print(user.uid);
     try {
       if (fcmToken != null) {
         await dbRef
