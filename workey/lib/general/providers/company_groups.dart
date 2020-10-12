@@ -272,6 +272,7 @@ class CompanyGroups with ChangeNotifier {
         firstName: null,
         lastName: null,
         dateOfCreation: null,
+        token: '',
       );
       p.fromJsonToObject(dataSnapshot.value, groupEmployeeModel.id);
       groupEmployeeModel.address = p.address;
@@ -299,6 +300,7 @@ class CompanyGroups with ChangeNotifier {
               firstName: null,
               lastName: null,
               dateOfCreation: null,
+              token: '',
             );
             p.fromJsonToObject(map[employee.id], employee.id);
             employee.firstName = p.firstName;
@@ -468,6 +470,7 @@ class CompanyGroups with ChangeNotifier {
           firstName: null,
           lastName: null,
           dateOfCreation: null,
+          token: '',
         );
         personalAccountModel.fromJsonToObject(
             dataSnapshot.value, dataSnapshot.key);
@@ -510,6 +513,7 @@ class CompanyGroups with ChangeNotifier {
           .once()
           .then((DataSnapshot dataSnapshot) {
         CompanyAccountModel companyAccountModel = CompanyAccountModel(
+            token: '',
             companyEmail: null,
             companyName: null,
             owenrFirstName: null,
@@ -574,6 +578,7 @@ class CompanyGroups with ChangeNotifier {
         Map<dynamic, dynamic> map = dataSnapshot.value;
         map.forEach((key, value) {
           PersonalAccountModel p = PersonalAccountModel(
+              token: '',
               email: null,
               firstName: null,
               lastName: null,
