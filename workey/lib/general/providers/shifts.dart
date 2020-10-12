@@ -27,6 +27,41 @@ class Shifts with ChangeNotifier {
     _shiftList = [];
   }
 
+  Future<void> fetchAndSetToListForCompany() async {
+    User user = FirebaseAuth.instance.currentUser;
+    _userId = user.uid;
+    clearList();
+    try {
+      await _dbRef
+          .child('Company Groups')
+          .child(_userId)
+          .child('shiftList')
+          .orderByKey()
+          .once()
+          .then((DataSnapshot dataSnapshot) {
+        Map<dynamic, dynamic> map = dataSnapshot.value;
+        map.forEach((key, value) {
+          Map<dynamic, dynamic> map2 = value;
+          map2.forEach((key2, value2) {
+            ShiftModel shiftModel = ShiftModel(startTime: null, endTime: null);
+            shiftModel.fromJsonToObject(value2, key2);
+            shiftModel.companyId = _userId;
+            shiftModel.employeeId = key;
+            shiftModel.totalHours = (shiftModel.endTime
+                    .difference(shiftModel.startTime)
+                    .inSeconds
+                    .toDouble()) /
+                3600;
+            shiftSummary(shiftModel);
+            _shiftList.add(shiftModel);
+          });
+        });
+      });
+    } catch (err) {
+      throw 'Error in fetchAndSetToListForCompany() of shifts';
+    }
+  }
+
   Future<void> fetchAndSetToListForPersonal(String companyId) async {
     User user = FirebaseAuth.instance.currentUser;
     _userId = user.uid;

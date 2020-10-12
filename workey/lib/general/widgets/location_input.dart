@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:workey/general/screens/map_screen.dart';
 import 'package:workey/helpers/location_helper.dart';
 
@@ -29,6 +30,21 @@ class _LocationInputState extends State<LocationInput> {
     });
   }
 
+  Future<void> _getWorkGroupLocation() async {
+    // setState(() {
+    //   _isLoading = true;
+    // });
+    // final locData = await Location().getLocation();
+    // final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
+    //   latitude: locData.latitude,
+    //   longitude: locData.longitude,
+    // );
+    // setState(() {
+    //   _previewImageUrl = staticMapImageUrl;
+    //   _isLoading = false;
+    // });
+  }
+
   Future<void> _selectOnMap() async {
     final selectedLocation = await Navigator.of(context).push(
       MaterialPageRoute(
@@ -45,6 +61,7 @@ class _LocationInputState extends State<LocationInput> {
 
   @override
   void initState() {
+    // _getWorkGroupLocation();
     _getCurrentUserLocation();
     super.initState();
   }
@@ -52,7 +69,6 @@ class _LocationInputState extends State<LocationInput> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      //mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
           width: double.infinity,
@@ -61,6 +77,7 @@ class _LocationInputState extends State<LocationInput> {
             border: Border.all(
               width: 1,
               color: Theme.of(context).primaryColor,
+              // color: Colors.white,
             ),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(36),
@@ -103,21 +120,41 @@ class _LocationInputState extends State<LocationInput> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlatButton.icon(
-                icon: Icon(
-                  Icons.location_on,
+              Flexible(
+                child: FittedBox(
+                  child: FlatButton.icon(
+                    icon: Icon(
+                      Icons.location_on,
+                    ),
+                    label: Text('Current Location'),
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: _getCurrentUserLocation,
+                  ),
                 ),
-                label: Text('Current Location'),
-                textColor: Theme.of(context).primaryColor,
-                onPressed: _getCurrentUserLocation,
               ),
-              FlatButton.icon(
-                icon: Icon(
-                  Icons.map,
+              Flexible(
+                child: FittedBox(
+                  child: FlatButton.icon(
+                    icon: Icon(
+                      Icons.work,
+                    ),
+                    label: Text('Work Location'),
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: _getCurrentUserLocation,
+                  ),
                 ),
-                label: Text('Select on Map'),
-                textColor: Theme.of(context).primaryColor,
-                onPressed: _selectOnMap,
+              ),
+              Flexible(
+                child: FittedBox(
+                  child: FlatButton.icon(
+                    icon: Icon(
+                      Icons.map,
+                    ),
+                    label: Text('Select on Map'),
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: _selectOnMap,
+                  ),
+                ),
               ),
             ],
           ),

@@ -42,6 +42,7 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
           if (accountTypeChosen == AccountTypeChosen.company) {
             isCompany = true;
             userCompanyId = _auth.user.uid;
+            await _shiftsProvider.fetchAndSetToListForCompany();
           } else if (accountTypeChosen == AccountTypeChosen.personal) {
             final personalAccountModel =
                 _auth.getDynamicUser as PersonalAccountModel;

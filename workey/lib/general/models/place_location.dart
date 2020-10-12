@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 
 class PlaceLocation {
@@ -12,18 +11,35 @@ class PlaceLocation {
     @required this.longitude,
     this.address,
   });
+
+  Map<String, Object> toJson() {
+    return {
+      'latitude': this.latitude,
+      'longitude': this.longitude,
+      'address': this.address,
+    };
+  }
+
+  PlaceLocation fromJson(Map snapshot) {
+    PlaceLocation p = PlaceLocation(
+      latitude: snapshot['latitude'],
+      longitude: snapshot['longitude'],
+      address: snapshot['address'],
+    );
+    return p;
+  }
 }
 
-class Place {
-  final String id;
-  final String title;
-  final PlaceLocation location;
-  final File image;
+// class Place {
+//   final String id;
+//   final String title;
+//   final PlaceLocation location;
+//   final File image;
 
-  Place({
-    @required this.id,
-    @required this.title,
-    @required this.location,
-    @required this.image,
-  });
-}
+//   Place({
+//     @required this.id,
+//     @required this.title,
+//     @required this.location,
+//     @required this.image,
+//   });
+// }

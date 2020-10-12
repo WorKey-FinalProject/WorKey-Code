@@ -14,6 +14,7 @@ class _GroupsTabBarState extends State<GroupsTabBar> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        extendBody: true,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: Container(

@@ -5,11 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/screens/mail_box.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
 
-
 import 'package:workey/general/widgets/location_input.dart';
-
 
 import 'package:workey/personal_account/screens/members_list_screen.dart';
 import 'package:workey/personal_account/screens/weekly_shifts_screen.dart';
@@ -71,6 +70,12 @@ class _IconsGridViewState extends State<IconsGridView> {
 
       case ButtonType.mailBox:
         {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MailBox(),
+            ),
+          );
           print('Selected mailBox button');
         }
         break;
@@ -78,6 +83,7 @@ class _IconsGridViewState extends State<IconsGridView> {
       case ButtonType.location:
         {
           showBottomSheet(
+            elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(36.0)),
             ),
@@ -188,6 +194,11 @@ class _IconsGridViewState extends State<IconsGridView> {
     ];
 
     return GridView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      physics: accountTypeChosen == AccountTypeChosen.company
+          ? NeverScrollableScrollPhysics()
+          : null,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
       ),

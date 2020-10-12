@@ -105,7 +105,7 @@ class _ProfileFormState extends State<ProfileForm> {
   Future<void> _tryChangePassword() async {
     final isValid = _formKeyForPassword.currentState.validate();
     FocusScope.of(context).unfocus();
-
+    var message = 'Password changed successfully';
     if (isValid) {
       _formKeyForPassword.currentState.save();
       try {
@@ -114,10 +114,11 @@ class _ProfileFormState extends State<ProfileForm> {
           passwordTextController.text.trim(),
         );
       } on PlatformException catch (err) {
-        var message = 'An error occurred';
+        print(err.message.toString());
+        message = 'An error occurred';
 
         if (err.message != null) {
-          message = err.message;
+          message = err.message.toString();
         }
 
         Scaffold.of(context).showSnackBar(
@@ -133,7 +134,7 @@ class _ProfileFormState extends State<ProfileForm> {
         SnackBar(
           duration: Duration(seconds: 2),
           content: Text(
-            'Password changed successfully',
+            message,
             textAlign: TextAlign.center,
           ),
           backgroundColor: Colors.blue,
