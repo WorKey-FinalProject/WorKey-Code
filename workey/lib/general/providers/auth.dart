@@ -153,7 +153,6 @@ class Auth with ChangeNotifier {
         owenrLastName: owenrLastName,
         dateOfCreation: DateTime.now().toString(),
         companyLogo: companyLogo,
-        location: location,
       );
 
       CompanyGroupModel companyGroupModel = CompanyGroupModel(
@@ -252,21 +251,19 @@ class Auth with ChangeNotifier {
   /// updateCurrUserPassword
   Future<void> updateCurrUserPassword(
       String oldPassword, String newPassword) async {
-    print(oldPassword);
-    print(newPassword);
     try {
       AuthCredential authCredential = EmailAuthProvider.credential(
           email: user.email, password: oldPassword);
-      user.reauthenticateWithCredential(authCredential).then((result) async {
+      await user
+          .reauthenticateWithCredential(authCredential)
+          .then((result) async {
         await user.updatePassword(newPassword);
+        print(result);
       }).catchError((error) {
-        print("lol");
         print(error);
-        return error;
       });
     } catch (error) {
-      print("bb");
-      return error;
+      print(error);
     }
   }
 

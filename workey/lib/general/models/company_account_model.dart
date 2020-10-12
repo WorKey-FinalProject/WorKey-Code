@@ -6,7 +6,6 @@ class CompanyAccountModel {
   String id;
   String companyEmail;
   String companyName;
-  String location;
   String companyLogo;
   String owenrFirstName;
   String owenrLastName;
@@ -18,7 +17,6 @@ class CompanyAccountModel {
     this.id,
     @required this.companyEmail,
     @required this.companyName,
-    this.location,
     this.companyLogo,
     @required this.owenrFirstName,
     @required this.owenrLastName,
@@ -37,7 +35,6 @@ class CompanyAccountModel {
     return {
       'companyEmail': this.companyEmail,
       'companyName': this.companyName,
-      'location': this.location,
       'companyLogo': this.companyLogo,
       'owenrFirstName': this.owenrFirstName,
       'owenrLastName': this.owenrLastName,
@@ -52,7 +49,6 @@ class CompanyAccountModel {
     owenrFirstName = snapshot['owenrFirstName'];
     owenrLastName = snapshot['owenrLastName'];
     dateOfCreation = snapshot['dateOfCreation'];
-    location = snapshot['location'] ?? '';
     companyLogo = snapshot['companyLogo'] ?? '';
   }
 
@@ -60,7 +56,6 @@ class CompanyAccountModel {
     this.companyEmail = companyAccountModel.companyEmail;
     this.companyName = companyAccountModel.companyName;
     this.companyLogo = companyAccountModel.companyLogo;
-    this.location = companyAccountModel.location;
     this.owenrFirstName = companyAccountModel.owenrFirstName;
     this.owenrLastName = companyAccountModel.owenrLastName;
   }

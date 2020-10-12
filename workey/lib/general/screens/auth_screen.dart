@@ -35,12 +35,10 @@ class _AuthScreenState extends State<AuthScreen> {
         updateLoadingStatus(false);
         print(err.message.toString());
         message = err.message;
-        print("aa");
       }
     } catch (err) {
       updateLoadingStatus(false);
       print(err.toString());
-      print("nn");
       if (err.toString().contains('The password is invalid')) {
         message = 'Invalid Password';
       } else if (err.toString().contains('There is no user record')) {

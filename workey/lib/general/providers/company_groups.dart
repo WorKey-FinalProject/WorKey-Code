@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/personal_account_model.dart';
+import 'package:workey/general/models/place_location.dart';
 import 'package:workey/general/models/work_group_model.dart';
 
 import 'package:flutter/foundation.dart';
@@ -201,6 +202,7 @@ class CompanyGroups with ChangeNotifier {
   }
 
   Future<void> fetchAndSetToLists(bool isCompany) async {
+    await setLocationToWorkGroup(123123, 12441);
     if (isCompany) {
       await _fetchAndSetToListsForCompany();
     } else {
@@ -326,6 +328,21 @@ class CompanyGroups with ChangeNotifier {
           .set(isWorking);
     } catch (err) {
       print(err);
+    }
+  }
+
+  Future<void> setLocationToWorkGroup(double lat, double long) async {
+    PlaceLocation placeLocation = PlaceLocation(latitude: lat, longitude: long);
+    try {
+      await _dbRef
+          .child('Company Groups')
+          .child(_userId)
+          .child('workGroupList')
+          .child(_currentWorkGroup.id)
+          .child('location')
+          .set(placeLocation);
+    } on Exception {
+      throw ErrorHint;
     }
   }
 
