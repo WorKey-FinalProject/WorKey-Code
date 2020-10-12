@@ -82,12 +82,10 @@ class _IconsGridViewState extends State<IconsGridView> {
 
       case ButtonType.location:
         {
-
           var _isExpanded = false;
           var _height = MediaQuery.of(context).size.height * 0.4;
 
           showModalBottomSheet(
-
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(16.0)),
@@ -108,7 +106,7 @@ class _IconsGridViewState extends State<IconsGridView> {
                       });
                     },
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 600),
+                      duration: Duration(milliseconds: 400),
                       curve: Curves.fastOutSlowIn,
                       height: _height,
                       decoration: BoxDecoration(
