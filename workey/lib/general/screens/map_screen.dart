@@ -38,6 +38,7 @@ class _MapScreenState extends State<MapScreen> {
         title: Text('Map'),
         actions: [
           if (widget.isSelecting)
+
             _isLoading
                 ? Center(
                     child: CircularProgressIndicator(),
@@ -57,6 +58,7 @@ class _MapScreenState extends State<MapScreen> {
                       });
                     },
                   ),
+
         ],
       ),
       body: GoogleMap(
