@@ -1,16 +1,32 @@
+'use strict';
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const { ref, DataSnapshot } = require('firebase-functions/lib/providers/database');
+admin.initializeApp();
 
-admin.initializeApp;
+
 
 exports.enterShiftNotfication = functions.database.ref('/Company Groups/{companyId}/employeeList/{employeeId}/isWorking')
-.onUpdate(async (change, comtext) => {
-const companyId = context.param.conpanyId;
-const employeeId = context.param.employeeId;
-if(!change.after.val()){
-    return console.log('company', companyId, 'employee exit', employeeId);
+.onWrite(async(change, context) => {
+const companyId = context.params.companyId;
+const employeeId = context.params.employeeId;
+if(change.after.val()){
+    const getWorkGroupId = admin.database()
+    .ref(`/Company Groups/${companyId}/employeeList/${employeeId}/workGroupId`)
+    .once('value');
+    
+   const workGroupId = await Promise.all([getWorkGroupId]);
+
+//    if (!workGroupId[0].hasChildren()) {
+//     return console.log('There are no id.');
+//   }
+  
+    return console.log('company', companyId, 'employee enter', employeeId,'id', workGroupId[0].val());
+  
 }
-console.log('company', companyId, 'employee enter', employeeId);
+
+console.log('company', companyId, 'employee exit', employeeId,);
+
 }
 );
 
@@ -21,5 +37,3 @@ console.log('company', companyId, 'employee enter', employeeId);
 //   functions.logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
-
-
