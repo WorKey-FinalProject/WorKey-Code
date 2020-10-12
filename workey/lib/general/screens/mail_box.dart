@@ -227,9 +227,15 @@ class _MailBoxState extends State<MailBox> {
                   );
                 }
                 final documents = snapshot.data.documents;
-
+                List<Mail> tempUnReadMails = [];
                 Mail mail;
-                return documents.length == 0
+                return ((documents.length == 0) &&
+                        (_dropdownItems
+                                .where((groupMember) =>
+                                    groupMember.id == mail.sentFrom)
+                                .toList()
+                                .length ==
+                            0))
                     ? Center(child: Text('no mails'))
                     : ListView.builder(
                         scrollDirection: Axis.vertical,
@@ -244,31 +250,18 @@ class _MailBoxState extends State<MailBox> {
                             isRead: documents[index].get('isRead'),
                           );
 
-                          // print(mail.toJson());
-                          if (_dropdownItems
-                                  .where((groupMember) =>
-                                      groupMember.id == mail.sentFrom)
-                                  .toList()
-                                  .length ==
-                              0) {
-                            return Center(
-                              child: Text('no mails'),
-                            );
+                          //if (_dropdownItems[index].id == mail.sentTo) {
+                          if (mail.isRead == false) {
+                            tempUnReadMails.add(mail);
                           }
-                          if (_dropdownItems[index].id == mail.sentFrom) {
-                            if (mail.isRead == false) {
-                              unReadMails.add(mail);
-                            }
-                            mailsAmount++;
-                            return MailItem(
-                              mail,
-                              _dropdownItems[index],
-                            );
-                          } else {
-                            return null;
-                          }
-                        },
-                      );
+                          mailsAmount++;
+                          return MailItem(
+                            mail,
+                            _dropdownItems[index],
+                          );
+                        }
+                        //  },
+                        );
               },
             ),
           ),

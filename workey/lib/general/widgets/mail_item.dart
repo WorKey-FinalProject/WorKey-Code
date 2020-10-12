@@ -30,11 +30,21 @@ class MailItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0)),
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
-                child: Image.network(
-                  groupMember.picture,
-                  height: 60.0,
-                  width: 60.0,
-                ),
+                child: groupMember.picture.isEmpty
+                    ? Container(
+                        alignment: Alignment.center,
+                        height: 60.0,
+                        width: 60.0,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey,
+                        ),
+                      )
+                    : Image.network(
+                        groupMember.picture,
+                        height: 60.0,
+                        width: 60.0,
+                      ),
               ),
             ),
             Expanded(
