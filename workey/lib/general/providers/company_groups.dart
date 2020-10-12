@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:workey/general/models/company_account_model.dart';
 import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/personal_account_model.dart';
@@ -331,8 +332,12 @@ class CompanyGroups with ChangeNotifier {
     }
   }
 
-  Future<void> setLocationToWorkGroup(double lat, double long) async {
-    PlaceLocation placeLocation = PlaceLocation(latitude: lat, longitude: long);
+
+  Future<void> setLocationToWorkGroup(LatLng location) async {
+    PlaceLocation placeLocation = PlaceLocation(
+      latitude: location.latitude,
+      longitude: location.longitude,
+    );
     try {
       await _dbRef
           .child('Company Groups')

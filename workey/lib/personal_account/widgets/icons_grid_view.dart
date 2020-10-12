@@ -82,17 +82,19 @@ class _IconsGridViewState extends State<IconsGridView> {
 
       case ButtonType.location:
         {
-          showBottomSheet(
+
+          showModalBottomSheet(
+
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(36.0)),
             ),
             context: context,
-            builder: (context) {
+            builder: (_) {
               return StatefulBuilder(
                 builder: (context, setLocationModalState) {
                   return Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.4,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(36),

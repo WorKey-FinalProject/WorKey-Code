@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:workey/general/models/place_location.dart';
+import 'package:workey/general/providers/company_groups.dart';
 
 class MapScreen extends StatefulWidget {
   final PlaceLocation initialLocation;
@@ -28,6 +30,8 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final companyGroupsProvider =
+        Provider.of<CompanyGroups>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Map'),
@@ -35,7 +39,11 @@ class _MapScreenState extends State<MapScreen> {
           if (widget.isSelecting)
             IconButton(
               icon: Icon(Icons.check),
-              onPressed: () {
+
+              onPressed: () async {
+                // await companyGroupsProvider
+                //     .setLocationToWorkGroup(_pickedLocation);
+
                 Navigator.of(context).pop();
               },
             ),
