@@ -5,11 +5,16 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/models/work_group_model.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/providers/shifts.dart';
+import 'package:workey/helpers/location_helper.dart';
 
 const String portName = "MyAppPort";
 
@@ -35,6 +40,10 @@ timerCallback() {
 }
 
 class _HomeTopViewState extends State<HomeTopView> {
+  var _isLoading = false;
+  LocationData _currentLocation;
+  WorkGroupModel _workGroup;
+
   ReceivePort receivePort = ReceivePort();
   bool _isRunning = false;
   String _timer = "00:00:00";
@@ -107,13 +116,21 @@ class _HomeTopViewState extends State<HomeTopView> {
     });
   }
 
-  bool flip() {
-    print("1");
-    return true;
+  Future<void> _getCurrentUserLocation() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final locData = await Location().getLocation();
+    setState(() {
+      _currentLocation = locData;
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _workGroup = Provider.of<CompanyGroups>(context).getCurrentWorkGroup;
+
     return Container(
       height: widget.constraintsMaxHeight,
       child: Stack(
@@ -151,13 +168,20 @@ class _HomeTopViewState extends State<HomeTopView> {
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 maxRadius: 50,
-                child: RaisedButton(
-                  onPressed: () {
-                    //if ()
-                  },
-                  child: FlipCard(
-                    onFlip: () async {
-                      print("2");
+                child: FlipCard(
+                  onFlip: () async {
+                    await _getCurrentUserLocation();
+                    var _distanceInMeters =
+                        GeolocatorPlatform.instance.distanceBetween(
+                      _workGroup.location.latitude,
+                      _workGroup.location.longitude,
+                      _currentLocation.latitude,
+                      _currentLocation.longitude,
+                    );
+                    print('$_distanceInMeters--- distance');
+                    if (_distanceInMeters > 100) {
+                      Fluttertoast.showToast(msg: 'You are not in work range');
+                    } else {
                       startAlarm();
                       dynamic p =
                           await Provider.of<Auth>(context, listen: false)
@@ -173,38 +197,25 @@ class _HomeTopViewState extends State<HomeTopView> {
                             .setIsWorkingForPersonal(false, p.companyId);
                         stopTimer();
                       }
-                    },
-                    front: Center(
-                      child: Icon(
-                        MdiIcons.faceRecognition,
-                        color: Theme.of(context).secondaryHeaderColor,
-                        size: 50,
-                      ),
+                    }
+                  },
+                  front: Center(
+                    child: Icon(
+                      MdiIcons.faceRecognition,
+                      color: Theme.of(context).secondaryHeaderColor,
+                      size: 50,
                     ),
-                    back: Center(
-                      child: Text(
-                        _timer,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
+                  ),
+                  back: Center(
+                    child: Text(
+                      _timer,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
                 ),
-                // child: IconButton(
-                //   icon: Icon(MdiIcons.faceRecognition),
-                // onPressed: () {
-                //   if (!_isRunning) {
-                //     _seconds = 0;
-                //     _start = DateTime.now();
-                //     startTimer();
-                //   } else if (_isRunning) {
-                //     stopTimer();
-                //   }
-                // },
-                //   iconSize: 40,
-                // ),
               ),
             ),
           ),
