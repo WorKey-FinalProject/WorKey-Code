@@ -2,7 +2,7 @@
  
 Created by:
 
-**Mati stern**
+**Matti stern**
 
 **Yotam dafna**
 
