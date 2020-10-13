@@ -256,21 +256,32 @@ class _MailBoxState extends State<MailBox> {
                 color: Colors.white70,
                 borderRadius: BorderRadius.circular(15.0),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.email,
-                        color: Colors.blue,
-                      ),
-                      Text('${value.getAllMails.length}'),
-                    ],
-                  )
-                ],
+              child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  'Welcome to Mail Box',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
+              // child: Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //   children: [
+              //     Column(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Icon(
+              //           Icons.email,
+              //           color: Colors.blue,
+              //         ),
+              //         Text('${value.getAllMails.length}'),
+              //       ],
+              //     )
+              //   ],
+              // ),
             ),
           ),
         ],
@@ -388,19 +399,43 @@ class _MailBoxState extends State<MailBox> {
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
 
-                      child: TextField(
-                        controller: contentTextController,
-                        decoration: InputDecoration(
-                          hintText: 'Reply..',
-                          border: InputBorder.none,
-                          suffixIcon: CircleAvatar(
-                            backgroundColor: Colors.blue[600],
-                            child: Icon(
-                              Icons.arrow_forward,
-                              color: Colors.white,
+                      child: Row(
+                        children: [
+                          Flexible(
+                            child: TextField(
+                              controller: contentTextController,
+                              decoration: InputDecoration(
+                                hintText: 'Reply..',
+                                border: InputBorder.none,
+                              ),
                             ),
                           ),
-                        ),
+                          InkWell(
+                            onTap: () async {
+                              Mail newMail = Mail(
+                                sentFrom: userId,
+                                sentTo: mail.sentFrom,
+                                title: mail.title,
+                                content: contentTextController.text,
+                                sendTime: DateTime.now(),
+                              );
+                              await FirebaseFirestore.instance
+                                  .collection('users/$userId/mails')
+                                  .add(newMail.toJson());
+                              await FirebaseFirestore.instance
+                                  .collection('users/${newMail.sentTo}/mails')
+                                  .add(newMail.toJson());
+                              Navigator.of(context).pop();
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Colors.blue[600],
+                              child: Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       // Text(
                       //   "Reply..",
