@@ -193,11 +193,13 @@ class _HomeTopViewState extends State<HomeTopView> {
                   },
                   child: !_isInRange
                       ? Center(
-                          child: Icon(
-                            MdiIcons.faceRecognition,
-                            color: Theme.of(context).secondaryHeaderColor,
-                            size: 50,
-                          ),
+                          child: _isLoading
+                              ? CircularProgressIndicator()
+                              : Icon(
+                                  Icons.location_on,
+                                  color: Theme.of(context).secondaryHeaderColor,
+                                  size: 50,
+                                ),
                         )
                       : FlipCard(
                           flipOnTouch: true,
@@ -234,7 +236,7 @@ class _HomeTopViewState extends State<HomeTopView> {
                           //},
                           front: Center(
                             child: Icon(
-                              MdiIcons.faceRecognition,
+                              MdiIcons.locationEnter,
                               color: Theme.of(context).secondaryHeaderColor,
                               size: 50,
                             ),
