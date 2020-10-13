@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/providers/monthly_shift_summery_list.dart';
 import 'package:workey/personal_account/screens/monthly_summary_screen.dart';
 
@@ -18,6 +19,9 @@ class MonthlySummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentGroup =
+        Provider.of<CompanyGroups>(context).getCurrentWorkGroup;
+
     return Container(
       color: Colors.blueGrey[50],
       child: FlatButton(
@@ -25,7 +29,7 @@ class MonthlySummary extends StatelessWidget {
           var _height = MediaQuery.of(context).size.height * 0.4;
           final summaryData =
               Provider.of<MonthltShiftSummeryList>(context, listen: false)
-                  .getFeedList;
+                  .getMonthlyShiftSummeryList;
           showModalBottomSheet(
             elevation: 5,
             shape: RoundedRectangleBorder(

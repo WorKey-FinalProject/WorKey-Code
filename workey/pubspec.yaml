@@ -57,6 +57,7 @@ dependencies:
   timetable: ^0.2.8
   fluttertoast: ^7.1.1
   flutter_multi_formatter: ^1.1.8
+  geolocator: ^6.0.0+4
 
 
   flutter_keyboard_visibility: ^3.2.2
