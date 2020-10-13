@@ -24,8 +24,6 @@ Company side - the App helps the company to manage their employees with features
 
 * Division the employees into work groups.
 
-![workgroup](https://user-images.githubusercontent.com/45067010/95869829-7aa60480-0d74-11eb-9d8c-7e9082faa204.gif)
-
 * Send/get messages in mail box with employees.
 
 * get notifications about the employees.
@@ -73,6 +71,10 @@ Sign up :
  * Personal account - email(must), password(must), first name(must), last name(must), Image(optional), phone number(optional), birth date(optional), address(optional).
  
  Delete employee:
+ 
+ ![workgroup](https://user-images.githubusercontent.com/45067010/95869829-7aa60480-0d74-11eb-9d8c-7e9082faa204.gif)
+ 
+ Add employee:
  
  ![addemp](https://user-images.githubusercontent.com/45067010/95870046-b771fb80-0d74-11eb-82c5-afba685dee16.gif)
  
