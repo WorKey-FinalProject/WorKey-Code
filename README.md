@@ -23,6 +23,8 @@ Company side - the App helps the company to manage their employees with features
 * Division the employees into work groups.
 
 * Send/get messages in mail box with employees.
+
+* get notifications about the employees.
  
 * Weekly shifts schedule for the employees for any work group.
 
@@ -31,7 +33,6 @@ Company side - the App helps the company to manage their employees with features
 * Link to the group in WhatsApp.
 
 * Set Tasks/notes to employees.
-
 
 employee side - The app helps the employee to manage himself in working with features such as:
 
