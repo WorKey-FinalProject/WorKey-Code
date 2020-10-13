@@ -78,155 +78,164 @@ class _MailBoxState extends State<MailBox> {
 
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
-      body: Column(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-                color: Colors.blue[600],
-                // color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(40.0),
-                  bottomLeft: Radius.circular(40.0),
-                )),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 10.0,
-                    right: 10.0,
-                    top: 50.0,
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: [
-                              IconButton(
-                                padding: EdgeInsets.only(bottom: 20),
-                                icon: Icon(
-                                  Icons.arrow_back_ios_outlined,
-                                  color: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.blue[600],
+                  // color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(40.0),
+                    bottomLeft: Radius.circular(40.0),
+                  )),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 10.0,
+                      right: 10.0,
+                      top: 50.0,
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Row(
+                              children: [
+                                IconButton(
+                                  padding: EdgeInsets.only(bottom: 20),
+                                  icon: Icon(
+                                    Icons.arrow_back_ios_outlined,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
                                 ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          ),
-                          Text(
-                            "All Mails",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 26.0,
-                              fontWeight: FontWeight.bold,
+                              ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            "You have got ${unReadMails.length} unread mails",
-                            style: TextStyle(
-                                color: Colors.blue[50], fontSize: 14.0),
-                          )
-                        ],
-                      ),
-                      Spacer(),
-                      InkWell(
-                        onTap: () {
-                          openNewMailBottomSheet();
-                        },
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          child: Icon(Icons.add),
+                            Text(
+                              "All Mails",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 26.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              "You have got ${unReadMails.length} unread mails",
+                              style: TextStyle(
+                                  color: Colors.blue[50], fontSize: 14.0),
+                            )
+                          ],
                         ),
-                      )
-                    ],
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            openNewMailBottomSheet();
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            child: Icon(Icons.add),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                mailTopInfoBox(),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 30.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 30.0),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  "RECENTS",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0),
-                ),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Text(
-                  "($mailsAmount)",
-                  style: TextStyle(
-                    color: Colors.grey,
+                  SizedBox(
+                    height: 30.0,
                   ),
-                ),
-              ],
+                  mailTopInfoBox(),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          Container(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('users/$userId/mails')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                final documents = snapshot.data.documents;
-                Mail mail;
-                return ((documents.length == 0))
-                    ? Center(child: Text('no mails'))
-                    : ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: documents.length,
-                        itemBuilder: (context, index) {
-                          mail = Mail(
-                            sentFrom: documents[index].get('sentFrom'),
-                            sentTo: documents[index].get('sentTo'),
-                            content: documents[index].get('content'),
-                            title: documents[index].get('title'),
-                            isRead: documents[index].get('isRead'),
-                          );
-
-                          if (_dropdownItems[index].id == mail.sentFrom) {
-                            Provider.of<MailProvider>(context, listen: false)
-                                .addMail(mail);
-                            return MailItem(
-                              mail,
-                              _dropdownItems[index],
-                              _selectedMail,
+            SizedBox(
+              height: 30.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30.0),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    "RECENTS",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(
+                    "($mailsAmount)",
+                    style: TextStyle(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            Container(
+              // height: 500,
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('users/$userId/mails')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final documents = snapshot.data.documents;
+                  Mail mail;
+                  return ((documents.length == 0))
+                      ? Center(child: Text('no mails'))
+                      : ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: documents.length,
+                          itemBuilder: (context, index) {
+                            mail = Mail(
+                              sentFrom: documents[index].get('sentFrom'),
+                              sentTo: documents[index].get('sentTo'),
+                              content: documents[index].get('content'),
+                              title: documents[index].get('title'),
+                              isRead: documents[index].get('isRead'),
                             );
-                          } else {
-                            return null;
-                          }
-                        },
-                      );
-              },
+
+                            if (_dropdownItems
+                                    .where((groupMember) =>
+                                        groupMember.id == mail.sentFrom)
+                                    .toList()
+                                    .length !=
+                                0) {
+                              Provider.of<MailProvider>(context, listen: false)
+                                  .addMail(mail);
+                              return MailItem(
+                                mail,
+                                _dropdownItems.firstWhere((groupMember) =>
+                                    groupMember.id == mail.sentFrom),
+                                _selectedMail,
+                              );
+                            } else {
+                              return null;
+                            }
+                          },
+                        );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -427,6 +436,7 @@ class _MailBoxState extends State<MailBox> {
                                   .collection('users/${newMail.sentTo}/mails')
                                   .add(newMail.toJson());
                               Navigator.of(context).pop();
+                              contentTextController.text = '';
                             },
                             child: CircleAvatar(
                               backgroundColor: Colors.blue[600],
@@ -584,6 +594,7 @@ class _MailBoxState extends State<MailBox> {
                                   .collection('users/${mail.sentTo}/mails')
                                   .add(mail.toJson());
                               Navigator.of(context).pop();
+                              contentTextController.text = '';
                             },
                             child: CircleAvatar(
                               backgroundColor: Colors.blue[600],
