@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/providers/monthly_shift_summery_list.dart';
 import 'package:workey/general/providers/shifts.dart';
 
 class HomeTopView extends StatefulWidget {
@@ -129,6 +130,13 @@ class _HomeTopViewState extends State<HomeTopView> {
                     dynamic p = await Provider.of<Auth>(context, listen: false)
                         .getCurrUserData();
                     if (!_isRunning) {
+                      final a = Provider.of<MonthltShiftSummeryList>(context,
+                              listen: false)
+                          .getFeedList;
+                      if (a != null && a.length == 1) {
+                        print(a[0].totalHours);
+                        print(a[0].totalWage);
+                      }
                       _seconds = 0;
                       _start = DateTime.now();
                       Provider.of<CompanyGroups>(context, listen: false)

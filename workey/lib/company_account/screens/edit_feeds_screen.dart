@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/feed_model.dart';
 import 'package:workey/general/providers/feed_list.dart';
+import 'package:workey/general/providers/monthly_shift_summery_list.dart';
 import 'package:workey/general/widgets/feed_item.dart';
 
 class EditFeedsScreen extends StatefulWidget {

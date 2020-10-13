@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/providers/feed_list.dart';
+import 'package:workey/general/providers/monthly_shift_summery_list.dart';
 import 'package:workey/general/providers/shifts.dart';
 
 import '../../../general/providers/company_groups.dart';
@@ -28,6 +29,8 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
         Provider.of<CompanyGroups>(context, listen: false);
     final _feedProvider = Provider.of<FeedList>(context, listen: false);
     final _shiftsProvider = Provider.of<Shifts>(context, listen: false);
+    final _monthlyProvider =
+        Provider.of<MonthltShiftSummeryList>(context, listen: false);
 
     final _auth = Provider.of<Auth>(context, listen: false);
 
@@ -41,6 +44,7 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
             await _shiftsProvider.fetchAndSetToListForCompany();
             await _companyGroupsProvider.fetchAndSetToLists(true);
             await _feedProvider.fetchAndSetToList(_auth.user.uid);
+            await _monthlyProvider.fetchAndSetToListForCompany();
           } else if (accountTypeChosen == AccountTypeChosen.personal) {
             final personalAccountModel =
                 _auth.getDynamicUser as PersonalAccountModel;
@@ -49,6 +53,8 @@ class _SignInAccountTypeState extends State<SignInAccountType> {
             await _shiftsProvider
                 .fetchAndSetToListForPersonal(personalAccountModel.companyId);
             await _companyGroupsProvider.fetchAndSetToLists(false);
+            await _monthlyProvider.fetchAndSetToListForPersonal(
+                personalAccountModel.companyId, _auth.user.uid);
           }
           setState(() {
             _isLoading = false;
