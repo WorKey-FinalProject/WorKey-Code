@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workey/general/providers/monthly_shift_summery_list.dart';
+import 'package:workey/personal_account/screens/monthly_summary_screen.dart';
 
 class MonthlySummary extends StatelessWidget {
   final Color backgroundColor;
@@ -19,9 +22,13 @@ class MonthlySummary extends StatelessWidget {
       color: Colors.blueGrey[50],
       child: FlatButton(
         onPressed: () {
-          var _isExpanded = false;
           var _height = MediaQuery.of(context).size.height * 0.4;
-
+          final a = Provider.of<MonthltShiftSummeryList>(context, listen: false)
+              .getFeedList;
+          if (a != null && a.length == 1) {
+            print(a[0].totalHours);
+            print(a[0].totalWage);
+          }
           showModalBottomSheet(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -30,21 +37,13 @@ class MonthlySummary extends StatelessWidget {
             context: context,
             builder: (_) {
               return StatefulBuilder(
-                builder: (context, setLocationModalState) {
-                  return GestureDetector(
-                    onTap: () {
-                      setLocationModalState(() {
-                        _isExpanded = !_isExpanded;
-                        if (_isExpanded) {
-                          _height = MediaQuery.of(context).size.height;
-                        } else {
-                          _height = MediaQuery.of(context).size.height * 0.6;
-                        }
-                      });
-                    },
-                    child: AnimatedContainer(
-                      duration: Duration(milliseconds: 400),
-                      curve: Curves.fastOutSlowIn,
+                builder: (context, _) {
+                  return ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                    child: Container(
                       height: _height,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.only(
@@ -52,7 +51,7 @@ class MonthlySummary extends StatelessWidget {
                           topRight: Radius.circular(16.0),
                         ),
                       ),
-                      child: Text('ddd'),
+                      child: MonthlySummaryScreen(),
                     ),
                   );
                 },
