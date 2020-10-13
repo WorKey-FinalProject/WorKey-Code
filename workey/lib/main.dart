@@ -1,3 +1,4 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -30,14 +31,19 @@ import './general/screens/signup_screen.dart';
 import './general/screens/auth_screen.dart';
 import './general/providers/auth.dart';
 
+// void printHello() {
+//   final DateTime now = DateTime.now();
+//   print("[$now] Hello, world!");
+// }
+
 Future<void> main() async {
   // Call these two functions before `runApp()`.
   WidgetsFlutterBinding.ensureInitialized();
-
   await TimeMachine.initialize({'rootBundle': rootBundle});
-
   await Firebase.initializeApp();
+  // await AndroidAlarmManager.initialize();
   runApp(MyApp());
+  // await AndroidAlarmManager.oneShot(const Duration(seconds: 7), 0, printHello);
 }
 
 class MyApp extends StatelessWidget {

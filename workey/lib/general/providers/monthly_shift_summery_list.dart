@@ -11,7 +11,7 @@ class MonthltShiftSummeryList with ChangeNotifier {
 
   List<MonthlyShiftSummeryModel> _monthlyShiftSummeryList = [];
 
-  List<MonthlyShiftSummeryModel> get getFeedList {
+  List<MonthlyShiftSummeryModel> get getMonthlyShiftSummeryList {
     return [..._monthlyShiftSummeryList];
   }
 
