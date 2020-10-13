@@ -418,6 +418,7 @@ class _MailBoxState extends State<MailBox> {
                                 title: mail.title,
                                 content: contentTextController.text,
                                 sendTime: DateTime.now(),
+                                isRead: false,
                               );
                               await FirebaseFirestore.instance
                                   .collection('users/$userId/mails')
