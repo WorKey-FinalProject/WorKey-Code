@@ -23,13 +23,11 @@ class HomeTopView extends StatefulWidget {
 }
 
 startAlarm() async {
-  print('startAlarm');
-  await AndroidAlarmManager.oneShot(Duration(seconds: 1), 0, timerCallback,
+  await AndroidAlarmManager.periodic(Duration(seconds: 1), 0, timerCallback,
       wakeup: true, exact: true);
 }
 
 timerCallback() {
-  print('1 sec');
   SendPort sendPort = IsolateNameServer.lookupPortByName(portName);
   if (sendPort != null) {
     sendPort.send("DONE");
@@ -109,6 +107,11 @@ class _HomeTopViewState extends State<HomeTopView> {
     });
   }
 
+  bool flip() {
+    print("1");
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -148,36 +151,43 @@ class _HomeTopViewState extends State<HomeTopView> {
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 maxRadius: 50,
-                child: FlipCard(
-                  onFlip: () async {
-                    startAlarm();
-                    dynamic p = await Provider.of<Auth>(context, listen: false)
-                        .getCurrUserData();
-                    if (!_isRunning) {
-                      _seconds = 0;
-                      _start = DateTime.now();
-                      Provider.of<CompanyGroups>(context, listen: false)
-                          .setIsWorkingForPersonal(true, p.companyId);
-                      startTimer();
-                    } else if (_isRunning) {
-                      Provider.of<CompanyGroups>(context, listen: false)
-                          .setIsWorkingForPersonal(false, p.companyId);
-                      stopTimer();
-                    }
+                child: RaisedButton(
+                  onPressed: () {
+                    //if ()
                   },
-                  front: Center(
-                    child: Icon(
-                      MdiIcons.faceRecognition,
-                      color: Theme.of(context).secondaryHeaderColor,
-                      size: 50,
+                  child: FlipCard(
+                    onFlip: () async {
+                      print("2");
+                      startAlarm();
+                      dynamic p =
+                          await Provider.of<Auth>(context, listen: false)
+                              .getCurrUserData();
+                      if (!_isRunning) {
+                        _seconds = 0;
+                        _start = DateTime.now();
+                        Provider.of<CompanyGroups>(context, listen: false)
+                            .setIsWorkingForPersonal(true, p.companyId);
+                        startTimer();
+                      } else if (_isRunning) {
+                        Provider.of<CompanyGroups>(context, listen: false)
+                            .setIsWorkingForPersonal(false, p.companyId);
+                        stopTimer();
+                      }
+                    },
+                    front: Center(
+                      child: Icon(
+                        MdiIcons.faceRecognition,
+                        color: Theme.of(context).secondaryHeaderColor,
+                        size: 50,
+                      ),
                     ),
-                  ),
-                  back: Center(
-                    child: Text(
-                      _timer,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
+                    back: Center(
+                      child: Text(
+                        _timer,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
