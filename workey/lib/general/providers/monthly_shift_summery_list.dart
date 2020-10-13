@@ -11,7 +11,7 @@ class MonthltShiftSummeryList with ChangeNotifier {
 
   List<MonthlyShiftSummeryModel> _monthlyShiftSummeryList = [];
 
-  List<MonthlyShiftSummeryModel> get getFeedList {
+  List<MonthlyShiftSummeryModel> get getMonthlyShiftSummeryList {
     return [..._monthlyShiftSummeryList];
   }
 
@@ -32,11 +32,13 @@ class MonthltShiftSummeryList with ChangeNotifier {
           .orderByKey()
           .once()
           .then((DataSnapshot dataSnapshot) {
-        Map<dynamic, dynamic> map = dataSnapshot.value;
-        if (map.isNotEmpty) {
-          map.keys.forEach((key) {
-            fetchAndSetToListForPersonal(_companyId, key);
-          });
+        if (dataSnapshot.value != '') {
+          Map<dynamic, dynamic> map = dataSnapshot.value;
+          if (map.isNotEmpty) {
+            map.keys.forEach((key) {
+              fetchAndSetToListForPersonal(_companyId, key);
+            });
+          }
         }
       });
     } on Exception {

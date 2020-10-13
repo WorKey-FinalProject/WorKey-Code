@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +9,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
-import 'package:workey/general/providers/monthly_shift_summery_list.dart';
 import 'package:workey/general/providers/shifts.dart';
+
+const String portName = "MyAppPort";
 
 class HomeTopView extends StatefulWidget {
   final double constraintsMaxHeight;
@@ -18,7 +22,22 @@ class HomeTopView extends StatefulWidget {
   _HomeTopViewState createState() => _HomeTopViewState();
 }
 
+startAlarm() async {
+  print('startAlarm');
+  await AndroidAlarmManager.oneShot(Duration(seconds: 1), 0, timerCallback,
+      wakeup: true, exact: true);
+}
+
+timerCallback() {
+  print('1 sec');
+  SendPort sendPort = IsolateNameServer.lookupPortByName(portName);
+  if (sendPort != null) {
+    sendPort.send("DONE");
+  }
+}
+
 class _HomeTopViewState extends State<HomeTopView> {
+  ReceivePort receivePort = ReceivePort();
   bool _isRunning = false;
   String _timer = "00:00:00";
   final _duration = const Duration(seconds: 1);
@@ -83,6 +102,11 @@ class _HomeTopViewState extends State<HomeTopView> {
       },
     );
     super.initState();
+    IsolateNameServer.registerPortWithName(receivePort.sendPort, portName);
+    AndroidAlarmManager.initialize();
+    receivePort.listen((v) {
+      print(v);
+    });
   }
 
   @override
@@ -126,16 +150,10 @@ class _HomeTopViewState extends State<HomeTopView> {
                 maxRadius: 50,
                 child: FlipCard(
                   onFlip: () async {
+                    startAlarm();
                     dynamic p = await Provider.of<Auth>(context, listen: false)
                         .getCurrUserData();
                     if (!_isRunning) {
-                      final a = Provider.of<MonthltShiftSummeryList>(context,
-                              listen: false)
-                          .getFeedList;
-                      if (a != null && a.length == 1) {
-                        print(a[0].totalHours);
-                        print(a[0].totalWage);
-                      }
                       _seconds = 0;
                       _start = DateTime.now();
                       Provider.of<CompanyGroups>(context, listen: false)
