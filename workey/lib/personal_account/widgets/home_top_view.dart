@@ -40,6 +40,8 @@ timerCallback() {
 }
 
 class _HomeTopViewState extends State<HomeTopView> {
+  var _isInRange = false;
+
   var _isLoading = false;
   LocationData _currentLocation;
   WorkGroupModel _workGroup;
@@ -168,8 +170,8 @@ class _HomeTopViewState extends State<HomeTopView> {
               child: CircleAvatar(
                 backgroundColor: Colors.white,
                 maxRadius: 50,
-                child: FlipCard(
-                  onFlip: () async {
+                child: InkWell(
+                  onTap: () async {
                     await _getCurrentUserLocation();
                     var _distanceInMeters =
                         GeolocatorPlatform.instance.distanceBetween(
@@ -180,41 +182,73 @@ class _HomeTopViewState extends State<HomeTopView> {
                     );
                     print('$_distanceInMeters--- distance');
                     if (_distanceInMeters > 100) {
-                      Fluttertoast.showToast(msg: 'You are not in work range');
+                      setState(() {
+                        _isInRange = false;
+                      });
                     } else {
-                      startAlarm();
-                      dynamic p =
-                          await Provider.of<Auth>(context, listen: false)
-                              .getCurrUserData();
-                      if (!_isRunning) {
-                        _seconds = 0;
-                        _start = DateTime.now();
-                        Provider.of<CompanyGroups>(context, listen: false)
-                            .setIsWorkingForPersonal(true, p.companyId);
-                        startTimer();
-                      } else if (_isRunning) {
-                        Provider.of<CompanyGroups>(context, listen: false)
-                            .setIsWorkingForPersonal(false, p.companyId);
-                        stopTimer();
-                      }
+                      setState(() {
+                        _isInRange = true;
+                      });
                     }
                   },
-                  front: Center(
-                    child: Icon(
-                      MdiIcons.faceRecognition,
-                      color: Theme.of(context).secondaryHeaderColor,
-                      size: 50,
-                    ),
-                  ),
-                  back: Center(
-                    child: Text(
-                      _timer,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                  child: !_isInRange
+                      ? Center(
+                          child: Icon(
+                            MdiIcons.faceRecognition,
+                            color: Theme.of(context).secondaryHeaderColor,
+                            size: 50,
+                          ),
+                        )
+                      : FlipCard(
+                          flipOnTouch: true,
+                          onFlip: () async {
+                            // await _getCurrentUserLocation();
+                            // var _distanceInMeters =
+                            //     GeolocatorPlatform.instance.distanceBetween(
+                            //   _workGroup.location.latitude,
+                            //   _workGroup.location.longitude,
+                            //   _currentLocation.latitude,
+                            //   _currentLocation.longitude,
+                            // );
+                            // print('$_distanceInMeters--- distance');
+                            // if (_distanceInMeters > 100) {
+                            //   Fluttertoast.showToast(
+                            //       msg: 'You are not in work range');
+                            // } else {
+                            startAlarm();
+                            dynamic p =
+                                await Provider.of<Auth>(context, listen: false)
+                                    .getCurrUserData();
+                            if (!_isRunning) {
+                              _seconds = 0;
+                              _start = DateTime.now();
+                              Provider.of<CompanyGroups>(context, listen: false)
+                                  .setIsWorkingForPersonal(true, p.companyId);
+                              startTimer();
+                            } else if (_isRunning) {
+                              Provider.of<CompanyGroups>(context, listen: false)
+                                  .setIsWorkingForPersonal(false, p.companyId);
+                              stopTimer();
+                            }
+                          },
+                          //},
+                          front: Center(
+                            child: Icon(
+                              MdiIcons.faceRecognition,
+                              color: Theme.of(context).secondaryHeaderColor,
+                              size: 50,
+                            ),
+                          ),
+                          back: Center(
+                            child: Text(
+                              _timer,
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
                 ),
               ),
             ),
