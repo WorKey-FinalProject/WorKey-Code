@@ -55,7 +55,7 @@ class _SubGroupsListState extends State<SubGroupsList> {
       child: RawMaterialButton(
         onPressed: () => _showSnackBarResult(context),
         elevation: 2.0,
-        fillColor: Theme.of(context).accentColor,
+        fillColor: Theme.of(context).buttonColor,
         child: Icon(
           Icons.add,
           size: 35.0,

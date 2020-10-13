@@ -33,7 +33,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
     final picker = ImagePicker();
     final pickedImage = await picker.getImage(
       source: _imageSource,
-      imageQuality: 50,
+      // imageQuality: 50,
       maxWidth: 150,
     );
     if (pickedImage == null) {

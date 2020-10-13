@@ -122,12 +122,7 @@ class _IconsGridViewState extends State<IconsGridView> {
               );
             },
           );
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => LocationInput(),
-          //   ),
-          // );
+
           print('Selected location button');
         }
         break;
@@ -184,12 +179,13 @@ class _IconsGridViewState extends State<IconsGridView> {
           ButtonType.groupMembers,
           _onSelected,
         ),
-      GridViewIconButton(
-        Icons.mail,
-        'Mail Box',
-        ButtonType.mailBox,
-        _onSelected,
-      ),
+      if (accountTypeChosen == AccountTypeChosen.personal)
+        GridViewIconButton(
+          Icons.mail,
+          'Mail Box',
+          ButtonType.mailBox,
+          _onSelected,
+        ),
       GridViewIconButton(
         Icons.location_on,
         'Location',
