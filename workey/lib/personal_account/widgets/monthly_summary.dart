@@ -21,7 +21,6 @@ class MonthlySummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentGroup =
         Provider.of<CompanyGroups>(context).getCurrentWorkGroup;
-
     return Container(
       color: Colors.blueGrey[50],
       child: FlatButton(
