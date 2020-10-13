@@ -8,7 +8,11 @@ import 'package:provider/provider.dart';
 import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/providers/feed_list.dart';
 import 'package:workey/general/providers/global_sizes.dart';
+
 import 'package:workey/general/providers/monthly_shift_summery_list.dart';
+
+import 'package:workey/general/providers/mail_provider.dart';
+
 import 'package:workey/general/providers/shifts.dart';
 import 'package:workey/general/screens/splash_screen.dart';
 
@@ -65,6 +69,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<MonthltShiftSummeryList>(
           create: (ctx) => MonthltShiftSummeryList(),
+        ),
+        ChangeNotifierProvider<MailProvider>(
+          create: (ctx) => MailProvider(),
         ),
       ],
       child: MaterialApp(

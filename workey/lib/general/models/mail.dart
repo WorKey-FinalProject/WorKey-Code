@@ -5,12 +5,15 @@ class Mail {
   String content;
   bool isRead;
 
+  DateTime sendTime;
+
   Mail({
     this.sentFrom,
     this.sentTo,
     this.title,
     this.content,
     this.isRead = false,
+    this.sendTime,
   });
 
   set setReadStatus(bool isRead) {
@@ -28,6 +31,7 @@ class Mail {
       'title': this.title,
       'content': this.content,
       'isRead': this.isRead,
+      'sendTime': this.sendTime,
     };
   }
 
