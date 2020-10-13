@@ -184,7 +184,7 @@ class _MailBoxState extends State<MailBox> {
               height: 20.0,
             ),
             Container(
-              // height: 500,
+              height: 500,
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('users/$userId/mails')
@@ -200,8 +200,8 @@ class _MailBoxState extends State<MailBox> {
                   return ((documents.length == 0))
                       ? Center(child: Text('no mails'))
                       : ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
+                          // scrollDirection: Axis.vertical,
+                          // shrinkWrap: true,
                           itemCount: documents.length,
                           itemBuilder: (context, index) {
                             mail = Mail(
@@ -218,8 +218,8 @@ class _MailBoxState extends State<MailBox> {
                                     .toList()
                                     .length !=
                                 0) {
-                              Provider.of<MailProvider>(context, listen: false)
-                                  .addMail(mail);
+                              // Provider.of<MailProvider>(context, listen: false)
+                              //     .addMail(mail);
                               return MailItem(
                                 mail,
                                 _dropdownItems.firstWhere((groupMember) =>
@@ -407,7 +407,6 @@ class _MailBoxState extends State<MailBox> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-
                       child: Row(
                         children: [
                           Flexible(
@@ -430,7 +429,7 @@ class _MailBoxState extends State<MailBox> {
                                 isRead: false,
                               );
                               await FirebaseFirestore.instance
-                                  .collection('users/$userId/mails')
+                                  .collection('users/${mail.sentFrom}/mails')
                                   .add(newMail.toJson());
                               await FirebaseFirestore.instance
                                   .collection('users/${newMail.sentTo}/mails')
@@ -448,13 +447,6 @@ class _MailBoxState extends State<MailBox> {
                           ),
                         ],
                       ),
-                      // Text(
-                      //   "Reply..",
-                      //   style: TextStyle(
-                      //     color: Colors.blueGrey,
-                      //     fontSize: 18.0,
-                      //   ),
-                      // ),
                     ),
                   )
                 ],
@@ -594,6 +586,7 @@ class _MailBoxState extends State<MailBox> {
                                   .collection('users/${mail.sentTo}/mails')
                                   .add(mail.toJson());
                               Navigator.of(context).pop();
+                              titleTextController.text = '';
                               contentTextController.text = '';
                             },
                             child: CircleAvatar(
