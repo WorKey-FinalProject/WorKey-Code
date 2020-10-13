@@ -84,7 +84,7 @@ class _GroupsTopViewState extends State<GroupsTopView> {
                         ? widget.companyAccount.companyName
                         : _currentWorkGroup.workGroupName,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColor,
+                      color: Theme.of(context).secondaryHeaderColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 24,
                     ),

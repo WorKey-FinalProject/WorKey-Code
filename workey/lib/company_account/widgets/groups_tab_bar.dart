@@ -38,8 +38,8 @@ class _GroupsTabBarState extends State<GroupsTabBar> {
                 // labelColor: Theme.of(context).accentColor,
                 // indicatorColor: Theme.of(context).accentColor,
                 unselectedLabelColor: Colors.white,
-                labelColor: Theme.of(context).primaryColor,
-                indicatorColor: Theme.of(context).primaryColor,
+                labelColor: Theme.of(context).secondaryHeaderColor,
+                indicatorColor: Theme.of(context).secondaryHeaderColor,
 
                 // indicator: UnderlineTabIndicator(
                 //   insets: EdgeInsets.symmetric(horizontal: 16),

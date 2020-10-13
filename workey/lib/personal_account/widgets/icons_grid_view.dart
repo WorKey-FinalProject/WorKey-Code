@@ -220,7 +220,7 @@ class _IconsGridViewState extends State<IconsGridView> {
           child: Card(
             margin: EdgeInsets.all(10),
             elevation: 5,
-            color: Colors.amberAccent,
+            color: Theme.of(context).secondaryHeaderColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(36),
             ),
