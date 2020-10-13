@@ -25,7 +25,7 @@ class MonthlySummary extends StatelessWidget {
           var _height = MediaQuery.of(context).size.height * 0.4;
           final summaryData =
               Provider.of<MonthltShiftSummeryList>(context, listen: false)
-                  .getFeedList;
+                  .getMonthlyShiftSummeryList;
           showModalBottomSheet(
             elevation: 5,
             shape: RoundedRectangleBorder(
