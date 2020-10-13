@@ -24,90 +24,8 @@ class GridViewIconButton extends StatelessWidget {
     this.onSelected,
   );
 
-  // final _formKey = GlobalKey<FormState>();
-
-  // final whatsAppGroupLink = TextEditingController();
-  // AccountTypeChosen accountTypeChosen;
-
-  // void _onSelected(
-  //   BuildContext context,
-  //   CompanyGroups companyGroups,
-  //   Auth auth,
-  // ) {
-  //   switch (buttonType) {
-  //     case ButtonType.weeklyShifts:
-  //       {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => WeeklyShiftsScreen(),
-  //           ),
-  //         );
-  //         print('Selected weeklyShifts button');
-  //       }
-  //       break;
-
-  //     case ButtonType.groupMembers:
-  //       {
-  //         Navigator.push(
-  //           context,
-  //           MaterialPageRoute(
-  //             builder: (context) => MembersListScreen(),
-  //           ),
-  //         );
-  //         print('Selected groupMembers button');
-  //       }
-  //       break;
-
-  //     case ButtonType.mailBox:
-  //       {
-  //         print('Selected mailBox button');
-  //       }
-  //       break;
-
-  //     case ButtonType.location:
-  //       {
-  //         print('Selected location button');
-  //       }
-  //       break;
-
-  //     case ButtonType.notes:
-  //       {
-  //         print('Selected notes button');
-  //       }
-  //       break;
-
-  //     case ButtonType.whatsApp:
-  //       {
-  //         if (accountTypeChosen == AccountTypeChosen.company) {
-  //           addWhatsAppLinkShowDialog(context, _formKey, companyGroups);
-  //         } else {
-  //           if (whatsAppGroupLink.text == null ||
-  //               whatsAppGroupLink.text.isEmpty) {
-  //             Fluttertoast.showToast(msg: "No link defined for WhatsApp group");
-  //           } else {
-  //             launchWhatsApp(
-  //               whatsAppGroupLink: whatsAppGroupLink.text,
-  //             );
-  //             print('Selected whatsApp button');
-  //           }
-  //         }
-  //       }
-  //       break;
-
-  //     default:
-  //       break;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final companyGroups = Provider.of<CompanyGroups>(context, listen: false);
-    // final _auth = Provider.of<Auth>(context, listen: false);
-    // whatsAppGroupLink.text = companyGroups.getCurrentWorkGroup.whatsAppUrl;
-    // print(whatsAppGroupLink.text);
-    // accountTypeChosen = _auth.getAccountTypeChosen;
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(36),
       child: FlatButton(
@@ -118,13 +36,14 @@ class GridViewIconButton extends StatelessWidget {
           children: <Widget>[
             Icon(
               iconData,
-              color: Theme.of(context).primaryColor,
+              color: Colors.brown,
               size: MediaQuery.of(context).size.height * 0.05,
             ),
             Text(
               title,
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
+                color: Colors.brown,
+                fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
             ),
@@ -133,107 +52,4 @@ class GridViewIconButton extends StatelessWidget {
       ),
     );
   }
-
-  // void launchWhatsApp({
-  //   @required String whatsAppGroupLink,
-  // }) async {
-  //   if (await canLaunch(whatsAppGroupLink)) {
-  //     await launch(whatsAppGroupLink);
-  //   } else {
-  //     throw 'Could not launch $whatsAppGroupLink';
-  //   }
-  // }
-
-  // Future addWhatsAppLinkShowDialog(
-  //   BuildContext context,
-  //   GlobalKey<FormState> _formKey,
-  //   CompanyGroups companyGroupsProvider,
-  // ) {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(20),
-  //         ),
-  //         content: Form(
-  //           key: _formKey,
-  //           child: Column(
-  //             mainAxisSize: MainAxisSize.min,
-  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //             children: <Widget>[
-  //               Flexible(
-  //                 child: TextFormField(
-  //                   controller: whatsAppGroupLink,
-  //                   decoration: InputDecoration(
-  //                     labelText: 'whatsApp group link',
-  //                     floatingLabelBehavior: FloatingLabelBehavior.always,
-  //                     border: const OutlineInputBorder(),
-  //                   ),
-  //                   keyboardType: TextInputType.multiline,
-  //                   onSaved: (value) {
-  //                     whatsAppGroupLink.text = value;
-  //                     companyGroupsProvider.setWhatsAppUrl(value);
-  //                   },
-  //                   validator: (value) {
-  //                     if (value.isEmpty) {
-  //                       return 'Please enter a WhatsApp link';
-  //                     }
-  //                     return null;
-  //                   },
-  //                 ),
-  //               ),
-  //               Flexible(
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.only(
-  //                     left: 8.0,
-  //                     right: 8.0,
-  //                     top: 8.0,
-  //                   ),
-  //                   child: RaisedButton(
-  //                     onPressed: () {
-  //                       final isValid = _formKey.currentState.validate();
-  //                       if (isValid) {
-  //                         Navigator.pop(context);
-  //                         _formKey.currentState.save();
-  //                       }
-  //                     },
-  //                     padding: EdgeInsets.symmetric(horizontal: 50),
-  //                     elevation: 2,
-  //                     shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(20),
-  //                     ),
-  //                     child: Text("Save"),
-  //                   ),
-  //                 ),
-  //               ),
-  //               Flexible(
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-  //                   child: RaisedButton(
-  //                     color: Theme.of(context).primaryColor,
-  //                     onPressed: () {
-  //                       final isValid = _formKey.currentState.validate();
-  //                       if (isValid) {
-  //                         launchWhatsApp(
-  //                           whatsAppGroupLink: whatsAppGroupLink.text,
-  //                         );
-  //                       }
-  //                     },
-  //                     padding: EdgeInsets.symmetric(horizontal: 50),
-  //                     elevation: 2,
-  //                     shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(20),
-  //                     ),
-  //                     child: Text("Go to group"),
-  //                   ),
-  //                 ),
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 }

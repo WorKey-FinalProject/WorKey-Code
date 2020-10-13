@@ -168,6 +168,7 @@ class _HomeTopViewState extends State<HomeTopView> {
                   front: Center(
                     child: Icon(
                       MdiIcons.faceRecognition,
+                      color: Theme.of(context).secondaryHeaderColor,
                       size: 50,
                     ),
                   ),

@@ -62,7 +62,8 @@ class _SignUpTypeState extends State<SignUpType> {
             },
             child: AccountSelection(
               title: 'Company Account',
-              description: 'Description',
+              description:
+                  '• Arranging weekly schedule. \n• Managing working groups. \n• Monitoring employees shifts.',
               color: Colors.grey[400],
             ),
           ),
@@ -77,7 +78,8 @@ class _SignUpTypeState extends State<SignUpType> {
             },
             child: AccountSelection(
               title: 'Personal Account',
-              description: 'Description',
+              description:
+                  '• Check in and out work. \n• Keep track of shift details. \n• Choosing a desired work arrangement.',
               color: Colors.black45,
             ),
           ),
