@@ -1,9 +1,8 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+
 import 'package:workey/general/models/monthly_shift_summery_model.dart';
-import 'package:workey/general/providers/monthly_shift_summery_list.dart';
 
 class MonthlySummaryScreen extends StatelessWidget {
   final List<MonthlyShiftSummeryModel> summaryData;

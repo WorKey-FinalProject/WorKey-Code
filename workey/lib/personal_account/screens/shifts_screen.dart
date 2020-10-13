@@ -91,9 +91,10 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: 60.0),
+            // padding: EdgeInsets.only(bottom: 60.0),
             scrollDirection: Axis.horizontal,
             child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: DataTable(
                 //columnSpacing: MediaQuery.of(context).size.width * 0.084,
                 dataRowHeight: MediaQuery.of(context).size.height * 0.084,
@@ -190,22 +191,22 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: MonthlySummary(
-              backgroundColor: Theme.of(context).accentColor,
-              buttonText: Text(
-                "Monthly Summary",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-              iconColor: Colors.black,
-            ),
-          ),
+          // Positioned(
+          //   bottom: 0,
+          //   left: 0,
+          //   right: 0,
+          //   child: MonthlySummary(
+          //     backgroundColor: Theme.of(context).accentColor,
+          //     buttonText: Text(
+          //       "Monthly Summary",
+          //       style: TextStyle(
+          //           color: Colors.white,
+          //           fontSize: 20,
+          //           fontWeight: FontWeight.bold),
+          //     ),
+          //     iconColor: Colors.black,
+          //   ),
+          // ),
         ],
       ),
     );
