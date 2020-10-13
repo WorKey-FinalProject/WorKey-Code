@@ -84,7 +84,7 @@ class CreditCardFront {
                                 hintText: 'XXXX XXXX XXXX XXXX',
                                 hintStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 22,
+                                  fontSize: 20,
                                 ),
                                 disabledBorder: InputBorder.none,
                                 enabledBorder: InputBorder.none,
