@@ -195,7 +195,7 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
             left: 0,
             right: 0,
             child: MonthlySummary(
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: Theme.of(context).accentColor,
               buttonText: Text(
                 "Monthly Summary",
                 style: TextStyle(
