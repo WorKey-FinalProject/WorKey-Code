@@ -23,12 +23,9 @@ class MonthlySummary extends StatelessWidget {
       child: FlatButton(
         onPressed: () {
           var _height = MediaQuery.of(context).size.height * 0.4;
-          final a = Provider.of<MonthltShiftSummeryList>(context, listen: false)
-              .getFeedList;
-          if (a != null && a.length == 1) {
-            print(a[0].totalHours);
-            print(a[0].totalWage);
-          }
+          final summaryData =
+              Provider.of<MonthltShiftSummeryList>(context, listen: false)
+                  .getFeedList;
           showModalBottomSheet(
             elevation: 5,
             shape: RoundedRectangleBorder(
@@ -51,7 +48,7 @@ class MonthlySummary extends StatelessWidget {
                           topRight: Radius.circular(16.0),
                         ),
                       ),
-                      child: MonthlySummaryScreen(),
+                      child: MonthlySummaryScreen(summaryData),
                     ),
                   );
                 },
@@ -87,7 +84,7 @@ class MonthlySummary extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(30),
-                          color: Colors.white,
+                          color: Theme.of(context).primaryColor,
                         ),
                         child: Icon(Icons.data_usage_rounded),
                       ),
