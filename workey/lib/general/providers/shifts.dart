@@ -181,12 +181,28 @@ class Shifts with ChangeNotifier {
           dateOfCreation: null,
           token: '',
         );
-
         p.fromJsonToObject(dataSnapshot.value, _userId);
         shiftModel.companyId = p.companyId;
       });
     } on Exception {
       throw 'Error in _fetchShiftCompanyId function of Shifts';
+    }
+  }
+
+  Future<void> updateShiftByCompany(ShiftModel shiftModel) async {
+    try {
+      _dbRef
+          .child('Company Groups')
+          .child(_userId)
+          .child('shiftList')
+          .child(shiftModel.employeeId)
+          .child(shiftModel.id)
+          .update(shiftModel.toJson());
+      _shiftList[_shiftList.indexWhere((shift) => shift.id == shiftModel.id)] =
+          shiftModel;
+      notifyListeners();
+    } on Exception {
+      throw 'Error in updateShiftByCompany function of Shifts';
     }
   }
 }

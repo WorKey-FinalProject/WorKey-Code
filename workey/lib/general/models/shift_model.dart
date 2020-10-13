@@ -39,6 +39,7 @@ class ShiftModel {
   }
 
   void updateShift(ShiftModel shiftModel) {
+    this.hourlyWage = shiftModel.hourlyWage;
     this.startTime = shiftModel.startTime;
     this.endTime = shiftModel.endTime;
   }
