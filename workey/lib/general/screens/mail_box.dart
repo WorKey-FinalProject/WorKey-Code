@@ -6,6 +6,7 @@ import 'package:workey/general/models/group_employee_model.dart';
 import 'package:workey/general/models/mail.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
+import 'package:workey/general/providers/mail_provider.dart';
 import 'package:workey/general/widgets/auth/signup_type.dart';
 import 'package:workey/general/widgets/mail_item.dart';
 import 'package:workey/personal_account/widgets/employee_list_item.dart';
@@ -52,14 +53,19 @@ class _MailBoxState extends State<MailBox> {
         _dropdownItems.isEmpty ? null : _dropdownMenuItems[0].value;
   }
 
+  void _selectedMail(
+    Mail mail,
+    GroupEmployeeModel groupMember,
+  ) {
+    openExistingMailBottomSheet(mail, groupMember);
+  }
+
   @override
   Widget build(BuildContext context) {
     final _companyGroupsProvider =
         Provider.of<CompanyGroups>(context, listen: false);
 
     final _auth = Provider.of<Auth>(context, listen: false);
-
-    fillDropDownList();
 
     if (_auth.getAccountTypeChosen == AccountTypeChosen.company) {
       _dropdownItems = _companyGroupsProvider.getEmployeeList;
@@ -68,6 +74,7 @@ class _MailBoxState extends State<MailBox> {
           .where((emp) => emp.id != userId)
           .toList();
     }
+    fillDropDownList();
 
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.9),
@@ -140,49 +147,9 @@ class _MailBoxState extends State<MailBox> {
                   ),
                 ),
                 SizedBox(
-                  height: 70.0,
+                  height: 30.0,
                 ),
-                Stack(
-                  alignment: Alignment.center,
-                  overflow: Overflow.visible,
-                  children: <Widget>[
-                    Container(
-                      height: 70.0,
-                      width: 300.0,
-                      decoration: BoxDecoration(
-                          color: Colors.blue,
-                          // color: Theme.of(context).primaryColor,
-                          borderRadius: BorderRadius.circular(15.0)),
-                    ),
-                    Positioned(
-                      bottom: 10.0,
-                      child: Container(
-                        height: 70.0,
-                        width: 330.0,
-                        decoration: BoxDecoration(
-                          color: Colors.white70,
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 20.0,
-                      child: InkWell(
-                        onTap: () {
-                          openBottomSheet();
-                        },
-                        child: unReadMails.isEmpty
-                            ? Text('No new E-mails')
-                            : MailItem(
-                                unReadMails[0],
-                                _dropdownItems.firstWhere(
-                                  (groupMember) =>
-                                      groupMember.id == unReadMails[0].sentFrom,
-                                )),
-                      ),
-                    )
-                  ],
-                )
+                mailTopInfoBox(),
               ],
             ),
           ),
@@ -227,15 +194,8 @@ class _MailBoxState extends State<MailBox> {
                   );
                 }
                 final documents = snapshot.data.documents;
-                List<Mail> tempUnReadMails = [];
                 Mail mail;
-                return ((documents.length == 0) &&
-                        (_dropdownItems
-                                .where((groupMember) =>
-                                    groupMember.id == mail.sentFrom)
-                                .toList()
-                                .length ==
-                            0))
+                return ((documents.length == 0))
                     ? Center(child: Text('no mails'))
                     : ListView.builder(
                         scrollDirection: Axis.vertical,
@@ -250,15 +210,16 @@ class _MailBoxState extends State<MailBox> {
                             isRead: documents[index].get('isRead'),
                           );
 
-                          if (_dropdownItems[index].id == mail.sentTo) {
-                            if (mail.isRead == false) {
-                              tempUnReadMails.add(mail);
-                            }
-                            mailsAmount++;
+                          if (_dropdownItems[index].id == mail.sentFrom) {
+                            Provider.of<MailProvider>(context, listen: false)
+                                .addMail(mail);
                             return MailItem(
                               mail,
                               _dropdownItems[index],
+                              _selectedMail,
                             );
+                          } else {
+                            return null;
                           }
                         },
                       );
@@ -270,7 +231,57 @@ class _MailBoxState extends State<MailBox> {
     );
   }
 
-  void openBottomSheet() {
+  Widget mailTopInfoBox() {
+    return Consumer<MailProvider>(
+      builder: (context, value, child) => Stack(
+        alignment: Alignment.center,
+        overflow: Overflow.visible,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            height: 70.0,
+            width: 300.0,
+            decoration: BoxDecoration(
+                color: Colors.blue,
+                // color: Theme.of(context).primaryColor,
+                borderRadius: BorderRadius.circular(15.0)),
+          ),
+          Positioned(
+            bottom: 10.0,
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10),
+              height: 70.0,
+              width: 330.0,
+              decoration: BoxDecoration(
+                color: Colors.white70,
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.email,
+                        color: Colors.blue,
+                      ),
+                      Text('${value.getAllMails.length}'),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void openExistingMailBottomSheet(
+    Mail mail,
+    GroupEmployeeModel groupMember,
+  ) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -296,11 +307,21 @@ class _MailBoxState extends State<MailBox> {
                             borderRadius: BorderRadius.circular(20.0)),
                         child: Padding(
                           padding: const EdgeInsets.all(3.0),
-                          child: Image.asset(
-                            'assets/images/google-icon.png',
-                            height: 60.0,
-                            width: 60.0,
-                          ),
+                          child: groupMember.picture.isEmpty
+                              ? Container(
+                                  alignment: Alignment.center,
+                                  height: 60.0,
+                                  width: 60.0,
+                                  child: Icon(
+                                    Icons.person,
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              : Image.network(
+                                  groupMember.picture,
+                                  height: 60.0,
+                                  width: 60.0,
+                                ),
                         ),
                       ),
                       Expanded(
@@ -313,11 +334,12 @@ class _MailBoxState extends State<MailBox> {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    "Protorix Code",
+                                    '${groupMember.firstName} ${groupMember.lastName}',
                                     style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16.0),
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18.0,
+                                    ),
                                   ),
                                   Spacer(),
                                   Icon(
@@ -330,54 +352,34 @@ class _MailBoxState extends State<MailBox> {
                                   ),
                                 ],
                               ),
-                              Text(
-                                "Your opinion matters",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 14.0),
-                              )
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  mail.title,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16.0,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
                       )
                     ],
                   ),
+                  Divider(),
                   SizedBox(
                     height: 20.0,
                   ),
                   Text(
-                    "Code,",
+                    mail.content,
                     style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0),
+                      color: Colors.black,
+                      fontSize: 18.0,
+                    ),
                   ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Text(
-                    "To add custom fonts to your application, add a fonts section here,in this section. Each entry in this list should have a key with the font family name, and a ",
-                    style: TextStyle(color: Colors.black, fontSize: 18.0),
-                  ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Text(
-                    "Thank you,",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0),
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  Text(
-                    "Protorix Code",
-                    style: TextStyle(color: Colors.black, fontSize: 18.0),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
+                  Spacer(),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.blue[50],
@@ -385,23 +387,28 @@ class _MailBoxState extends State<MailBox> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            "Reply..",
-                            style: TextStyle(
-                                color: Colors.blueGrey, fontSize: 18.0),
-                          ),
-                          Spacer(),
-                          CircleAvatar(
+
+                      child: TextField(
+                        controller: contentTextController,
+                        decoration: InputDecoration(
+                          hintText: 'Reply..',
+                          border: InputBorder.none,
+                          suffixIcon: CircleAvatar(
                             backgroundColor: Colors.blue[600],
                             child: Icon(
                               Icons.arrow_forward,
                               color: Colors.white,
                             ),
-                          )
-                        ],
+                          ),
+                        ),
                       ),
+                      // Text(
+                      //   "Reply..",
+                      //   style: TextStyle(
+                      //     color: Colors.blueGrey,
+                      //     fontSize: 18.0,
+                      //   ),
+                      // ),
                     ),
                   )
                 ],
@@ -532,6 +539,7 @@ class _MailBoxState extends State<MailBox> {
                                 sentTo: _selectedEmployee.id,
                                 title: titleTextController.text,
                                 content: contentTextController.text,
+                                sendTime: DateTime.now(),
                               );
                               await FirebaseFirestore.instance
                                   .collection('users/$userId/mails')
