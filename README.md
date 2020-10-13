@@ -69,6 +69,10 @@ Sign up :
  * Company account - email(must), company name(must), password(must), first name (must), last name (must), Image(optional).
  
  * Personal account - email(must), password(must), first name(must), last name(must), Image(optional), phone number(optional), birth date(optional), address(optional).
+
+ Enter shift:
+ 
+ ![כניסה-למשמרת](https://user-images.githubusercontent.com/45067010/95870819-9cec5200-0d75-11eb-8905-22ee817e6093.gif)
  
  Delete employee:
  
