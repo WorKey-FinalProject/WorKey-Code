@@ -6,26 +6,30 @@ import 'package:workey/general/models/monthly_shift_summery_model.dart';
 import 'package:workey/general/providers/monthly_shift_summery_list.dart';
 
 class MonthlySummaryScreen extends StatelessWidget {
-  Double monthSalary;
-  Double monthHours;
-  List<MonthlyShiftSummeryModel> temp;
+  final List<MonthlyShiftSummeryModel> summaryData;
+
+  MonthlySummaryScreen(this.summaryData);
 
   @override
   Widget build(BuildContext context) {
-    final a = Provider.of<MonthltShiftSummeryList>(context, listen: false)
-        .getFeedList;
-    if (a != null && a.length == 1) {
-      print(a[0].totalHours);
-      print(a[0].totalWage);
-    }
+    final totalSalary =
+        double.parse((summaryData[0].totalWage).toStringAsFixed(2));
+    final totalHours =
+        double.parse((summaryData[0].totalHours).toStringAsFixed(2));
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Theme.of(context).accentColor,
       body: Column(
         children: [
           Container(
             alignment: Alignment.topCenter,
-            padding: EdgeInsets.only(top: 10.0),
-            child: Text('Monthly Summary'),
+            padding: EdgeInsets.only(top: 15.0),
+            child: Text(
+              'Monthly Summary',
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
@@ -45,12 +49,20 @@ class MonthlySummaryScreen extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.monetization_on_rounded,
-                    size: 40.0,
+                    size: 80.0,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Text('salary'),
+                  Text(
+                    '$totalSalary',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ],
               ),
               Column(
@@ -58,12 +70,20 @@ class MonthlySummaryScreen extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.timer,
-                    size: 40.0,
+                    size: 80.0,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     height: 20,
                   ),
-                  Text('hours'),
+                  Text(
+                    '$totalHours',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ],
               ),
             ],
