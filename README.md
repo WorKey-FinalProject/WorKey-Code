@@ -2,8 +2,6 @@
  
 Created by:
 
-![WhatsApp-Video-2020-10-13-at-16 37 12](https://user-images.githubusercontent.com/45067010/95869091-b12f4f80-0d73-11eb-8038-0b315c44b572.gif)
-
 **Matti stern**
 
 **Yotam dafna**
@@ -22,11 +20,17 @@ Company side - the App helps the company to manage their employees with features
 
 * Show general messages to all employees ("feeds").
 
+![WhatsApp-Video-2020-10-13-at-16 37 12](https://user-images.githubusercontent.com/45067010/95869091-b12f4f80-0d73-11eb-8038-0b315c44b572.gif)
+
 * Division the employees into work groups.
+
+![workgroup](https://user-images.githubusercontent.com/45067010/95869829-7aa60480-0d74-11eb-9d8c-7e9082faa204.gif)
 
 * Send/get messages in mail box with employees.
 
 * get notifications about the employees.
+
+![notifictions](https://user-images.githubusercontent.com/45067010/95869855-81347c00-0d74-11eb-9005-c16250b35a75.gif)
  
 * Weekly shifts schedule for the employees for any work group.
 
