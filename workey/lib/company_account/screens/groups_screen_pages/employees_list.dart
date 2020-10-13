@@ -50,7 +50,7 @@ class _State extends State<EmployeesList> {
         elevation: 2.0,
         fillColor: companyGroupsProvider.getCurrentWorkGroup == null
             ? Colors.grey
-            : Theme.of(context).accentColor,
+            : Theme.of(context).buttonColor,
         child: Icon(
           Icons.add,
           size: 35.0,

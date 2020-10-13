@@ -55,7 +55,11 @@ class Logo extends StatelessWidget {
                 backgroundColor: Colors.white,
                 maxRadius: 45,
                 child: IconButton(
-                  icon: Icon(Icons.edit),
+                  icon: Icon(
+                    Icons.edit,
+                    //color: Theme.of(context).buttonColor,
+                    color: Theme.of(context).secondaryHeaderColor,
+                  ),
                   onPressed: () {
                     Navigator.push(
                       context,

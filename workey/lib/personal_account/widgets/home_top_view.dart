@@ -4,7 +4,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:workey/general/models/personal_account_model.dart';
 import 'package:workey/general/providers/auth.dart';
 import 'package:workey/general/providers/company_groups.dart';
 import 'package:workey/general/providers/monthly_shift_summery_list.dart';
@@ -151,6 +150,7 @@ class _HomeTopViewState extends State<HomeTopView> {
                   front: Center(
                     child: Icon(
                       MdiIcons.faceRecognition,
+                      color: Theme.of(context).secondaryHeaderColor,
                       size: 50,
                     ),
                   ),
