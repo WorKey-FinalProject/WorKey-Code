@@ -36,13 +36,13 @@ class GridViewIconButton extends StatelessWidget {
           children: <Widget>[
             Icon(
               iconData,
-              color: Colors.brown,
+              color: Theme.of(context).buttonColor,
               size: MediaQuery.of(context).size.height * 0.05,
             ),
             Text(
               title,
               style: TextStyle(
-                color: Colors.brown,
+                color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,

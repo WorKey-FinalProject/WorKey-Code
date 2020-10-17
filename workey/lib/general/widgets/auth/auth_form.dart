@@ -201,7 +201,7 @@ class _AuthFormState extends State<AuthForm> {
                             width: double.infinity,
                             height: 60,
                             child: RaisedButton(
-                              color: Theme.of(context).buttonColor,
+                              color: Theme.of(context).primaryColor,
                               child: Text(
                                 'Sign In',
                                 style: TextStyle(

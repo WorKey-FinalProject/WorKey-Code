@@ -84,10 +84,15 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Workey',
         theme: ThemeData(
-          primaryColor: Colors.blue[600],
-          accentColor: Colors.blue[100],
-          buttonColor: Colors.brown[300],
-          secondaryHeaderColor: Colors.brown[200],
+          // primaryColor: Colors.blue[600],
+          // accentColor: Colors.blue[100],
+          // buttonColor: Colors.brown[300],
+          // secondaryHeaderColor: Colors.brown[200],
+
+          primaryColor: Color(hexColor('#5381a6')),
+          accentColor: Color(hexColor('#5381a6')).withOpacity(0.3),
+          buttonColor: Color(hexColor('#CDAB81')),
+          secondaryHeaderColor: Color(hexColor('#CDAB81')),
 
           // primaryColor: Color(hexColor('#27AE60')),
           //primaryColor: Colors.blue,

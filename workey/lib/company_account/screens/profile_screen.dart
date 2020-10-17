@@ -32,8 +32,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: Theme.of(context).primaryColor,
             child: TabBar(
               unselectedLabelColor: Colors.white,
-              labelColor: Theme.of(context).accentColor,
-              indicatorColor: Theme.of(context).accentColor,
+              labelColor: Theme.of(context).buttonColor,
+              indicatorColor: Theme.of(context).buttonColor,
               tabs: [
                 Tab(icon: Icon(Icons.person_outline)),
                 Tab(icon: Icon(Icons.payment)),
